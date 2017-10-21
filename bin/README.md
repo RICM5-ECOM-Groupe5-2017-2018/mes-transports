@@ -42,8 +42,7 @@ Dans le tuto la base est en posgreSQL donc dans notre cas c'est MySQL
 
 :::danger
 Il y a normallement 7 liens à réaliser 
-![](https://i.imgur.com/WpmncVh.png)
-
+![](https://i.imgur.com/LbBnUiH.png)
 
 :::
     

@@ -4,12 +4,6 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="myPU" transaction-type="JTA">
-    	<class>model.Agency</class>
-    	<class>model.Characteristic</class>
-    	<class>model.Rent</class>
-    	<class>model.User</class>
-    	<class>model.Vehicle</class>
-    	<class>model.VehicleType</class>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
             <property name="javax.persistence.schema-generation.create-source" value="script"/>
