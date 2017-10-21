@@ -1,75 +1,48 @@
-# Java EE 7 - Angular - Sample Application #
+# Générer des Entites jpa via des tables MySQL 
 
-## Blog posts ##
+> Configuration de base choisie : Wildfly 10.1 et eclipse JavaEE néon 
 
-* [Java EE 7 with Angular JS – Part 1](http://www.radcortez.com/java-ee-7-with-angular-js-part-1)
+## Etape 1 : setup
 
-* [Java EE 7 with Angular JS – CRUD, REST, Validations – Part 2](http://www.radcortez.com/java-ee-7-with-angular-js-crud-rest-validations-part-2)
+1. Installer java :smile: la base quoi
+2. Installer Eclipse(version néon dans mon cas)
+3. Suivre ce tutoriel pour le setup, pour installer les pluggin eclipse nécessaire, chapitre **extending eclipse** et **installing jboss tool for eclipse** :  https://wwu-pi.github.io/tutorials/lectures/acse/010_setting_up_environment_with_docker.html 
+4. Installer wildfly en locale pour cela suivre ce tuto : http://www.ejbtutorial.com/j2ee/getting-started-with-j2ee-installing-wildfly-on-eclipse 
 
-* [Codenvy setup to demo applications using Docker: Java EE 7 with Angular](http://www.radcortez.com/codenvy-setup-to-demo-applications-using-docker-java-ee-7-with-angular/)
+:::danger
+Par contre mon eclipse ram et crash pas mal àprès avoir installé tous les pluggins
+:::
 
-## How to run ? ##
+## Etape 2 : Le connecteur mysql  
 
-## Codenvy ##
+Suivre ce tuto : http://www.javahelps.com/2015/08/add-mysql-jdbc-driver-to-eclipse.html
 
-Codenvy (https://codenvy.com) is a cloud environment for coding, building, and debugging apps. It's the recommended way
-to run this project, since all the setup is cloud based, you don't need to setup anything in your own machine.
+## Etape 3 : Créer le projet
 
-Just go to: [Java EE 7 with Angular Demo](https://codenvy.com/f?id=ybnr6nsyrimeoyhg)
+:::warning
+Partie optionnel je sais pas si on finira pas faire quelque chose dans le genre :
+Suivre ce tuto pour créer le Enterprise Application Project, EJB Project et Web Project : https://wwu-pi.github.io/tutorials/lectures/acse/020_tutorial_jboss_project.html
+:::
 
-Wait for the project to load and then just hit the Green Run Button in the upper right corner. You might want to check a
-few instructions here: [Codenvy setup to demo applications using Docker: Java EE 7 with Angular](http://www.radcortez.com/codenvy-setup-to-demo-applications-using-docker-java-ee-7-with-angular/)
+Dans le cas du JPA : 
 
-## Localhost ##
+![](https://i.imgur.com/WLSO7K8.png)
 
-* You need JDK 7 or higher, Maven 3 and Wildfly 8 or Glassfish 4.1 to run the application.
-* Build the code using Maven with the command: `mvn clean install`.
 
-### Deploy in Wildfly 10 ###
+1. Créer un nouveau projet JPA : File > New > JPA Project 
+2. Dans la fenetre qui s'ouvre :
+    * Donner un nom au projet (ex : MesTransports-JPA)
+    * Pour le champ "Target runtime" selectionner le serveur wldfly
+    * Dans le cas ou l'Enterprise Application Project est présent cocher la case EAR et selectionner le projet. 
+3. Cliquer deux fois sur next jusqu'à la page **JPA Facet** et suivre ce tutoriel : https://www.youtube.com/watch?v=_dq3v2s59V8
 
-  * Copy the file javaee7-angular.war from target directory to your Wildfly installation folder
-  `standalone/deployments`
+:::warning
+Dans le tuto la base est en posgreSQL donc dans notre cas c'est MySQL
+:::
 
-  * You can also deploy the app using the Maven Wildfly Plugin with the following command: `mvn wildfly:deploy`. You need to have Wildfly running.
+:::danger
+Il y a normallement 7 liens à réaliser 
+![](https://i.imgur.com/LbBnUiH.png)
 
-  * Start Wildfly and go to http://localhost:8080/javaee7-angular/ (http://localhost:8080/javaee7-angular/)
-  
-### Deploy in Embedded Wilffy ###
-
-  * Just run `mvn wildfly:run`
-  
-  * Go to http://localhost:8080/javaee7-angular/ (http://localhost:8080/javaee7-angular/)
-
-### Deploy in Glassfish 4.1 ###
-
-  * Open Admin Console (http://localhost:8484/)
-  
-  * Go to menu "Application" 
-  
-  * In the button "Deploy..." select the file javaee7-angular.war
-   
-  * Go to http://localhost:8080/javaee7-angular/ (http://localhost:8080/javaee7-angular/)
-  
-### Deploy in Embedded-Glassfish 4.1 ###
-
-  * Just run `mvn embedded-glassfish:run`
-  
-  * Go to http://localhost:8080/javaee7-angular/ (http://localhost:8080/javaee7-angular/)
-  
-### Run with TomEE ###
-
-  * Just run `mvn tomee:run`
-  
-  * Go to http://localhost:8080/javaee7-angular/ (http://localhost:8080/javaee7-angular/)
-  
-## Javascript Package Management (optional) ##
-
-The required JS libraries are included in the project, but it also possible to manage them following the next steps:
-
-* You need NPM. Please go to http://nodejs.org/download/ to get a copy.
-
-* Once NPM is installed run the command `npm install`.
-
-* Install Grunt `npm install -g grunt-cli`  for more information please go to http://gruntjs.com/getting-started.
-
-* Run the command 'grunt' to download all the web dependencies and build an optimized version of the project.
+:::
+    
