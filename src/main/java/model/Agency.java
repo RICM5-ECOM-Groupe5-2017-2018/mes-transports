@@ -10,7 +10,6 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="AGENCY")
 @NamedQuery(name="Agency.findAll", query="SELECT a FROM Agency a")
 public class Agency implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +17,8 @@ public class Agency implements Serializable {
 	@Id
 	private int id;
 
-	private String address;
+	@Column(name="id_mother_agency")
+	private int idMotherAgency;
 
 	private String type;
 
@@ -32,7 +32,7 @@ public class Agency implements Serializable {
 
 	//bi-directional many-to-one association to Agency
 	@ManyToOne
-	@JoinColumn(name="id_mother_agency")
+	@JoinColumn(name="id", referencedColumnName="address")
 	private Agency agency;
 
 	//bi-directional many-to-one association to Agency
@@ -50,12 +50,12 @@ public class Agency implements Serializable {
 		this.id = id;
 	}
 
-	public String getAddress() {
-		return this.address;
+	public int getIdMotherAgency() {
+		return this.idMotherAgency;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setIdMotherAgency(int idMotherAgency) {
+		this.idMotherAgency = idMotherAgency;
 	}
 
 	public String getType() {

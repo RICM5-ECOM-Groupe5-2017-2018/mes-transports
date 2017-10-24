@@ -27,12 +27,12 @@ public class VehicleType implements Serializable {
 	//bi-directional many-to-many association to Characteristic
 	@ManyToMany
 	@JoinTable(
-		name="CHARACTERISTIC_TYPE"
+		name="VEHICLE_TYPE"
 		, joinColumns={
-			@JoinColumn(name="idType")
+			@JoinColumn(name="id")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="idCharacteristic")
+			@JoinColumn(name="id")
 			}
 		)
 	private List<Characteristic> characteristics;

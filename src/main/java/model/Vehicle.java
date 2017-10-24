@@ -10,13 +10,14 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="VEHICLE")
 @NamedQuery(name="Vehicle.findAll", query="SELECT v FROM Vehicle v")
 public class Vehicle implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private int id;
+
+	private String brand;
 
 	private String insurance;
 
@@ -41,7 +42,7 @@ public class Vehicle implements Serializable {
 	@JoinTable(
 		name="ASSIGN_CHARACTERISTIC"
 		, joinColumns={
-			@JoinColumn(name="idVehicle", referencedColumnName="brand")
+			@JoinColumn(name="idVehicle")
 			}
 		, inverseJoinColumns={
 			@JoinColumn(name="idCharacteristic")
@@ -58,6 +59,14 @@ public class Vehicle implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getBrand() {
+		return this.brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
 
 	public String getInsurance() {

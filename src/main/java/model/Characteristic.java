@@ -10,7 +10,6 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="CHARACTERISTIC")
 @NamedQuery(name="Characteristic.findAll", query="SELECT c FROM Characteristic c")
 public class Characteristic implements Serializable {
 	private static final long serialVersionUID = 1L;
