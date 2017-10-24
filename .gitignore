@@ -87,3 +87,4 @@ node_modules
 src/main/webapp/lib/bower
 temp
 build
+/bin
