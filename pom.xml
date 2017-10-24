@@ -71,7 +71,7 @@
                 <version>${version.plugin.war}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <warName>javaee7-angular</warName>
+                    <warName>mes-transports</warName>
                 </configuration>
             </plugin>
 

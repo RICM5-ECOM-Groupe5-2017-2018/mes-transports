@@ -11,13 +11,9 @@
     	<class>model.User</class>
     	<class>model.Vehicle</class>
     	<class>model.VehicleType</class>
+    	<class>model.CharacteristicType</class>
+    	<class>model.CharacteristicTypePK</class>
         <properties>
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-            <property name="javax.persistence.schema-generation.create-source" value="script"/>
-            <property name="javax.persistence.schema-generation.drop-source" value="script"/>
-            <property name="javax.persistence.schema-generation.create-script-source" value="sql/create.sql"/>
-            <property name="javax.persistence.schema-generation.drop-script-source" value="sql/drop.sql"/>
-            <property name="javax.persistence.sql-load-script-source" value="sql/load.sql"/>
         </properties>
     </persistence-unit>
 </persistence>
