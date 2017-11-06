@@ -23,8 +23,17 @@ public class QuerySession implements QuerySessionRemote {
 
 	@Override
 	public List<Vehicle> search(String[] parameters) {
-
-		//TODO
+		string s = "SELECT * FROM Vehicule";
+		if(parameters.size()>0){
+		s += " WHERE ";
+			for(int i=0;i<parameters.size();i++){
+				s+= " Caracteristique='"+parameters.get(i)+"'";
+				if(i<parameters.size()-1) s+=" AND ";
+			}
+		}
+		(List<Vehicule>) em.createQuery(s)
+		.getResultList();
+		
 		return null;
 		
 	}

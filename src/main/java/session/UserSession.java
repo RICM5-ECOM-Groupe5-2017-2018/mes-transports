@@ -82,6 +82,36 @@ public class UserSession implements UserSessionRemote {
 	@Override
 	public void validateCart() {
 
+		List<Boolean> validate_list = new LinkedList<Boolean>();
+		
+		for(int i=0;i<cart.size();i++){
+			
+			if((cart.get(i).start_date==0 && cart.get(i).end_date==0) || cart.get(i).vehicles.size()<=0){
+				validate_list.add(true);
+			}
+			else{
+				
+				boolean list_validation=true;
+				for(int j=0;j<cart.get(i).vehicles.get(j);j++){
+					Vehicule v = cart.get(i).vehicules.get(j);
+					string s="SELECT * FROM Vehicule WHERE id="+v.id+ 
+					//TODO RAJOUTER LES DISPONIBILITEE " INNER JOIN disponibilite ON Vehicule.id = disponibilite.id WHERE TODO\\
+					
+					List<Vehicule> lv = (List<Vehicule>)em.createQuery(s)
+					.getResultList();
+					
+					if(lv.size()==0){
+						list_validation=false;
+					}
+				}
+				if(list_validation){
+					validate_list.add(true);
+				}
+				else{
+					validate_list.add(false);
+				}
+			}
+		}
 		// TODO 
 		
 	}
