@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import model.Vehicle;
 
@@ -14,6 +16,7 @@ import model.Vehicle;
 @LocalBean
 public class QuerySession implements QuerySessionRemote {
 
+	@PersistenceContext protected EntityManager em;
     /**
      * Default constructor. 
      */
@@ -23,18 +26,17 @@ public class QuerySession implements QuerySessionRemote {
 
 	@Override
 	public List<Vehicle> search(String[] parameters) {
-		string s = "SELECT * FROM Vehicule";
-		if(parameters.size()>0){
+		String s = "SELECT * FROM Vehicule";
+		if(parameters.length>0){
 		s += " WHERE ";
-			for(int i=0;i<parameters.size();i++){
-				s+= " Caracteristique='"+parameters.get(i)+"'";
-				if(i<parameters.size()-1) s+=" AND ";
+			for(int i=0;i<parameters.length;i++){
+				s+= " Caracteristique='"+parameters[i]+"'";
+				if(i<parameters.length-1) s+=" AND ";
 			}
 		}
-		(List<Vehicule>) em.createQuery(s)
+		return (List<Vehicle>) em.createQuery(s)
 		.getResultList();
-		
-		return null;
+	
 		
 	}
 

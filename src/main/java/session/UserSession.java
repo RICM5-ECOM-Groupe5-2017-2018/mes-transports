@@ -79,6 +79,7 @@ public class UserSession implements UserSessionRemote {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void validateCart() {
 
@@ -92,15 +93,14 @@ public class UserSession implements UserSessionRemote {
 			else{
 				
 				boolean list_validation=true;
-				for(int j=0;j<cart.get(i).vehicles.get(j);j++){
-					Vehicule v = cart.get(i).vehicules.get(j);
-					string s="SELECT * FROM Vehicule WHERE id="+v.id+ 
-					//TODO RAJOUTER LES DISPONIBILITEE " INNER JOIN disponibilite ON Vehicule.id = disponibilite.id WHERE TODO\\
+				for(int j=0;j<cart.get(i).vehicles.size();j++){
+					Vehicle v = cart.get(i).vehicles.get(j);
+					String s="SELECT * FROM Vehicule WHERE id="+v.getId();
+					//TODO RAJOUTER LES DISPONIBILITEE " INNER JOIN  ON Vehicule.id = disponibilite.id WHERE TODO
 					
-					List<Vehicule> lv = (List<Vehicule>)em.createQuery(s)
-					.getResultList();
-					
-					if(lv.size()==0){
+					;					
+					List<Vehicle> vehicule_list=(List<Vehicle>) em.createQuery(s).getResultList();
+					if(vehicule_list.size()==0){
 						list_validation=false;
 					}
 				}
