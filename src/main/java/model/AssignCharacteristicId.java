@@ -1,7 +1,5 @@
 package model;
-
-// default package
-// Generated 24 oct. 2017 17:46:56 by Hibernate Tools 5.2.5.Final
+// Generated 11 nov. 2017 18:56:02 by Hibernate Tools 5.1.5.Final
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
