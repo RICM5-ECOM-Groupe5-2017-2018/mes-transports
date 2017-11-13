@@ -1,5 +1,7 @@
 package controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -36,6 +38,8 @@ public class UserController extends ApiController {
 	
 	@Context private HttpServletRequest request;
 	
+	public static final String SALT = "MTsalt";
+	
 	@GET
 	@Secured
 	@Path("/logout")
@@ -67,9 +71,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
+			String saltedPassword = SALT + password;
+			String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", password)
+					.setParameter("pass", hashedPassword)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
@@ -97,6 +103,26 @@ public class UserController extends ApiController {
 		
 	}
 	
+	private String generateHash(String input) {
+		StringBuilder hash = new StringBuilder();
+
+		try {
+			MessageDigest sha = MessageDigest.getInstance("SHA-1");
+			byte[] hashedBytes = sha.digest(input.getBytes());
+			char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+					'a', 'b', 'c', 'd', 'e', 'f' };
+			for (int idx = 0; idx < hashedBytes.length; ++idx) {
+				byte b = hashedBytes[idx];
+				hash.append(digits[(b & 0xf0) >> 4]);
+				hash.append(digits[b & 0x0f]);
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// handle error here.
+		}
+
+		return hash.toString();
+	}
+
 	@GET
 	@Path("/create/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -109,10 +135,12 @@ public class UserController extends ApiController {
 			@PathParam("firstname") String firstname,
 			@PathParam("lastname") String lastname) {
 		User userRet = new User();
+		String saltedPassword = SALT + password;
+		String hashedPassword = generateHash(saltedPassword);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
 		userRet.setMailAddress(mail);
-		userRet.setPassword(password);
+		userRet.setPassword(hashedPassword);
 		userRet.setPhoneNum(phone);
 		userRet.setRole(role);
 		userRet.setUserFirstName(firstname);
@@ -142,7 +170,9 @@ public class UserController extends ApiController {
 		userRet.setUserName(username);
 		userRet.setLogin(login);
 		userRet.setMailAddress(mail);
-		userRet.setPassword(password);
+		String saltedPassword = SALT + password;
+		String hashedPassword = generateHash(saltedPassword);
+		userRet.setPassword(hashedPassword);
 		userRet.setPhoneNum(phone);
 		userRet.setRole(role);
 		userRet.setUserFirstName(firstname);
