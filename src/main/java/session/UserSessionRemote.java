@@ -12,7 +12,7 @@ import utils.CartItem;
 public interface UserSessionRemote {
 
 	public void initialize(String token);
-	public void connect(String username, String password);
+	public boolean connect(String username, String password);
 	public void register(String username, String password, String email);
 	public void addItemToCart(List<Vehicle> item, long start_date, long end_date);
 	public void removeItemFromCart(int id);
