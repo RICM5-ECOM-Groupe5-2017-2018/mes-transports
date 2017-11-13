@@ -17,6 +17,7 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
@@ -77,10 +78,16 @@ public class UserController extends ApiController {
 			calendar.add(Calendar.DATE, 2);
 			date = calendar.getTime();
 			user.setTokenExpiration(date);
-			String token = UUID.randomUUID().toString();
-			user.setToken(token);
+			String token = null;
+			if (user.getToken() == null) {
+				token = UUID.randomUUID().toString();
+				user.setToken(token);
+			} else {
+				token = user.getToken();
+			}
 			request.getSession().setAttribute("token", token);
 			String json = token;
+			NewCookie cookie = new NewCookie("Bearer", token);
 			entityManager.merge(user);
 			entityManager.flush();
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();	
@@ -148,6 +155,7 @@ public class UserController extends ApiController {
 	}
 	
 	@GET
+	@SecuredAgency
 	@Path("/view/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User consultUser (@PathParam("id") Integer id) {
