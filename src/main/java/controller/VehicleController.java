@@ -7,11 +7,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.Api;
 import model.Vehicle;
 
 @Stateless
 @ApplicationPath("/api")
 @Path("/vehicle")
+@Api("vehicle")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class VehicleController extends ApiController{

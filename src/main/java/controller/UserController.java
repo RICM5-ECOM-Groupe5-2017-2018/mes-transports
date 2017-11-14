@@ -23,12 +23,14 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
+import io.swagger.annotations.Api;
 import model.User;
 import session.UserSession;
 
 @Stateless
 @ApplicationPath("/api")
 @Path("/user")
+@Api("user")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserController extends ApiController {

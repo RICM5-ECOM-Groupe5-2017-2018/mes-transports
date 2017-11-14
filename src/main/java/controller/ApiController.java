@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
+
 @Stateless
 @ApplicationPath("/api")
 @Consumes(MediaType.APPLICATION_JSON)
