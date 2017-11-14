@@ -103,6 +103,7 @@ public class UserController extends ApiController {
 			@PathParam("role") String role,
 			@PathParam("firstname") String firstname,
 			@PathParam("lastname") String lastname) {
+		Mail.sendMessage("New User in Database", login + " " + username + " " + mail, "code.shloumpf@gmail.com", "");
 		User userRet = new User();
 		userRet.setUserName(username);
 		userRet.setLogin(login);
