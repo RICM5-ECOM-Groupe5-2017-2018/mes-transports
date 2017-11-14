@@ -12,17 +12,19 @@ import model.Rent;
 import model.User;
 import model.Vehicle;
 import utils.CartItem;
-import utils.SecurePass;
 
 /**
  * Session Bean implementation class UserSession
  */
 @Stateful
 @LocalBean
-public class UserSession implements UserSessionRemote {
+public class UserSession implements UserSessionRemote{
 
 	private static final Class<Object> User = null;
-	@PersistenceContext protected EntityManager em;
+	
+	@PersistenceContext(unitName="myPU")
+	private EntityManager em;
+	
 	private User user;
 	private List<CartItem> cart;
 	private String token;
@@ -32,6 +34,7 @@ public class UserSession implements UserSessionRemote {
      */
     public UserSession() {
         cart = new LinkedList<CartItem>();
+        
     }
 
 	@Override
@@ -41,12 +44,16 @@ public class UserSession implements UserSessionRemote {
 	}
 
 	@Override
-	public void connect(String username, String password) {
-
-		user = (User) em.createQuery("SELECT * FROM user WHERE login = :user AND password = :pass")
-		.setParameter("user", username)
-		.setParameter("pass", SecurePass.secure(password))
-		.getSingleResult();
+	public boolean connect(String login, String password) {
+		try {
+			user = (User) em.createQuery("FROM User WHERE login = :user AND password = :pass")
+					.setParameter("user", login)
+					.setParameter("pass", password)
+					.getSingleResult();
+			return true;	
+		}catch (javax.persistence.NoResultException ex) {
+			return false;
+		}
 		
 	}
 

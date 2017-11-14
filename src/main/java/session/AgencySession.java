@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import model.Agency;
 import model.Vehicle;
@@ -14,6 +16,9 @@ import model.Vehicle;
 @Stateful
 @LocalBean
 public class AgencySession extends UserSession implements AgencySessionRemote {
+	
+	@PersistenceContext(unitName="myPU")
+	private EntityManager em;
 	
 	public List<Agency> agencies;
 
