@@ -45,6 +45,50 @@ Il y a normallement 7 liens à réaliser
 ![](https://i.imgur.com/WpmncVh.png)
 :::
 
+
+## Etape 4 : Configurer wildfly pour fonctionner avec MySQL
+1. Télécharger wildfly : http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip
+2. Télécharger le connecteur MySQL : https://dev.mysql.com/downloads/connector/j/
+3. Aller dans modules\system\layers\base\com
+4. Créer un dossier mysql\main et naviguer dedans
+5. Mettre le connecteur téléchargé en étape 2 dedans
+6. Créer un fichier module.xml dans le dossier racine 
+    ```
+    <?xml version="1.0" encoding="UTF-8"?>
+    <module xmlns="urn:jboss:module:1.1" name="com.mysql">
+        <resources>
+            <resource-root path="{chemin du connecteur}"/>              
+        </resources>
+        <dependencies>
+            <module name="javax.api"/>
+            <module name="javax.transaction.api"/>
+        </dependencies>
+    </module>
+    ```
+7. Aller dans le fichier standalone.xml et localiser la balise "datasources-driver" et ajouter 
+    ```
+    <driver name="mysql" module="com.mysql">
+        <driver-class>com.mysql.jdbc.Driver</driver-class>
+    </driver>
+    ```
+ 8. Ajouter une datasource aux datasources
+    ```
+        <datasource jndi-name="java:jboss/datasources/SchoolAppDS" pool-name="SchoolAppDS" enabled="true" use-java-context="true">
+            <connection-url>jdbc:mysql://{url vers la database mysql}</connection-url>
+            <driver>mysql</driver>
+            <pool>
+                <min-pool-size>2</min-pool-size>
+                <max-pool-size>5</max-pool-size>
+            </pool>
+            <security>
+                <user-name>{USERNAME}</user-name>
+                <password>{PASSWORD}</password>
+            </security>
+        </datasource>
+    ```
+9. C'est fait!
+
+:::
 # API - url 
 
 ## Les agences
