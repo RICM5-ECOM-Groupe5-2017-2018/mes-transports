@@ -1,26 +1,18 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5
--- https://www.phpmyadmin.net/
+-- version 4.4.10
+-- http://www.phpmyadmin.net
 --
--- Client :  localhost:3306
--- Généré le :  Lun 06 Novembre 2017 à 16:14
--- Version du serveur :  5.7.20-0ubuntu0.17.10.1
--- Version de PHP :  7.1.8-1ubuntu1
+-- Client :  127.0.0.1:3306
+-- Généré le :  Mar 14 Novembre 2017 à 09:20
+-- Version du serveur :  5.5.42
+-- Version de PHP :  5.6.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Base de données :  `Mes_Transports`
 --
-CREATE DATABASE IF NOT EXISTS `Mes_Transports` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `Mes_Transports`;
 
 -- --------------------------------------------------------
 
@@ -32,7 +24,7 @@ CREATE TABLE `agency` (
   `id` int(11) NOT NULL,
   `type` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `id_mother_agency` int(11) NOT NULL,
+  `id_mother_agency` int(11) DEFAULT NULL,
   `phone_num` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -102,11 +94,12 @@ CREATE TABLE `user` (
   `role` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `mail_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `login` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `password` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `phone_num` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `idAgency` int(11) DEFAULT NULL,
   `token` varchar(50) DEFAULT NULL,
-  `token_expiration` timestamp NULL DEFAULT NULL
+  `token_expiration` timestamp NULL DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -273,7 +266,3 @@ ALTER TABLE `user`
 ALTER TABLE `vehicle`
   ADD CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`idAgency`) REFERENCES `agency` (`id`),
   ADD CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`type`) REFERENCES `vehicle_type` (`id`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
