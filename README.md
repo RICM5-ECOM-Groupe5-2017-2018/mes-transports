@@ -99,7 +99,6 @@ Il y a normallement 7 liens à réaliser
 >**Fonctionnalités** : *Créer une nouvelle agence*
 >
 > **Paramètres** : 
->
 >- type : type d'agence(normal, taxi....)
 >- address : l'adresse physique de l'agence
 >- phone : le numéro de l'agence
@@ -110,8 +109,8 @@ Il y a normallement 7 liens à réaliser
 
 ### /edit
 >**Fonctionnalités** : *Modifier les paramètres d'une agence*
-> **Paramètres** :
 >
+> **Paramètres** :
 >- id : l'identifiant de l'agence à modifier
 >- type : type d'agence(normal, taxi....)
 >- address : l'adresse physique de l'agence
@@ -123,6 +122,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /view
 >**Fonctionnalités** : *Visualiser les données d'une agence*
+>
 > **Paramètres** :
 >- id : l'identifiant de l'agence à visualiser
 >
@@ -132,6 +132,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /delete
 >**Fonctionnalités** : *Supprimer une agence*
+>
 >**Paramètres** :
 >- id : l'identifiant de l'agence à supprimer
 >
@@ -141,6 +142,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /vehicle
 >**Fonctionnalités** : *Visualiser la liste des véhicules d'une agence*
+>
 >**Paramètres** :
 >- id : l'identifiant de l'agence ou de la sous-agence
 >
@@ -150,6 +152,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /list
 >**Fonctionnalités** : *Obtenir la liste des sous agences pour une agence*
+>
 >**Paramètres** :
 >- id : l'identifiant de l'agence ou de la sous-agence
 >
@@ -159,6 +162,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /history
 >**Fonctionnalités** : *Liste des locations effectuées pour une agence *
+>
 >**Paramètres** : 
 >- id : identifiant de l'agence ou de la sous agence
 >
@@ -173,6 +177,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /create
 >**Fonctionnalités** : *Créer un nouvel utilisateur*
+>
 >**Paramètres** : 
 >- login : le nom de connexion de l'utilisateur
 >- username : le nom de l'utilisateur dans l'application
@@ -188,6 +193,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /edit
 >**Fonctionnalités** : *Modifie les données d'un utilisateur*
+>
 >**Paramètres** : 
 >- id : l'id de l'utilisateur à modifier
 >- login : le nom de connexion de l'utilisateur
@@ -204,6 +210,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /view
 >**Fonctionnalités** : *Visualiser les données d'un utilisateur*
+>
 >**Paramètres** : 
 >- id : l'identifiant de l'utilisateur
 >
@@ -213,6 +220,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /disable
 >**Fonctionnalités** : *Supprimer un utilisateur*
+>
 >**Paramètres** : 
 >- id : l'identifiant de l'utilisateur à supprimer
 >
@@ -222,6 +230,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /authenticate
 >**Fonctionnalités** : *Permettre à une utilisateur de s'identifier*
+>
 >**Paramètres** : 
 >- login : le nom de connexion de l'utilisateur
 >- password : le mot de passe de l'utilisateur
@@ -231,6 +240,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /logout
 >**Fonctionnalités** : *Permettre à un utilisateur de se déconnecter*
+>
 >**Paramètres** : aucun paramètre
 >
 >**Sortie**:
@@ -238,6 +248,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /reativate
 >**Fonctionnalités** : *Réactiver un compte utilisateur*
+>
 >**Paramètres** : 
 >- id : l'identifiant de l'utilisateur à réactiver
 >
@@ -250,6 +261,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /create
 >**Fonctionnalités** : *Créer un véhicule*
+>
 >**Paramètres** : 
 >- brand : marque du véhicule
 >- price : prix du véhicule
@@ -263,6 +275,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /list
 >**Fonctionnalités** : *Obtenir la liste des caractéristiques possibles*
+>
 >**Paramètres** : 
 >- idType : identifiant du type de véhicule 
 >
@@ -272,6 +285,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /view
 >**Fonctionnalités** : *Visualiser un véhicule*
+>
 >**Paramètres** : 
 >- id : identifiant du véhicule 
 >
@@ -281,6 +295,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /edit
 >**Fonctionnalités** : *Modifier un véhicule*
+>
 >**Paramètres** : 
 >- id : identifiant du véhicule à modifier
 >- brand : marque du véhicule
@@ -295,6 +310,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /delete
 >**Fonctionnalités** : *Effacer un véhicule*
+>
 >**Paramètres** : 
 >- id : identifiant du véhicule à supprimer
 >
@@ -303,6 +319,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /search
 >**Fonctionnalités** : *Obtenir une liste de véhicule disponible sur une période de temps*
+>
 >**Paramètres** : 
 >- being : date début periode
 >- end : date de fin de periode
@@ -316,6 +333,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /history
 >**Fonctionnalités** : *Obtenir les dernières transactions d'un utilisateur*
+>
 >**Paramètres** : aucun
 >
 >**Sortie**:
@@ -327,6 +345,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /add
 >**Fonctionnalités** : *Ajouter un véhicule*
+>
 >**Paramètres** : 
 >- idV : identifiant du véhicule
 >- idU : identifiant de l'utilsateur
@@ -338,6 +357,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /remove
 >**Fonctionnalités** : *Supprimer un véhicule du panier*
+>
 >**Paramètres** : 
 >- idU : identifiant utilisateur
 >- idV : identifiant du véhicule
@@ -347,6 +367,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /ordred
 >**Fonctionnalités** : *Passer la liste des véhicules dans la table location*
+>
 >**Paramètres** : 
 >- id : identifiant utilisateur
 >
@@ -355,6 +376,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /view
 >**Fonctionnalités** : *Visualiser le panier*
+>
 >**Paramètres** : aucun paramètre
 >
 >**Sortie**:
@@ -366,6 +388,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /map
 >**Fonctionnalités** : *Obtenir la liste des position d'un taxi en fonction d'une ville*
+>
 >**Paramètres** : 
 >- city : ville à regarder
 >
@@ -375,6 +398,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /assign
 >**Fonctionnalités** : *Assigner une coursse(location) à un taxi*
+>
 >**Paramètres** : 
 >- idR : identifiant de la coursse
 >- idT : identifiant du taxi
@@ -384,6 +408,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /finish
 >**Fonctionnalités** : *Signaler qu'une course est terminer*
+>
 >**Paramètres** : 
 >- idT : identifiant du taxi
 >- idC : identifiant de la coursse
@@ -396,6 +421,7 @@ Il y a normallement 7 liens à réaliser
 ### /view
 
 >**Fonctionnalités** : *Visualiser les coursses non affectées(sans paramètres), liste des coursses affecté à un taxi*
+>
 > **Paramètres** : 
 >- idT : identifiant du taxi
 >
