@@ -21,14 +21,15 @@ public class VehicleController extends ApiController{
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/create/{brand}/{price}/{insurance}/{idAgency}/{idType}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle createVehicle (@PathParam("brand") String brand,
-			@PathParam("price") Float price,
-			@PathParam("insurance") String insurance,
-			@PathParam("idAgency") Integer idAgency,
-			@PathParam("idType") Integer idType){
+	public Vehicle createVehicle (@FormParam("brand") String brand,
+			@FormParam("price") Float price,
+			@FormParam("insurance") String insurance,
+			@FormParam("idAgency") Integer idAgency,
+			@FormParam("idType") Integer idType){
 		Vehicle vehicleRet = new Vehicle();
 		vehicleRet.setBrand(brand);
 		vehicleRet.setPrice(price);
@@ -40,15 +41,16 @@ public class VehicleController extends ApiController{
 		return vehicleRet;
 	}
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/edit/{id}/{brand}/{price}/{insurance}/{idAgency}/{idType}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle editVehicle (@PathParam("id") Integer id,
-			@PathParam("brand") String brand,
-			@PathParam("price") Float price,
-			@PathParam("insurance") String insurance,
-			@PathParam("idAgency") Integer idAgency,
-			@PathParam("idType") Integer idType) {
+	public Vehicle editVehicle (@FormParam("id") Integer id,
+			@FormParam("brand") String brand,
+			@FormParam("price") Float price,
+			@FormParam("insurance") String insurance,
+			@FormParam("idAgency") Integer idAgency,
+			@FormParam("idType") Integer idType) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		vehicleRet.setBrand(brand);
 		vehicleRet.setPrice(price);
@@ -69,10 +71,11 @@ public class VehicleController extends ApiController{
 		return vehicleRet;
 	}
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteVehicle (@PathParam("id") Integer id) {
+	public String deleteVehicle (@FormParam("id") Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		entityManager.detach(vehicleRet);
 		entityManager.flush();

@@ -92,17 +92,18 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/create/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@PathParam("login") String login,
-			@PathParam("username") String username,
-			@PathParam("password") String password,
-			@PathParam("mail") String mail,
-			@PathParam("phone") String phone,
-			@PathParam("role") String role,
-			@PathParam("firstname") String firstname,
-			@PathParam("lastname") String lastname) {
+	public User createUser (@FormParam("login") String login,
+			@FormParam("username") String username,
+			@FormParam("password") String password,
+			@FormParam("mail") String mail,
+			@FormParam("phone") String phone,
+			@FormParam("role") String role,
+			@FormParam("firstname") String firstname,
+			@FormParam("lastname") String lastname) {
 		User userRet = new User();
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -119,20 +120,21 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@GET
+	@POST
 	@Secured
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/edit/{id}/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}/{agencyId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User editUser (@PathParam("id") Integer id,
-			@PathParam("login") String login,
-			@PathParam("username") String username,
-			@PathParam("password") String password,
-			@PathParam("mail") String mail,
-			@PathParam("phone") String phone,
-			@PathParam("role") String role,
-			@PathParam("firstname") String firstname,
-			@PathParam("lastname") String lastname,
-			@PathParam("agencyId") Integer agencyId) {
+	public User editUser (@FormParam("id") Integer id,
+			@FormParam("login") String login,
+			@FormParam("username") String username,
+			@FormParam("password") String password,
+			@FormParam("mail") String mail,
+			@FormParam("phone") String phone,
+			@FormParam("role") String role,
+			@FormParam("firstname") String firstname,
+			@FormParam("lastname") String lastname,
+			@FormParam("agencyId") Integer agencyId) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -157,10 +159,11 @@ public class UserController extends ApiController {
 		return userRet;
 	}
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/disable/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String disableUser (@PathParam("id") Integer id) {
+	public String disableUser (@FormParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setStatus(false);
 		entityManager.merge(userRet);

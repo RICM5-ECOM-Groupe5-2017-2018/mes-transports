@@ -21,13 +21,14 @@ public class AgencyController extends ApiController{
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
 	
-	@GET
+	@POST
 	@Path("/create/{type}/{adress}/{phone}/{idMotherAgency}")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Agency createAgency (@PathParam("type") String type,
-			@PathParam("adress") String adress,
-			@PathParam("phone") String phone,
-			@PathParam("idMotherAgency") Integer idMotherAgency){
+	public Agency createAgency (@FormParam("type") String type,
+			@FormParam("adress") String adress,
+			@FormParam("phone") String phone,
+			@FormParam("idMotherAgency") Integer idMotherAgency){
 		Agency agencyRet = new Agency();
 		agencyRet.setAddress(adress);
 		agencyRet.setIdMotherAgency(idMotherAgency);
@@ -38,14 +39,15 @@ public class AgencyController extends ApiController{
 		return agencyRet;
 	}
 	
-	@GET
+	@POST
 	@Path("/edit/{id}/{type}/{adress}/{phone}/{idMotherAgency}")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Agency editAgency (@PathParam("id") Integer id,
-			@PathParam("type") String type,
-			@PathParam("adress") String adress,
-			@PathParam("phone") String phone,
-			@PathParam("idMotherAgency") Integer idMotherAgency) {
+	public Agency editAgency (@FormParam("id") Integer id,
+			@FormParam("type") String type,
+			@FormParam("adress") String adress,
+			@FormParam("phone") String phone,
+			@FormParam("idMotherAgency") Integer idMotherAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		agencyRet.setAddress(adress);
 		agencyRet.setIdMotherAgency(idMotherAgency);
@@ -65,10 +67,11 @@ public class AgencyController extends ApiController{
 		return agencyRet;
 	}
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteAgency (@PathParam("id") Integer id) {
+	public String deleteAgency (@FormParam("id") Integer id) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		entityManager.detach(agencyRet);
 		entityManager.flush();
