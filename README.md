@@ -97,7 +97,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /create
 >**Fonctionnalités** : *Créer une nouvelle agence*
->**Paramètres** : 
+> **Paramètres** : 
 >- type : type d'agence(normal, taxi....)
 >- address : l'adresse physique de l'agence
 >- phone : le numéro de l'agence
@@ -108,7 +108,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /edit
 >**Fonctionnalités** : *Modifier les paramètres d'une agence*
->**Paramètres** :
+> **Paramètres** :
 >- id : l'identifiant de l'agence à modifier
 >- type : type d'agence(normal, taxi....)
 >- address : l'adresse physique de l'agence
@@ -120,7 +120,7 @@ Il y a normallement 7 liens à réaliser
 
 ### /view
 >**Fonctionnalités** : *Visualiser les données d'une agence*
->**Paramètres** :
+> **Paramètres** :
 >- id : l'identifiant de l'agence à visualiser
 >
 >**Sortie**:
@@ -393,7 +393,7 @@ Il y a normallement 7 liens à réaliser
 ### /view
 
 >**Fonctionnalités** : *Visualiser les coursses non affectées(sans paramètres), liste des coursses affecté à un taxi*
->**Paramètres** : 
+> **Paramètres** : 
 >- idT : identifiant du taxi
 >
 >**Sortie**:
