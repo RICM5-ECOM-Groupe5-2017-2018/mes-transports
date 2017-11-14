@@ -97,7 +97,9 @@ Il y a normallement 7 liens à réaliser
 
 ### /create
 >**Fonctionnalités** : *Créer une nouvelle agence*
+>
 > **Paramètres** : 
+>
 >- type : type d'agence(normal, taxi....)
 >- address : l'adresse physique de l'agence
 >- phone : le numéro de l'agence
@@ -109,6 +111,7 @@ Il y a normallement 7 liens à réaliser
 ### /edit
 >**Fonctionnalités** : *Modifier les paramètres d'une agence*
 > **Paramètres** :
+>
 >- id : l'identifiant de l'agence à modifier
 >- type : type d'agence(normal, taxi....)
 >- address : l'adresse physique de l'agence
