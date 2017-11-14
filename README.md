@@ -43,7 +43,315 @@ Dans le tuto la base est en posgreSQL donc dans notre cas c'est MySQL
 :::danger
 Il y a normallement 7 liens à réaliser 
 ![](https://i.imgur.com/WpmncVh.png)
-
-
 :::
-    
+
+# API - url 
+
+## Les agences
+
+**Url de base** : api/agency
+
+### /create
+>**Fonctionnalités** : *Créer une nouvelle agence*
+>**Paramètres** : 
+>- type : type d'agence(normal, taxi....)
+>- address : l'adresse physique de l'agence
+>- phone : le numéro de l'agence
+>- idMotherAgency : l'identifiant de l'agece mère
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /edit
+>**Fonctionnalités** : *Modifier les paramètres d'une agence*
+>**Paramètres** :
+>- id : l'identifiant de l'agence à modifier
+>- type : type d'agence(normal, taxi....)
+>- address : l'adresse physique de l'agence
+>- phone : le numéro de l'agence
+>- idMotherAgency : l'identifiant de l'agece mère
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /view
+>**Fonctionnalités** : *Visualiser les données d'une agence*
+>**Paramètres** :
+>- id : l'identifiant de l'agence à visualiser
+>
+>**Sortie**:
+>- Renvoie les données d'une agence id, type, address, phone et idMotherAgency
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /delete
+>**Fonctionnalités** : *Supprimer une agence*
+>**Paramètres** :
+>- id : l'identifiant de l'agence à supprimer
+>
+>**Sortie**:
+>- Renvoie les données d'une agence id, type, address, phone et idMotherAgency
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /vehicle
+>**Fonctionnalités** : *Visualiser la liste des véhicules d'une agence*
+>**Paramètres** :
+>- id : l'identifiant de l'agence ou de la sous-agence
+>
+>**Sortie**:
+>- Renvoie la liste de détails de véhicule sans les caractéristiques pour une agence
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /list
+>**Fonctionnalités** : *Obtenir la liste des sous agences pour une agence*
+>**Paramètres** :
+>- id : l'identifiant de l'agence ou de la sous-agence
+>
+>**Sortie**:
+>- Renvoie la liste des sous agences
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /history
+>**Fonctionnalités** : *Liste des locations effectuées pour une agence *
+>**Paramètres** : 
+>- id : identifiant de l'agence ou de la sous agence
+>
+>**Sortie**:
+>- Renvoie la liste des locations de l'agence sur la perriode demandé(données location, données utilisateurs, données véhicules)
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+
+## Les users
+
+**Url de base** : api/user
+
+### /create
+>**Fonctionnalités** : *Créer un nouvel utilisateur*
+>**Paramètres** : 
+>- login : le nom de connexion de l'utilisateur
+>- username : le nom de l'utilisateur dans l'application
+>- password : le mot de passe de l'utilisateur
+>- mail : le mail de l'utilisateur
+>- phone : le numéro de téléphone de l'utilisateur
+>- role : le rôle de l'utilisateur(admin, client, renter)
+>- firstname : prénom de l'utilisateur
+>- lastname : nom de l'utilisateur
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /edit
+>**Fonctionnalités** : *Modifie les données d'un utilisateur*
+>**Paramètres** : 
+>- id : l'id de l'utilisateur à modifier
+>- login : le nom de connexion de l'utilisateur
+>- username : le nom de l'utilisateur dans l'application
+>- password : le mot de passe de l'utilisateur
+>- mail : le mail de l'utilisateur
+>- phone : le numéro de téléphone de l'utilisateur
+>- role : le rôle de l'utilisateur(admin, client, renter)
+>- firstname : prénom de l'utilisateur
+>- lastname : nom de l'utilisateur
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /view
+>**Fonctionnalités** : *Visualiser les données d'un utilisateur*
+>**Paramètres** : 
+>- id : l'identifiant de l'utilisateur
+>
+>**Sortie**:
+>- Renvoie les données de l'utilisateur (id, login,username,password,mail,phone,role,firstname, lastname)
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /disable
+>**Fonctionnalités** : *Supprimer un utilisateur*
+>**Paramètres** : 
+>- id : l'identifiant de l'utilisateur à supprimer
+>
+>**Sortie**:
+>- Renvoie les données de l'utilisateur
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /authenticate
+>**Fonctionnalités** : *Permettre à une utilisateur de s'identifier*
+>**Paramètres** : 
+>- login : le nom de connexion de l'utilisateur
+>- password : le mot de passe de l'utilisateur
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /logout
+>**Fonctionnalités** : *Permettre à un utilisateur de se déconnecter*
+>**Paramètres** : aucun paramètre
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /reativate
+>**Fonctionnalités** : *Réactiver un compte utilisateur*
+>**Paramètres** : 
+>- id : l'identifiant de l'utilisateur à réactiver
+>
+>**Sortie**:
+>- Renvoie les données de l'utilisateur
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+## Les véhicules
+**Url de base** : api/vehicle
+
+### /create
+>**Fonctionnalités** : *Créer un véhicule*
+>**Paramètres** : 
+>- brand : marque du véhicule
+>- price : prix du véhicule
+>- insurance : assurance
+>- idAgency : identifiant de l'agence qui possède le véhicule
+>- idType : identifiant du type de véhicule
+>- caracteristics : tableaux des différentes caractéristiques
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /list
+>**Fonctionnalités** : *Obtenir la liste des caractéristiques possibles*
+>**Paramètres** : 
+>- idType : identifiant du type de véhicule 
+>
+>**Sortie**:
+>- Renvoie n tableau où chaque item est de la forme label:{détails}
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /view
+>**Fonctionnalités** : *Visualiser un véhicule*
+>**Paramètres** : 
+>- id : identifiant du véhicule 
+>
+>**Sortie**:
+>- Renvoie les données véhicule (id, brand, price, insurance,idagency,idtype)
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /edit
+>**Fonctionnalités** : *Modifier un véhicule*
+>**Paramètres** : 
+>- id : identifiant du véhicule à modifier
+>- brand : marque du véhicule
+>- price : prix du véhicule
+>- insurance : assurance
+>- idAgency : identifiant de l'agence qui possède le véhicule
+>- idType : identifiant du type de véhicule
+>- caracteristics : tableaux des différentes caractéristiques
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /delete
+>**Fonctionnalités** : *Effacer un véhicule*
+>**Paramètres** : 
+>- id : identifiant du véhicule à supprimer
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /search
+>**Fonctionnalités** : *Obtenir une liste de véhicule disponible sur une période de temps*
+>**Paramètres** : 
+>- being : date début periode
+>- end : date de fin de periode
+>
+>**Sortie**:
+>- Renvoie uns liste de détail de véhicule(avec leurs caractéristiques)
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+## les commandes
+**Url de base** : api/ordered
+
+### /history
+>**Fonctionnalités** : *Obtenir les dernières transactions d'un utilisateur*
+>**Paramètres** : aucun
+>
+>**Sortie**:
+>- Renvoie la liste des détails de location pour l'utilisateur
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+## Le panier
+**Url de base** : api/cart
+
+### /add
+>**Fonctionnalités** : *Ajouter un véhicule*
+>**Paramètres** : 
+>- idV : identifiant du véhicule
+>- idU : identifiant de l'utilsateur
+>- being : date début periode location
+>- end : date de fin de periode location
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /remove
+>**Fonctionnalités** : *Supprimer un véhicule du panier*
+>**Paramètres** : 
+>- idU : identifiant utilisateur
+>- idV : identifiant du véhicule
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /ordred
+>**Fonctionnalités** : *Passer la liste des véhicules dans la table location*
+>**Paramètres** : 
+>- id : identifiant utilisateur
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /view
+>**Fonctionnalités** : *Visualiser le panier*
+>**Paramètres** : aucun paramètre
+>
+>**Sortie**:
+>- Renvoie la liste des détails de véhicule dans le panier, ainsi que son montant, les periodes de location et les lieux de retrait
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+## Les taxis
+**Url de base** : api/taxi
+
+### /map
+>**Fonctionnalités** : *Obtenir la liste des position d'un taxi en fonction d'une ville*
+>**Paramètres** : 
+>- city : ville à regarder
+>
+>**Sortie**:
+>- Renvoie la liste des véhicules présent dans la ville ainsi que leur position et leur état
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /assign
+>**Fonctionnalités** : *Assigner une coursse(location) à un taxi*
+>**Paramètres** : 
+>- idR : identifiant de la coursse
+>- idT : identifiant du taxi
+>
+>**Sortie**:
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+### /finish
+>**Fonctionnalités** : *Signaler qu'une course est terminer*
+>**Paramètres** : 
+>- idT : identifiant du taxi
+>- idC : identifiant de la coursse
+>
+>**Sortie**:
+>- Renvoie la liste des détails de location pour l'utilisateur
+>- Si erreur renvoie le code 200 avec un message d'erreur
+
+
+### /view
+
+>**Fonctionnalités** : *Visualiser les coursses non affectées(sans paramètres), liste des coursses affecté à un taxi*
+>**Paramètres** : 
+>- idT : identifiant du taxi
+>
+>**Sortie**:
+>- Renvoie la liste des locations soit affecté à un véhicule soit celle qui ne sont pas affecté à un véhicule.
+>- Si erreur renvoie le code 200 avec un message d'erreur
