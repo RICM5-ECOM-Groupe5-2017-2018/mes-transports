@@ -22,15 +22,15 @@ public class AgencyController extends ApiController{
     private EntityManager entityManager;
 	
 	@POST
-	@Path("/create/{type}/{adress}/{phone}/{idMotherAgency}")
+	@Path("/create/agency/}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency createAgency (@FormParam("type") String type,
-			@FormParam("adress") String adress,
+			@FormParam("address") String address,
 			@FormParam("phone") String phone,
 			@FormParam("idMotherAgency") Integer idMotherAgency){
 		Agency agencyRet = new Agency();
-		agencyRet.setAddress(adress);
+		agencyRet.setAddress(address);
 		agencyRet.setIdMotherAgency(idMotherAgency);
 		agencyRet.setPhoneNum(phone);
 		agencyRet.setType(type);
