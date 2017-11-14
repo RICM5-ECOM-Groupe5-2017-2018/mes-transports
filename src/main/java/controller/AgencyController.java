@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.Console;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,7 +24,7 @@ public class AgencyController extends ApiController{
     private EntityManager entityManager;
 	
 	@POST
-	@Path("/create/agency")
+	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency createAgency (@QueryParam("type") String type,
@@ -30,11 +32,10 @@ public class AgencyController extends ApiController{
 			@QueryParam("phone") String phone,
 			@QueryParam("idMotherAgency") Integer idMotherAgency){
 		Agency agencyRet = new Agency();
-		System.out.println("DEBUG : " + type + " " + phone);
 		agencyRet.setAddress(address);
 		agencyRet.setIdMotherAgency(idMotherAgency);
 		agencyRet.setPhoneNum(phone);
-		agencyRet.setType(type);
+		agencyRet.setType(type);		
 		entityManager.persist(agencyRet);
 		entityManager.flush();
 		return agencyRet;
@@ -44,11 +45,11 @@ public class AgencyController extends ApiController{
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Agency editAgency (@FormParam("id") Integer id,
-			@FormParam("type") String type,
-			@FormParam("adress") String adress,
-			@FormParam("phone") String phone,
-			@FormParam("idMotherAgency") Integer idMotherAgency) {
+	public Agency editAgency (@QueryParam("id") Integer id,
+			@QueryParam("type") String type,
+			@QueryParam("adress") String adress,
+			@QueryParam("phone") String phone,
+			@QueryParam("idMotherAgency") Integer idMotherAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		agencyRet.setAddress(adress);
 		agencyRet.setIdMotherAgency(idMotherAgency);
@@ -70,9 +71,9 @@ public class AgencyController extends ApiController{
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/delete/{id}")
+	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteAgency (@FormParam("id") Integer id) {
+	public String deleteAgency (@QueryParam("id") Integer id) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		entityManager.detach(agencyRet);
 		entityManager.flush();

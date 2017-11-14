@@ -94,7 +94,7 @@ public class UserController extends ApiController {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/create/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}")
+	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User createUser (@FormParam("login") String login,
 			@FormParam("username") String username,
@@ -123,18 +123,18 @@ public class UserController extends ApiController {
 	@POST
 	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/edit/{id}/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}/{agencyId}")
+	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User editUser (@FormParam("id") Integer id,
-			@FormParam("login") String login,
-			@FormParam("username") String username,
-			@FormParam("password") String password,
-			@FormParam("mail") String mail,
-			@FormParam("phone") String phone,
-			@FormParam("role") String role,
-			@FormParam("firstname") String firstname,
-			@FormParam("lastname") String lastname,
-			@FormParam("agencyId") Integer agencyId) {
+	public User editUser (@QueryParam("id") Integer id,
+			@QueryParam("login") String login,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("mail") String mail,
+			@QueryParam("phone") String phone,
+			@QueryParam("role") String role,
+			@QueryParam("firstname") String firstname,
+			@QueryParam("lastname") String lastname,
+			@QueryParam("agencyId") Integer agencyId) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -161,9 +161,9 @@ public class UserController extends ApiController {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/disable/{id}")
+	@Path("/disable")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String disableUser (@FormParam("id") Integer id) {
+	public String disableUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setStatus(false);
 		entityManager.merge(userRet);

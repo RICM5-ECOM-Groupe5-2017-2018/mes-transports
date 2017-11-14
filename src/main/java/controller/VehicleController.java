@@ -23,13 +23,13 @@ public class VehicleController extends ApiController{
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/create/{brand}/{price}/{insurance}/{idAgency}/{idType}")
+	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle createVehicle (@FormParam("brand") String brand,
-			@FormParam("price") Float price,
-			@FormParam("insurance") String insurance,
-			@FormParam("idAgency") Integer idAgency,
-			@FormParam("idType") Integer idType){
+	public Vehicle createVehicle (@QueryParam("brand") String brand,
+			@QueryParam("price") Float price,
+			@QueryParam("insurance") String insurance,
+			@QueryParam("idAgency") Integer idAgency,
+			@QueryParam("idType") Integer idType){
 		Vehicle vehicleRet = new Vehicle();
 		vehicleRet.setBrand(brand);
 		vehicleRet.setPrice(price);
@@ -43,14 +43,14 @@ public class VehicleController extends ApiController{
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/edit/{id}/{brand}/{price}/{insurance}/{idAgency}/{idType}")
+	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle editVehicle (@FormParam("id") Integer id,
-			@FormParam("brand") String brand,
-			@FormParam("price") Float price,
-			@FormParam("insurance") String insurance,
-			@FormParam("idAgency") Integer idAgency,
-			@FormParam("idType") Integer idType) {
+	public Vehicle editVehicle (@QueryParam("id") Integer id,
+			@QueryParam("brand") String brand,
+			@QueryParam("price") Float price,
+			@QueryParam("insurance") String insurance,
+			@QueryParam("idAgency") Integer idAgency,
+			@QueryParam("idType") Integer idType) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		vehicleRet.setBrand(brand);
 		vehicleRet.setPrice(price);
@@ -73,9 +73,9 @@ public class VehicleController extends ApiController{
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/delete/{id}")
+	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteVehicle (@FormParam("id") Integer id) {
+	public String deleteVehicle (@QueryParam("id") Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		entityManager.detach(vehicleRet);
 		entityManager.flush();
