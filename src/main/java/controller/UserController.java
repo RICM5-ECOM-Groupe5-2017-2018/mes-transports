@@ -96,14 +96,14 @@ public class UserController extends ApiController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@FormParam("login") String login,
-			@FormParam("username") String username,
-			@FormParam("password") String password,
-			@FormParam("mail") String mail,
-			@FormParam("phone") String phone,
-			@FormParam("role") String role,
-			@FormParam("firstname") String firstname,
-			@FormParam("lastname") String lastname) {
+	public User createUser (@QueryParam("login") String login,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("mail") String mail,
+			@QueryParam("phone") String phone,
+			@QueryParam("role") String role,
+			@QueryParam("firstname") String firstname,
+			@QueryParam("lastname") String lastname) {
 		User userRet = new User();
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -121,7 +121,6 @@ public class UserController extends ApiController {
 	}
 	
 	@POST
-	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -133,8 +132,7 @@ public class UserController extends ApiController {
 			@QueryParam("phone") String phone,
 			@QueryParam("role") String role,
 			@QueryParam("firstname") String firstname,
-			@QueryParam("lastname") String lastname,
-			@QueryParam("agencyId") Integer agencyId) {
+			@QueryParam("lastname") String lastname){
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
