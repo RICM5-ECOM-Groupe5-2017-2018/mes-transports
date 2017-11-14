@@ -165,5 +165,20 @@
             <version>${version.dependency.javaee}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+	        <groupId>io.swagger</groupId>
+	        <artifactId>swagger-core</artifactId>
+	        <version>1.5.13</version>
+		</dependency>
+		<dependency>
+    		<groupId>io.swagger</groupId>
+    		<artifactId>swagger-jaxrs</artifactId>
+    		<version>1.5.13</version>
+		</dependency>
+		<dependency>
+    		<groupId>io.swagger</groupId>
+    		<artifactId>swagger-annotations</artifactId>
+    		<version>1.5.13</version>
+		</dependency>
     </dependencies>
 </project>

@@ -7,11 +7,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
+import io.swagger.annotations.Api;
 import model.Agency;
 
 @Stateless
 @ApplicationPath("/api")
 @Path("/agency")
+@Api("agency")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AgencyController extends ApiController{
