@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.Console;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +8,9 @@ import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
 import model.Agency;
+import security.Secured;
+import security.SecuredAdmin;
+import security.SecuredAgency;
 
 @Stateless
 @ApplicationPath("/api")
@@ -23,6 +24,7 @@ public class AgencyController extends ApiController{
     private EntityManager entityManager;
 	
 	@POST
+	@SecuredAgency
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +43,7 @@ public class AgencyController extends ApiController{
 	}
 	
 	@POST
+	@SecuredAgency
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +64,7 @@ public class AgencyController extends ApiController{
 	}
 	
 	@GET
+	@SecuredAgency
 	@Path("/view/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency consultAgency (@PathParam("id") Integer id) {
@@ -69,6 +73,7 @@ public class AgencyController extends ApiController{
 	}
 	
 	@POST
+	@SecuredAdmin
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
