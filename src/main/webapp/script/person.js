@@ -1,3 +1,5 @@
+
+//angular.module('page associé (np-app=)', ['ngResource', 'ngGrid', 'ui.bootstrap']);
 var app = angular.module('persons', ['ngResource', 'ngGrid', 'ui.bootstrap']);
 
 // Create a controller with name personsListController to bind to the grid section.
