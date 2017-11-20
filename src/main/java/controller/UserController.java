@@ -150,6 +150,7 @@ public class UserController extends ApiController {
 	}
 	
 	@GET
+	@Secured
 	@Path("/view/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User consultUser (@PathParam("id") Integer id) {
