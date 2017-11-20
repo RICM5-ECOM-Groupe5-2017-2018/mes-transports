@@ -17,11 +17,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
 
 import model.User;
 import security.Secured;
-import security.SecuredAgency;
+import security.SecuredAdmin;
 
 
 @Stateless
@@ -91,11 +93,10 @@ public class UserController extends ApiController {
 				token = user.getToken();
 			}
 			request.getSession().setAttribute("token", token);
-			String json = token;
 			NewCookie cookie = new NewCookie("Bearer", token);
 			entityManager.merge(user);
 			entityManager.flush();
-			return Response.ok(json, MediaType.APPLICATION_JSON).build();	
+			return Response.ok(user, MediaType.APPLICATION_JSON).build();
 		}catch (javax.persistence.NoResultException ex) {
 			return Response.status(401).build();
 		}
@@ -184,6 +185,7 @@ public class UserController extends ApiController {
 	}
 	
 	@GET
+	@Secured
 	@Path("/view/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User consultUser (@PathParam("id") Integer id) {
@@ -192,6 +194,7 @@ public class UserController extends ApiController {
 	}
 	
 	@POST
+	@SecuredAdmin
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/disable")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -201,6 +204,19 @@ public class UserController extends ApiController {
 		entityManager.merge(userRet);
 		entityManager.flush();
 		return ("User successfully disabled");
+	}
+
+	@POST
+	@SecuredAdmin
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/reactivate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String enableUser (@QueryParam("id") Integer id) {
+		User userRet = entityManager.find(User.class, id);
+		userRet.setStatus(true);
+		entityManager.merge(userRet);
+		entityManager.flush();
+		return ("User successfully enabled");
 	}
 
 }

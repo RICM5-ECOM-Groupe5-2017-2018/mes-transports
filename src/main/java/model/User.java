@@ -1,6 +1,9 @@
 package model;
 // Generated 11 nov. 2017 18:56:02 by Hibernate Tools 5.1.5.Final
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -119,6 +122,10 @@ public class User implements java.io.Serializable {
 	}
 
 	@Column(name = "password", nullable = false, length = 255)
+
+
+	@JsonIgnore
+	@JsonProperty(value = "password")
 	public String getPassword() {
 		return this.password;
 	}
