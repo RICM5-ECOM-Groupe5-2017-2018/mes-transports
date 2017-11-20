@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="user">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	
+	<!-- build:css css/third-party.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css css/application.css -->
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <!-- endbuild -->
+
+    <!-- build:js lib/third-party.js -->
+    <!-- bower:js -->
+    <script src="lib/dependencies/angular.min.js"></script>
+    <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="lib/dependencies/jquery.min.js"></script>
+    <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/dependencies/ng-grid.min.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js script/all.js -->
+    <script src="script/user-test.js"></script>
+    <!-- endbuild -->
+	
+</head>
+<body ng-controller="userTestController">
+
+<h1>Test de récupération user</h1>
+
+<span>{{user.name}}</span>
+
+<div>{{info}}</div>
+
+<form>
+<input type="text" id="input_login" ng-model="loginForm.login" />
+<input type="password" id="input_password" ng-model="loginForm.password" />
+<button ng-click="connect()">Go</button>
+</form>
+
+</body>
+</html>

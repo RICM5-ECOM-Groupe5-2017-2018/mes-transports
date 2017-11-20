@@ -1,10 +1,11 @@
 package controller;
 
+import java.io.Console;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
@@ -21,31 +22,33 @@ public class AgencyController extends ApiController{
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
 	
-	@GET
-	@Path("/create/{type}/{adress}/{phone}/{idMotherAgency}")
+	@POST
+	@Path("/create")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Agency createAgency (@PathParam("type") String type,
-			@PathParam("adress") String adress,
-			@PathParam("phone") String phone,
-			@PathParam("idMotherAgency") Integer idMotherAgency){
+	public Agency createAgency (@QueryParam("type") String type,
+			@QueryParam("address") String address,
+			@QueryParam("phone") String phone,
+			@QueryParam("idMotherAgency") Integer idMotherAgency){
 		Agency agencyRet = new Agency();
-		agencyRet.setAddress(adress);
+		agencyRet.setAddress(address);
 		agencyRet.setIdMotherAgency(idMotherAgency);
 		agencyRet.setPhoneNum(phone);
-		agencyRet.setType(type);
+		agencyRet.setType(type);		
 		entityManager.persist(agencyRet);
 		entityManager.flush();
 		return agencyRet;
 	}
 	
-	@GET
-	@Path("/edit/{id}/{type}/{adress}/{phone}/{idMotherAgency}")
+	@POST
+	@Path("/edit")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Agency editAgency (@PathParam("id") Integer id,
-			@PathParam("type") String type,
-			@PathParam("adress") String adress,
-			@PathParam("phone") String phone,
-			@PathParam("idMotherAgency") Integer idMotherAgency) {
+	public Agency editAgency (@QueryParam("id") Integer id,
+			@QueryParam("type") String type,
+			@QueryParam("adress") String adress,
+			@QueryParam("phone") String phone,
+			@QueryParam("idMotherAgency") Integer idMotherAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		agencyRet.setAddress(adress);
 		agencyRet.setIdMotherAgency(idMotherAgency);
@@ -65,10 +68,11 @@ public class AgencyController extends ApiController{
 		return agencyRet;
 	}
 	
-	@GET
-	@Path("/delete/{id}")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteAgency (@PathParam("id") Integer id) {
+	public String deleteAgency (@QueryParam("id") Integer id) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		entityManager.detach(agencyRet);
 		entityManager.flush();

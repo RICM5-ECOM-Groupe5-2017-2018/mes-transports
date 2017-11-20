@@ -1,4 +1,4 @@
-package controller;
+package security;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.Retention;
@@ -9,6 +9,6 @@ import java.lang.annotation.ElementType;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @NameBinding
-public @interface SecuredAgency {
+public @interface Secured {
 
 }
