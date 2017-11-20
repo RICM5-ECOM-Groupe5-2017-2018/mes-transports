@@ -122,17 +122,18 @@ public class UserController extends ApiController {
 		return hash.toString();
 	}
 
-	@GET
-	@Path("/create/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@PathParam("login") String login,
-			@PathParam("username") String username,
-			@PathParam("password") String password,
-			@PathParam("mail") String mail,
-			@PathParam("phone") String phone,
-			@PathParam("role") String role,
-			@PathParam("firstname") String firstname,
-			@PathParam("lastname") String lastname) {
+	public User createUser (@QueryParam("login") String login,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("mail") String mail,
+			@QueryParam("phone") String phone,
+			@QueryParam("role") String role,
+			@QueryParam("firstname") String firstname,
+			@QueryParam("lastname") String lastname) {
 		User userRet = new User();
 		String saltedPassword = SALT + password;
 		String hashedPassword = generateHash(saltedPassword);
@@ -151,20 +152,19 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@GET
-	@Secured
-	@Path("/edit/{id}/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}/{agencyId}")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User editUser (@PathParam("id") Integer id,
-			@PathParam("login") String login,
-			@PathParam("username") String username,
-			@PathParam("password") String password,
-			@PathParam("mail") String mail,
-			@PathParam("phone") String phone,
-			@PathParam("role") String role,
-			@PathParam("firstname") String firstname,
-			@PathParam("lastname") String lastname,
-			@PathParam("agencyId") Integer agencyId) {
+	public User editUser (@QueryParam("id") Integer id,
+			@QueryParam("login") String login,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("mail") String mail,
+			@QueryParam("phone") String phone,
+			@QueryParam("role") String role,
+			@QueryParam("firstname") String firstname,
+			@QueryParam("lastname") String lastname){
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -184,7 +184,6 @@ public class UserController extends ApiController {
 	}
 	
 	@GET
-	@SecuredAgency
 	@Path("/view/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User consultUser (@PathParam("id") Integer id) {
@@ -192,10 +191,11 @@ public class UserController extends ApiController {
 		return userRet;
 	}
 	
-	@GET
-	@Path("/disable/{id}")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/disable")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String disableUser (@PathParam("id") Integer id) {
+	public String disableUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setStatus(false);
 		entityManager.merge(userRet);
