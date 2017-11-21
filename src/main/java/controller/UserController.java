@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
@@ -24,6 +26,9 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ResponseHeader;
 import model.User;
 import session.UserSession;
 
@@ -45,6 +50,7 @@ public class UserController extends ApiController {
 	@GET
 	@Secured
 	@Path("/logout")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response logout (@Context HttpHeaders httpHeaders) {
 		try {
@@ -73,11 +79,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
-			String saltedPassword = SALT + password;
-			String hashedPassword = generateHash(saltedPassword);
+			//String saltedPassword = SALT + password;
+			//String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", hashedPassword)
+					.setParameter("pass", /*hashedPassword*/password)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
@@ -157,6 +163,7 @@ public class UserController extends ApiController {
 	@GET
 	@Secured
 	@Path("/edit/{id}/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}/{agencyId}")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public User editUser (@PathParam("id") Integer id,
 			@PathParam("login") String login,
@@ -167,7 +174,8 @@ public class UserController extends ApiController {
 			@PathParam("role") String role,
 			@PathParam("firstname") String firstname,
 			@PathParam("lastname") String lastname,
-			@PathParam("agencyId") Integer agencyId) {
+			@PathParam("agencyId") Integer agencyId) 
+	{
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -189,6 +197,7 @@ public class UserController extends ApiController {
 	@GET
 	@SecuredAgency
 	@Path("/view/{id}")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public User consultUser (@PathParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
@@ -206,4 +215,30 @@ public class UserController extends ApiController {
 		return ("User successfully disabled");
 	}
 
+	
+	@GET
+	@Path("/structure")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Object consultUser () {
+		
+		Query query1 = entityManager.createNativeQuery("show columns from user");
+		List<Object[]> results = query1.getResultList();
+		String jsonStr = "{";
+		int index = 0;
+		for (Object[] obj : results) {
+			if(obj[0]!="id" && obj[0]!="token" && obj[0]!="status" && obj[0]!="token_expiration" && obj[0]!="idAgency")
+			jsonStr+="\""+index+"\" : {";
+			jsonStr+="\"name\":\""+obj[0]+"\",";
+			jsonStr+="\"type\":\""+obj[1]+"\",";
+			jsonStr+="\"nullabble\":\""+obj[2]+"\",";
+			jsonStr+="\"key\":\""+obj[3]+"\",";
+			jsonStr+="\"default\":\""+obj[4]+"\"},";
+		    index++;
+		}
+		jsonStr = jsonStr.substring(0,jsonStr.length()-1);
+		jsonStr+= "}";
+
+		return jsonStr;
+	}
+	
 }
