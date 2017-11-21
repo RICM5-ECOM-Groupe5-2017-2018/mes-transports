@@ -33,15 +33,15 @@ angular.module('MainModel').controller("Resgistration",function($scope,$http){
 			nullabble:"NO"
 			type:"int(11)"*/
     		
-    		if(val.key=="")
+    		if(val.extra!="auto_increment")
 			{
     			form+="<div class=\"form-group\">\n"
-	    		form+="<label for=\""+val.name+"\">"+val.name+"</label>\n"
+	    		form+="<label for=\""+val.id+"\">"+val.name+"</label>\n"
 	    		if(val.nullabble="NO"){
-	    			form+="<input type=\"text\" class=\"form-control\" id=\""+val.name+"\" required>\n"
+	    			form+="<input type=\"text\" class=\"form-control\" id=\""+val.id+"\" value=\""+val.defaultVal==NULL?"":val.defaultVal+"\" required>\n"
 	    		}
 	    		else{
-	    			form+="<input type=\"text\" class=\"form-control\" id=\""+val.name+"\">\n"
+	    			form+="<input type=\"text\" class=\"form-control\" id=\""+val.id+"\">\n"
 	    		}
 	    		
 	    		form+="</div>\n"

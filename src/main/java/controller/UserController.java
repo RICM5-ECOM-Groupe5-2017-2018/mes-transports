@@ -221,18 +221,20 @@ public class UserController extends ApiController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object consultUser () {
 		
-		Query query1 = entityManager.createNativeQuery("show columns from user");
+		Query query1 = entityManager.createNativeQuery("show full columns from user");
 		List<Object[]> results = query1.getResultList();
 		String jsonStr = "{";
 		int index = 0;
 		for (Object[] obj : results) {
 			if(obj[0]!="id" && obj[0]!="token" && obj[0]!="status" && obj[0]!="token_expiration" && obj[0]!="idAgency")
 			jsonStr+="\""+index+"\" : {";
-			jsonStr+="\"name\":\""+obj[0]+"\",";
+			jsonStr+="\"id\":\""+obj[0]+"\",";
+			jsonStr+="\"name\":\""+obj[8]+"\",";
 			jsonStr+="\"type\":\""+obj[1]+"\",";
-			jsonStr+="\"nullabble\":\""+obj[2]+"\",";
-			jsonStr+="\"key\":\""+obj[3]+"\",";
-			jsonStr+="\"default\":\""+obj[4]+"\"},";
+			jsonStr+="\"nullabble\":\""+obj[3]+"\",";
+			jsonStr+="\"key\":\""+obj[4]+"\",";
+			jsonStr+="\"extra\":\""+obj[6]+"\",";
+			jsonStr+="\"defaultVal\":\""+obj[5]+"\"},";
 		    index++;
 		}
 		jsonStr = jsonStr.substring(0,jsonStr.length()-1);
