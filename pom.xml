@@ -26,6 +26,7 @@
         <version.plugin.wildfly>1.1.0.Alpha8</version.plugin.wildfly>
         <version.plugin.glassfish>4.1.1</version.plugin.glassfish>
 
+
         <!-- Dependencies -->
         <version.dependency.javaee>7.0</version.dependency.javaee>
     </properties>
@@ -180,5 +181,21 @@
     		<artifactId>swagger-annotations</artifactId>
     		<version>1.5.13</version>
 		</dependency>
+        <!--
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate-core-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>${hibernate-search-version}</version>
+        </dependency>-->
     </dependencies>
 </project>

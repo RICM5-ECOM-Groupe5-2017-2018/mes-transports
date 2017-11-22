@@ -3,6 +3,7 @@ package controller;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -13,6 +14,7 @@ import model.CharacteristicType;
 import model.Vehicle;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -92,10 +94,11 @@ public class VehicleController extends ApiController{
 		return characteristics;
 	}
 	
-	@GET
-	@Path("/view/{id}")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/view")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle consultVehicle (@PathParam("id") Integer id) {
+	public Vehicle consultVehicle (@QueryParam("id") Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		return vehicleRet;
 	}
@@ -111,4 +114,13 @@ public class VehicleController extends ApiController{
 		return ("Vehicle successfully deleted");
 	}
 
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/search")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Vehicle> searchVehicle (@QueryParam("being") Date being,
+			@QueryParam("end") Date end) {
+		Query q=entityManager.createQuery("SELECT * FROM VEHICLE INNER JOIN RENT ON VEHICLE.id=RENT.idVehicle WHERE RENT.begin_date<'"+being.toString()+"' AND RENT.end_date>'"+end.toString()+"'");
+		return ((List<Vehicle>) q.getResultList());
+	}
 }

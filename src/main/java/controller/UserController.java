@@ -184,11 +184,12 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@GET
+	@POST
 	@Secured
-	@Path("/view/{id}")
+	@Path("/view")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User consultUser (@PathParam("id") Integer id) {
+	public User consultUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		return userRet;
 	}

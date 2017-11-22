@@ -1,13 +1,17 @@
 package controller;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
 import model.Agency;
+import model.Vehicle;
 import security.Secured;
 import security.SecuredAdmin;
 import security.SecuredAgency;
@@ -63,11 +67,12 @@ public class AgencyController extends ApiController{
 		
 	}
 	
-	@GET
+	@POST
 	@SecuredAgency
-	@Path("/view/{id}")
+	@Path("/view")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Agency consultAgency (@PathParam("id") Integer id) {
+	public Agency consultAgency (@QueryParam("id") Integer id) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		return agencyRet;
 	}
@@ -82,6 +87,26 @@ public class AgencyController extends ApiController{
 		entityManager.detach(agencyRet);
 		entityManager.flush();
 		return ("Agency successfully deleted");
+	}
+	
+	@POST
+	@SecuredAgency
+	@Path("/vehicle")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Vehicle> View_Vehicles (@QueryParam("id") Integer id) {
+		Query q = entityManager.createQuery("SELECT * FROM VEHICLE WHERE idAgency="+id);
+		return ((List<Vehicle>)q.getResultList());
+	}
+	
+	@POST
+	@SecuredAgency
+	@Path("/list")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Vehicle> View_Agency (@QueryParam("id") Integer id) {
+		Query q = entityManager.createQuery("SELECT * FROM AGENCY WHERE id_mother_agency="+id);
+		return ((List<Vehicle>)q.getResultList());
 	}
 
 }
