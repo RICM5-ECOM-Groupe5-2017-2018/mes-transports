@@ -266,3 +266,17 @@ ALTER TABLE `user`
 ALTER TABLE `vehicle`
   ADD CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`idAgency`) REFERENCES `agency` (`id`),
   ADD CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`type`) REFERENCES `vehicle_type` (`id`);
+  
+--
+-- Table des carts avec les contraintes
+--
+CREATE TABLE CART{
+	idUser integer,
+	idVehicle integer,
+	date_begin DATETIME,
+	date_end DATETIME,
+	date_selection DATETIME,
+	PRIMARY KEY (idUser,idVehicle),
+	FOREIGN KEY idUser REFERENCES USER(id),
+	FOREIGN KEY idVehicle REFERENCES VEHICLE(id)
+	};
