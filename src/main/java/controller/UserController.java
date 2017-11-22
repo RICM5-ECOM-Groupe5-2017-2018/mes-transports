@@ -17,8 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+//this is just a comment to test autodeploy
 import io.swagger.annotations.Api;
 
 import model.User;
