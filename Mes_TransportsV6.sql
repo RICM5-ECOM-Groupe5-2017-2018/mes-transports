@@ -270,13 +270,13 @@ ALTER TABLE `vehicle`
 --
 -- Table des carts avec les contraintes
 --
-CREATE TABLE CART{
-	idUser integer,
-	idVehicle integer,
-	date_begin DATETIME,
-	date_end DATETIME,
-	date_selection DATETIME,
+CREATE TABLE CART(
+	idUser int(11) NOT NULL,
+	idVehicle int(11) NOT NULL,
+	date_begin DATETIME NOT NULL,
+	date_end DATETIME NOT NULL,
+	date_selection DATETIME NOT NULL,
 	PRIMARY KEY (idUser,idVehicle),
-	FOREIGN KEY idUser REFERENCES USER(id),
-	FOREIGN KEY idVehicle REFERENCES VEHICLE(id)
-	};
+	FOREIGN KEY (idUser) REFERENCES USER(id),
+	FOREIGN KEY (idVehicle) REFERENCES VEHICLE(id)
+	);
