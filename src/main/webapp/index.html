@@ -19,6 +19,7 @@
     <!-- bower:js -->
     <script src="lib/dependencies/angular.min.js"></script>
     <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="lib/dependencies/angular-cookies.min.js"></script>
     <script src="lib/dependencies/jquery.min.js"></script>
     <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/dependencies/bootstrap.min.js"></script>
@@ -33,7 +34,6 @@
 	
 </head>
 <body>
-
 	<nav class="navbar navbar-inverse">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
@@ -75,6 +75,7 @@
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
+<div class="container-fluid">
 	
 	<div ng-app="account" ng-include="'login.html'"></div>
 	
@@ -152,6 +153,7 @@
 	    </div>
 	  </div>
 	</div>
+</div>
 
 </body>
 </html>

@@ -1,9 +1,9 @@
 /**
  * 
  */
-var app = angular.module('user', ['ngResource', 'ngGrid', 'ui.bootstrap']);
+var app = angular.module('user', ['ngResource', 'ngGrid', 'ui.bootstrap', 'ngCookies']);
 
-app.controller('userTestController', function UserTestController($scope, $http) {
+app.controller('userTestController', function UserTestController($scope, $http, $cookies) {
   
 	
 	$scope.user = {name : "Gilles"};
@@ -12,6 +12,8 @@ app.controller('userTestController', function UserTestController($scope, $http) 
 	$scope.loginForm.login = "login";
 	$scope.loginForm.password = "password";
   
+	$scope.prev = $cookies.test;
+	
 	$scope.connect = function UserConnect() {
 		$http({
 		  method: 'GET',
@@ -21,6 +23,7 @@ app.controller('userTestController', function UserTestController($scope, $http) 
 		    // when the response is available
 			console.log(response);
 			$scope.token = response.data;
+			$cookies.test = response.data;
 		}, function errorCallback(response) {
 		    // called asynchronously if an error occurs
 		    // or server returns response with an error status.
