@@ -14,8 +14,8 @@
     <!-- build:js lib/third-party.js -->
     <!-- bower:js -->
     <script src="lib/dependencies/angular.min.js"></script>
+    <script src="lib/dependencies/angular-route.min.js"></script>
     <script src="lib/dependencies/angular-resource.min.js"></script>
-    <script src="lib/dependencies/angular-routes.min.js"></script>
     <script src="lib/dependencies/angular-cookies.min.js"></script>
     <script src="lib/dependencies/jquery.min.js"></script>
     <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
@@ -60,7 +60,7 @@
 	      <ul class="nav navbar-nav navbar-right">
 	      	<li class="active"><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="badge">0</span></a></li>
 	        <li>
-	        	<a ng-if="!user" href="#/login">Connect</a>
+	        	<a ng-if="!user" href="#!/login">Connect</a>
 	        	<a ng-if="user" ng-click="logout()">Disconnect</a>
         	</li>
 	        <li class="dropdown">
