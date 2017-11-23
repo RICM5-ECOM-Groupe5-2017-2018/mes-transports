@@ -1,28 +1,29 @@
 package controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
 import java.util.UUID;
 
-import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+//this is just a comment to test autodeploy
 import io.swagger.annotations.Api;
+
 import model.User;
-import session.UserSession;
+import security.Secured;
+import security.SecuredAdmin;
+
 
 @Stateless
 @ApplicationPath("/api")
@@ -36,6 +37,8 @@ public class UserController extends ApiController {
     private EntityManager entityManager;
 	
 	@Context private HttpServletRequest request;
+	
+	public static final String SALT = "MTsalt";
 	
 	@GET
 	@Secured
@@ -68,9 +71,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
+			String saltedPassword = SALT + password;
+			String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", password)
+					.setParameter("pass", hashedPassword)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
@@ -79,35 +84,63 @@ public class UserController extends ApiController {
 			calendar.add(Calendar.DATE, 2);
 			date = calendar.getTime();
 			user.setTokenExpiration(date);
-			String token = UUID.randomUUID().toString();
-			user.setToken(token);
+			String token = null;
+			if (user.getToken() == null) {
+				token = UUID.randomUUID().toString();
+				user.setToken(token);
+			} else {
+				token = user.getToken();
+			}
 			request.getSession().setAttribute("token", token);
-			String json = token;
+			NewCookie cookie = new NewCookie("Bearer", token);
 			entityManager.merge(user);
 			entityManager.flush();
-			return Response.ok(json, MediaType.APPLICATION_JSON).build();	
+			return Response.ok(user, MediaType.APPLICATION_JSON).build();
 		}catch (javax.persistence.NoResultException ex) {
 			return Response.status(401).build();
 		}
 		
 	}
 	
-	@GET
-	@Path("/create/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}")
+	private String generateHash(String input) {
+		StringBuilder hash = new StringBuilder();
+
+		try {
+			MessageDigest sha = MessageDigest.getInstance("SHA-1");
+			byte[] hashedBytes = sha.digest(input.getBytes());
+			char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+					'a', 'b', 'c', 'd', 'e', 'f' };
+			for (int idx = 0; idx < hashedBytes.length; ++idx) {
+				byte b = hashedBytes[idx];
+				hash.append(digits[(b & 0xf0) >> 4]);
+				hash.append(digits[b & 0x0f]);
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// handle error here.
+		}
+
+		return hash.toString();
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@PathParam("login") String login,
-			@PathParam("username") String username,
-			@PathParam("password") String password,
-			@PathParam("mail") String mail,
-			@PathParam("phone") String phone,
-			@PathParam("role") String role,
-			@PathParam("firstname") String firstname,
-			@PathParam("lastname") String lastname) {
+	public User createUser (@QueryParam("login") String login,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("mail") String mail,
+			@QueryParam("phone") String phone,
+			@QueryParam("role") String role,
+			@QueryParam("firstname") String firstname,
+			@QueryParam("lastname") String lastname) {
 		User userRet = new User();
+		String saltedPassword = SALT + password;
+		String hashedPassword = generateHash(saltedPassword);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
 		userRet.setMailAddress(mail);
-		userRet.setPassword(password);
+		userRet.setPassword(hashedPassword);
 		userRet.setPhoneNum(phone);
 		userRet.setRole(role);
 		userRet.setUserFirstName(firstname);
@@ -119,25 +152,26 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@GET
-	@Secured
-	@Path("/edit/{id}/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}/{agencyId}")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User editUser (@PathParam("id") Integer id,
-			@PathParam("login") String login,
-			@PathParam("username") String username,
-			@PathParam("password") String password,
-			@PathParam("mail") String mail,
-			@PathParam("phone") String phone,
-			@PathParam("role") String role,
-			@PathParam("firstname") String firstname,
-			@PathParam("lastname") String lastname,
-			@PathParam("agencyId") Integer agencyId) {
+	public User editUser (@QueryParam("id") Integer id,
+			@QueryParam("login") String login,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("mail") String mail,
+			@QueryParam("phone") String phone,
+			@QueryParam("role") String role,
+			@QueryParam("firstname") String firstname,
+			@QueryParam("lastname") String lastname){
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
 		userRet.setMailAddress(mail);
-		userRet.setPassword(password);
+		String saltedPassword = SALT + password;
+		String hashedPassword = generateHash(saltedPassword);
+		userRet.setPassword(hashedPassword);
 		userRet.setPhoneNum(phone);
 		userRet.setRole(role);
 		userRet.setUserFirstName(firstname);
@@ -149,24 +183,40 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@GET
+	@POST
 	@Secured
-	@Path("/view/{id}")
+	@Path("/view")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User consultUser (@PathParam("id") Integer id) {
+	public User consultUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		return userRet;
 	}
 	
-	@GET
-	@Path("/disable/{id}")
+	@POST
+	@SecuredAdmin
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/disable")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String disableUser (@PathParam("id") Integer id) {
+	public String disableUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setStatus(false);
 		entityManager.merge(userRet);
 		entityManager.flush();
 		return ("User successfully disabled");
+	}
+
+	@POST
+	@SecuredAdmin
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/reactivate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String enableUser (@QueryParam("id") Integer id) {
+		User userRet = entityManager.find(User.class, id);
+		userRet.setStatus(true);
+		entityManager.merge(userRet);
+		entityManager.flush();
+		return ("User successfully enabled");
 	}
 
 }
