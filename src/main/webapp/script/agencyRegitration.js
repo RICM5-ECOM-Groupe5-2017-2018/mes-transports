@@ -28,8 +28,8 @@ angular.module('MainModel').controller("Resgistration",function($scope,$http){
         
         $http.get('api/agency/create/'+param,config)
         .success(function (data, status, headers, config) {
-        	$scope.currentRecord={};
-        	$scope.agency.$setPristine();
+        	$scope.agency={};
+        	$scope.registerForm.$setPristine();
         	alert("L'agence est créée");
         })
         .error(function (data, status, header, config) {
