@@ -231,7 +231,7 @@ public class UserController extends ApiController {
 			jsonStr+="\"id\":\""+obj[0]+"\",";
 			jsonStr+="\"name\":\""+obj[8]+"\",";
 			jsonStr+="\"type\":\""+obj[1]+"\",";
-			jsonStr+="\"nullabble\":\""+obj[3]+"\",";
+			jsonStr+="\"nullable\":\""+obj[3]+"\",";
 			jsonStr+="\"key\":\""+obj[4]+"\",";
 			jsonStr+="\"extra\":\""+obj[6]+"\",";
 			jsonStr+="\"defaultVal\":\""+obj[5]+"\"},";

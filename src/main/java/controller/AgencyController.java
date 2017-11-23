@@ -39,6 +39,21 @@ public class AgencyController extends ApiController{
 	}
 	
 	@GET
+	@Path("/create/{type}/{adress}/{phone}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Agency createAgency (@PathParam("type") String type,
+			@PathParam("adress") String adress,
+			@PathParam("phone") String phone){
+		Agency agencyRet = new Agency();
+		agencyRet.setAddress(adress);
+		agencyRet.setPhoneNum(phone);
+		agencyRet.setType(type);
+		entityManager.persist(agencyRet);
+		entityManager.flush();
+		return agencyRet;
+	}
+	
+	@GET
 	@Path("/edit/{id}/{type}/{adress}/{phone}/{idMotherAgency}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency editAgency (@PathParam("id") Integer id,
