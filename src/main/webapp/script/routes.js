@@ -8,7 +8,7 @@ routes.config(function($routeProvider) {
 	
 	$routeProvider
 	.when("/", {
-        templateUrl : ""
+        templateUrl : "search.html"
     })
     .when("/test", {
     	templateUrl : "login.html",
