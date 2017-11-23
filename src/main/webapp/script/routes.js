@@ -10,8 +10,12 @@ routes.config(function($routeProvider) {
 	.when("/", {
         templateUrl : "search.html"
     })
-    .when("/test", {
+    .when("/login", {
     	templateUrl : "login.html",
+    	controller : "AccountController"
+    })
+    .when("/signin", {
+    	templateUrl : "signin.html",
     	controller : "AccountController"
     });
 	

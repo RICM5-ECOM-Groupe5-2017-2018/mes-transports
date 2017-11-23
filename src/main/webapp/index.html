@@ -25,15 +25,15 @@
     <!-- endbuild -->
     
     <!-- build:js script/all.js -->
-    <!-- <script src="script/index.js"></script>  -->
+    <script src="script/app.js"></script>
     <script src="script/routes.js"></script>
     <script src="script/account.js"></script>
     <!-- endbuild -->
 	
 </head>
-<body ng-app="routes">
+<body ng-app="app">
 
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse" ng-controller="AccountController">
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
@@ -59,9 +59,12 @@
 	      </form>
 	      <ul class="nav navbar-nav navbar-right">
 	      	<li class="active"><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="badge">0</span></a></li>
-	        <li><a href="#">Connexion</a></li>
+	        <li>
+	        	<a ng-if="!user" href="#/login">Connect</a>
+	        	<a ng-if="user" ng-click="logout()">Disconnect</a>
+        	</li>
 	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Compte <span class="caret"></span></a>
+	          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Compte <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
 	            <li><a href="#">Action</a></li>
 	            <li><a href="#">Action</a></li>
@@ -74,9 +77,12 @@
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
-<div class="container-fluid">
 	
-	<div ng-view class="row"></div>
+	<div class="container-fluid">
+	
+		<div class="row ng-view"></div>
+	
+	</div>
 
 </body>
 </html>
