@@ -4,21 +4,22 @@
 
 var account = angular.module('account', ['ngCookies']);
 
-account.controller('AccountController', function AccountController($scope, $http, $cookies) {
+account.controller('AccountController', ['$scope', '$http', '$cookies', function AccountController($scope, $http, $cookies) {
 	
-	if($cookies.user) {
-		$scope.user = JSON.parse($cookies.user);
+	$scope.user = $cookies.getObject("user");
+	
+	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
 			/* Disconnect the user when the token has expired */
-			$cookies.user = undefined;
-			$cookies.token = undefined;
+			$cookies.remove("user");
+			$cookies.remove("token");
 			$scope.user = undefined;
 		}
 	}
 	
 	$scope.connect = function UserConnect() {
 		
-		if($cookies.user != undefined) {
+		if($cookies.getObject("user")) {
 			return "Already connected";
 		}
 		
@@ -26,9 +27,9 @@ account.controller('AccountController', function AccountController($scope, $http
 			'api/user/authenticate/' + $scope.form.connect.login + '/' + $scope.form.connect.password
 		).then(function successCallback(response) {
 			console.log(response.data);
-			$cookies.user = JSON.stringify(response.data);
-			$cookies.token = response.data.token;
-			$scope.user = $cookies.user;
+			$cookies.putObject("user", response.data);
+			$cookies.put("token", response.data.token);
+			$scope.user = $cookies.getObject("user");
 		}, function errorCallback(response) {
 			console.log(response);
 			//TODO message d'erreur
@@ -37,30 +38,32 @@ account.controller('AccountController', function AccountController($scope, $http
 	
 	$scope.logout = function UserLogout() {
 		
-		if($cookies.token == undefined) {
+		if(!$cookies.get("token")) {
 			return "Not connected";
 		}
 		
 		$http.get(
 			'api/user/logout',
 			{
-				headers: {'Authorization': 'Bearer ' + $cookies.token}
+				headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
 			}
 		).then(function sucessCallback(response) {
-			$cookies.user = undefined;
-			$cookies.token = undefined;
-			$scope.user = undefined;
+			//TODO check
 		}, function errorCallback(response) {
-			//TODO message d'erreur
+			//TODO have a callback, but delete anthentication cookies anyway
 		});
+		
+		$cookies.remove("user");
+		$cookies.remove("token");
+		$scope.user = undefined;
 	}
 	
 	$scope.signin = function UserSignin() {
 		
-		if($cookies.user != undefined) {
+		if($cookies.getObject("user")) {
 			return "Already connected";
 		}
 		
 	}
 	
-});
+}]);
