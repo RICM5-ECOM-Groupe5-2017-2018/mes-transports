@@ -1,24 +1,26 @@
-angular.module('MainModel').controller("Resgistration",function($scope,$http){
+angular.module('MainModel').controller("vehiculeRegisterForm",function($scope,$http){
 	
 	$scope.userAgency =false;
 
-    $scope.sendFormAgency = function(){
+    $scope.sendFormVehicules = function(){
     	if($scope.userAgency)
     	{
     		
     	}
     	else{
     		var data = "";
-    		data+=$scope.agency.type+"/";
-    		data+=$scope.agency.street+" "+$scope.agency.postal+" "+$scope.agency.city+"/";
-    		data+=$scope.agency.phone;
+    		data+=$scope.vehicule.brand+"/";
+    		data+=$scope.vehicule.price+"/";
+    		data+=$scope.vehicule.assurance+"/";
+    		data+="1/";
+    		data+=$scope.vehicule.type;
     		sendRequest(data);
     		
     	}
-    	console.log($scope.agency);
-    }
+    	console.log($scope.vehicule);
+    };
     
-    function sendRequestAgency(param){
+    function sendRequest(param){
 
         var config = {
             headers : {
@@ -26,11 +28,11 @@ angular.module('MainModel').controller("Resgistration",function($scope,$http){
             }
         }
         
-        $http.get('api/agency/create/'+param,config)
+        $http.get('api/vehicle/create/'+param,config)
         .success(function (data, status, headers, config) {
         	$scope.agency={};
-        	$scope.registerForm.$setPristine();
-        	alert("L'agence est créée");
+        	$scope.vehiculeRegisterForm.$setPristine();
+        	alert("Le véhicule est créé");
         })
         .error(function (data, status, header, config) {
             $scope.ResponseDetails = "Data: " + data +
@@ -38,5 +40,6 @@ angular.module('MainModel').controller("Resgistration",function($scope,$http){
                 "<br />headers: " + header +
                 "<br />config: " + config;
         });
-    }
+    };
+	//email : /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
 });

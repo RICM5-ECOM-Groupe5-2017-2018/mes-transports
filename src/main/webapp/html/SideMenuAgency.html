@@ -17,12 +17,12 @@
 	    <!-- Main Menu -->
 	    <div class="side-menu-container">
 	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
-	            <li id="accueil" class="active" ng-click="changePage('html/mainPage.html')"><a > Accueil</a></li>
-	            <li id="parc" ng-click="changePage('html/vehiculesPage.html')"> <a > Parc de Véhicules</a></li>
+	            <li id="accueil" class="active"><a href="#" > Accueil</a></li>
+	            <li id="parc"> <a href="#ajouter/vehicule"> Parc de Véhicules</a></li>
 	
 	            <!-- Dropdown-->
-	            <li id="agency" ng-click="changePage('html/agenciesPage.html')">
-	                <a data-toggle="collapse"  ng-click="collapse()"> Agences <span class="caret"></span></a>
+	            <li id="agency">
+	                <a data-toggle="collapse"  ng-click="collapse()"> <a href="#inscription/sousAgence">Agences</a> <span class="caret"></span></a>
 	                <!-- Dropdown level 1 -->
 	                <div id="{{agencyCity}}" class="panel-collapse collapse">
 	                    <div class="panel-body">

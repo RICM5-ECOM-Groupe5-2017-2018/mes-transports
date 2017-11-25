@@ -13,6 +13,7 @@
     <!-- bower:js -->
     <script src="lib/dependencies/angular.min.js"></script>
     <script src="lib/dependencies/angular-resource.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
     <script src="lib/dependencies/jquery.min.js"></script>
     <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
     <script src="lib/dependencies/ng-grid.min.js"></script>
@@ -23,15 +24,18 @@
     
     <script src="script/mainModel.js"></script> 
     <script src="script/agencyRegitration.js"></script> 
+    <script src="script/vehiculeRegistration.js"></script> 
     <!-- endbuild -->
 	
 </head>
 <body>
 
-<div ng-controller="PageController">
+<div >
 	<div ng-include="'html/header.html'"></div>
 	<div ng-include="'html/SideMenuAgency.html'"></div>
-	<ng-include src="getPage()"></ng-include>
+	<!-- <ng-include src="getPage()"></ng-include> -->
+	<div ng-view></div>
+	
 </div>
 	
 

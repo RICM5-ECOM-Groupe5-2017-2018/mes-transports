@@ -1,19 +1,27 @@
-var app = angular.module("MainModel",[]);
+var app = angular.module("MainModel",['ngRoute']);
 
-app.controller("PageController",function($scope){
-	
-	$scope.currentPage = "html/mainPage.html";
-	
-	$scope.getPage=function(){
+app.config(function($routeProvider) {
+    $routeProvider.when('/', {
+            templateUrl : 'html/mainPage.html'
+        })
 
-		return $scope.currentPage; 
-	};
-	
-	$scope.changePage=function(page){
-
-		$scope.currentPage = page ; 
-	};
-	
+        .when('/inscription', {
+            templateUrl : 'html/registrationPage.html'
+        })
+        
+        .when('/connexion', {
+            templateUrl : 'html/connexionPage.html'
+        })
+        
+        .when('/inscription/sousAgence', {
+            templateUrl : 'html/agenciesPage.html',
+            controller  : 'Resgistration'
+        })
+        
+        .when('/ajouter/vehicule', {
+            templateUrl : 'html/vehiculesPage.html',
+            controller  : 'vehiculeRegisterForm'
+        });
 });
 
 app.controller("topController", function ($scope) {
