@@ -1,4 +1,4 @@
-package controller;
+package security;
 
 import java.io.IOException;
 
@@ -16,8 +16,8 @@ import model.User;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-@SecuredAgency
-public class AuthenticationFilterAgency implements ContainerRequestFilter {
+@Secured
+public class AuthenticationFilter implements ContainerRequestFilter {
 
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
@@ -78,8 +78,5 @@ public class AuthenticationFilterAgency implements ContainerRequestFilter {
 		User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
 				.setParameter("token", token)
 				.getSingleResult();
-		if (user.getIdAgency() == null) {
-			throw new Exception("no agency");
-		}
     }
 }

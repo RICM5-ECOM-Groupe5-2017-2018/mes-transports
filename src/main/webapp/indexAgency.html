@@ -1,34 +1,42 @@
 <!DOCTYPE html>
-<html ng-app="MainModel">
+<html>
 <head>
 	<meta charset="UTF-8">
-	<title>MesTransports-Agency</title>
+	<title>MesTransports</title>
 
-
+	<!-- build:css css/third-party.css -->
+    <!-- bower:css -->
     <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
     <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
     <link rel="stylesheet" type="text/css" href="css/menuStyle.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 
     <!-- build:js lib/third-party.js -->
     <!-- bower:js -->
     <script src="lib/dependencies/angular.min.js"></script>
+    <script src="lib/dependencies/angular-route.min.js"></script>
     <script src="lib/dependencies/angular-resource.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
+    <script src="lib/dependencies/angular-cookies.min.js"></script>
     <script src="lib/dependencies/jquery.min.js"></script>
     <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/dependencies/bootstrap.min.js"></script>
     <script src="lib/dependencies/ng-grid.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     
     <!-- build:js script/all.js -->
-    
+
     <script src="script/mainModel.js"></script> 
     <script src="script/agencyRegitration.js"></script> 
     <script src="script/vehiculeRegistration.js"></script> 
+    <script src="script/app.js"></script>
+    <script src="script/routes.js"></script>
+    <script src="script/account.js"></script>
     <!-- endbuild -->
 	
 </head>
-<body>
+<body ng-app="app">
 
 <div >
 	<div ng-include="'html/header.html'"></div>
