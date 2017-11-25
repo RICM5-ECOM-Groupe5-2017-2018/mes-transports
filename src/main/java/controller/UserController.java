@@ -4,26 +4,33 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Timer;
 import java.util.UUID;
 
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-//this is just a comment to test autodeploy
 import io.swagger.annotations.Api;
-
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ResponseHeader;
 import model.User;
-import security.Secured;
-import security.SecuredAdmin;
-
+import session.UserSession;
 
 @Stateless
 @ApplicationPath("/api")
@@ -43,6 +50,7 @@ public class UserController extends ApiController {
 	@GET
 	@Secured
 	@Path("/logout")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response logout (@Context HttpHeaders httpHeaders) {
 		try {
@@ -71,11 +79,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
-			String saltedPassword = SALT + password;
-			String hashedPassword = generateHash(saltedPassword);
+			//String saltedPassword = SALT + password;
+			//String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", hashedPassword)
+					.setParameter("pass", /*hashedPassword*/password)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
@@ -92,10 +100,11 @@ public class UserController extends ApiController {
 				token = user.getToken();
 			}
 			request.getSession().setAttribute("token", token);
+			String json = token;
 			NewCookie cookie = new NewCookie("Bearer", token);
 			entityManager.merge(user);
 			entityManager.flush();
-			return Response.ok(user, MediaType.APPLICATION_JSON).build();
+			return Response.ok(json, MediaType.APPLICATION_JSON).build();	
 		}catch (javax.persistence.NoResultException ex) {
 			return Response.status(401).build();
 		}
@@ -122,18 +131,17 @@ public class UserController extends ApiController {
 		return hash.toString();
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/create")
+	@GET
+	@Path("/create/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@QueryParam("login") String login,
-			@QueryParam("username") String username,
-			@QueryParam("password") String password,
-			@QueryParam("mail") String mail,
-			@QueryParam("phone") String phone,
-			@QueryParam("role") String role,
-			@QueryParam("firstname") String firstname,
-			@QueryParam("lastname") String lastname) {
+	public User createUser (@PathParam("login") String login,
+			@PathParam("username") String username,
+			@PathParam("password") String password,
+			@PathParam("mail") String mail,
+			@PathParam("phone") String phone,
+			@PathParam("role") String role,
+			@PathParam("firstname") String firstname,
+			@PathParam("lastname") String lastname) {
 		User userRet = new User();
 		String saltedPassword = SALT + password;
 		String hashedPassword = generateHash(saltedPassword);
@@ -152,19 +160,22 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/edit")
+	@GET
+	@Secured
+	@Path("/edit/{id}/{login}/{username}/{password}/{mail}/{phone}/{role}/{firstname}/{lastname}/{agencyId}")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
-	public User editUser (@QueryParam("id") Integer id,
-			@QueryParam("login") String login,
-			@QueryParam("username") String username,
-			@QueryParam("password") String password,
-			@QueryParam("mail") String mail,
-			@QueryParam("phone") String phone,
-			@QueryParam("role") String role,
-			@QueryParam("firstname") String firstname,
-			@QueryParam("lastname") String lastname){
+	public User editUser (@PathParam("id") Integer id,
+			@PathParam("login") String login,
+			@PathParam("username") String username,
+			@PathParam("password") String password,
+			@PathParam("mail") String mail,
+			@PathParam("phone") String phone,
+			@PathParam("role") String role,
+			@PathParam("firstname") String firstname,
+			@PathParam("lastname") String lastname,
+			@PathParam("agencyId") Integer agencyId) 
+	{
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -183,22 +194,20 @@ public class UserController extends ApiController {
 		
 	}
 	
-	@POST
-	@Secured
-	@Path("/view")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@GET
+	@SecuredAgency
+	@Path("/view/{id}")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
-	public User consultUser (@QueryParam("id") Integer id) {
+	public User consultUser (@PathParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		return userRet;
 	}
 	
-	@POST
-	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/disable")
+	@GET
+	@Path("/disable/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String disableUser (@QueryParam("id") Integer id) {
+	public String disableUser (@PathParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
 		userRet.setStatus(false);
 		entityManager.merge(userRet);
@@ -206,17 +215,32 @@ public class UserController extends ApiController {
 		return ("User successfully disabled");
 	}
 
-	@POST
-	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/reactivate")
+	
+	@GET
+	@Path("/structure")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String enableUser (@QueryParam("id") Integer id) {
-		User userRet = entityManager.find(User.class, id);
-		userRet.setStatus(true);
-		entityManager.merge(userRet);
-		entityManager.flush();
-		return ("User successfully enabled");
-	}
+	public Object consultUser () {
+		
+		Query query1 = entityManager.createNativeQuery("show full columns from user");
+		List<Object[]> results = query1.getResultList();
+		String jsonStr = "{";
+		int index = 0;
+		for (Object[] obj : results) {
+			if(obj[0]!="id" && obj[0]!="token" && obj[0]!="status" && obj[0]!="token_expiration" && obj[0]!="idAgency")
+			jsonStr+="\""+index+"\" : {";
+			jsonStr+="\"id\":\""+obj[0]+"\",";
+			jsonStr+="\"name\":\""+obj[8]+"\",";
+			jsonStr+="\"type\":\""+obj[1]+"\",";
+			jsonStr+="\"nullable\":\""+obj[3]+"\",";
+			jsonStr+="\"key\":\""+obj[4]+"\",";
+			jsonStr+="\"extra\":\""+obj[6]+"\",";
+			jsonStr+="\"defaultVal\":\""+obj[5]+"\"},";
+		    index++;
+		}
+		jsonStr = jsonStr.substring(0,jsonStr.length()-1);
+		jsonStr+= "}";
 
+		return jsonStr;
+	}
+	
 }
