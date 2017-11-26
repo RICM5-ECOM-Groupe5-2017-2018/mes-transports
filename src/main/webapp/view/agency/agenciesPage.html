@@ -1,0 +1,57 @@
+<div ng-controller="Resgistration" style="margin-left: 21%;" >
+
+	<form class="form-horizontal" name="registerForm">
+	
+		<div class="form-group col-md-12">
+			<label for="street">Rue de l'agence*</label>
+			<input type="text" class="form-control col-md-12" ng-maxlength=200 ng-model="agency.street" name="street" value="" required>
+			<span class="text-danger" ng-show="registerForm.street.$error.maxlength">
+   				Le champ ne peux pas contenir plus de 200 caractères
+			</span>
+		</div>
+		<div class="form-group row colm-md-12">
+			<div class="form-group col-md-6">
+				<label for="postal" class="col-md-3">Code Postale de l'agence*</label>
+				<input type="text" class="form-control col-md-3" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-model="agency.postal" name="postal" value="" required>
+				<span class="text-danger" ng-show="registerForm.postal.$error.maxlength">
+	   				Le champ ne peux pas contenir plus de 5 chiffres
+				</span>
+				<span class="text-danger" ng-show="registerForm.postal.$error.pattern">
+	   				Le champ ne doit contenir que des chiffres
+				</span>
+			</div>
+			
+			<div class="form-group col-md-6">
+				<label for="city" class="col-md-3">Ville de l'agence*</label>
+				<input type="text" class="form-control col-md-3" ng-maxlength=50 ng-model="agency.city" name="city" value="" required>
+				<span class="text-danger" ng-show="registerForm.city.$error.maxlength">
+	   				Le champ ne peux pas contenir plus de 50 caractère
+				</span>
+			</div>
+		</div>
+		
+		<div class="form-group col-md-12" >
+			<label for="type" class="col-md-12">Type de l'agence*</label>
+			<select ng-model="agency.type" name="type" class="form-control col-md-12" required>
+			  <option value="AgenceN" selected>Agence de Location</option>
+			  <!-- <option value="AgenceT">Agence de Taxi</option>-->
+			</select> 
+			<label ></label>
+		</div>
+		
+		<div class="form-group col-md-12">
+			<label for="phone" class="col-md-12">Numéro de Téléphone*</label>
+			<input type="tel" class="form-control col-md-12" ng-pattern= "/^[0-9]+[0-9]*$/" ng-maxlength=15 ng-model="agency.phone" name="phone" value="" required>
+			<span class="text-danger" ng-show="registerForm.phone.$error.maxlength">
+   				Le champ ne peux pas contenir plus de 15 nombres
+			</span>
+			<span class="text-danger" ng-show="registerForm.phone.$error.pattern">
+   				Le champ ne doit contenir que des chiffres
+			</span>
+		</div>
+		
+		<div class="form-group col-md-12">
+		<input class="btn btn-primary col-md-10" type="button" ng-disabled="registerForm.$invalid" value="Inscrire l'agence" ng-click="sendFormAgency()">
+		</div>	
+	</form>
+</div>
