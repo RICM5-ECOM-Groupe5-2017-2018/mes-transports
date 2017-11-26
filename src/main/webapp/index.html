@@ -13,10 +13,9 @@
 
     <!-- build:js lib/third-party.js -->
     <!-- bower:js -->
-    <script src="lib/dependencies/angular.min.js"></script>
+    <script src="lib/dependencies/angular.js"></script>
     <script src="lib/dependencies/angular-route.min.js"></script>
     <script src="lib/dependencies/angular-resource.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.js"></script>
     <script src="lib/dependencies/angular-cookies.min.js"></script>
     <script src="lib/dependencies/jquery.min.js"></script>
     <script src="lib/dependencies/ui-bootstrap-tpls.min.js"></script>
@@ -29,21 +28,26 @@
 
     <script src="script/mainModel.js"></script> 
     <script src="script/agencyRegitration.js"></script> 
-    <script src="script/vehiculeRegistration.js"></script> 
-    <script src="script/app.js"></script>
+    <script src="script/vehiculeRegistration.js"></script>
+    <script src="script/menu.js"></script>
     <script src="script/routes.js"></script>
     <script src="script/account.js"></script>
     <!-- endbuild -->
 	
 </head>
-<body ng-app="app">
+<body ng-app="main">
 
-<div >
-	<div ng-include="'html/header.html'"></div>
-	<div ng-include="'html/SideMenuAgency.html'"></div>
-	<!-- <ng-include src="getPage()"></ng-include> -->
-	<div ng-view></div>
+<div ng-controller="menuCtrl">
 	
+	<!-- <ng-include src="getTopMenu()"></ng-include>
+	
+	<ng-include src="getSideMenu()"></ng-include>-->
+	
+	<div ng-include="getTopMenu()"></div>
+	
+	<div ng-include="getSideMenu()"></div>
+	
+	<div ng-view></div>
 </div>
 	
 

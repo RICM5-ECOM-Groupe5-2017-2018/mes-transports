@@ -1,4 +1,4 @@
-angular.module('MainModel').controller("vehiculeRegisterForm",function($scope,$http){
+angular.module('main').controller("vehiculeRegisterForm",function($scope,$http){
 	
 	$scope.userAgency =false;
 
@@ -41,5 +41,4 @@ angular.module('MainModel').controller("vehiculeRegisterForm",function($scope,$h
                 "<br />config: " + config;
         });
     };
-	//email : /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
 });

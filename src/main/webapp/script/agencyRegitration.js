@@ -1,4 +1,4 @@
-angular.module('MainModel').controller("Resgistration",function($scope,$http){
+angular.module('main').controller("Resgistration",function($scope,$http){
 	
 	$scope.userAgency =false;
 
