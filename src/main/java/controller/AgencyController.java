@@ -34,7 +34,7 @@ public class AgencyController extends ApiController{
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency createAgency (@QueryParam("type") String type,
 			@QueryParam("address") String address,
-			@QueryParam("phone") String phone,
+			@QueryParam("phoneNum") String phone,
 			@QueryParam("idMotherAgency") Integer idMotherAgency){
 		Agency agencyRet = new Agency();
 		agencyRet.setAddress(address);
@@ -54,7 +54,7 @@ public class AgencyController extends ApiController{
 	public Agency editAgency (@QueryParam("id") Integer id,
 			@QueryParam("type") String type,
 			@QueryParam("adress") String adress,
-			@QueryParam("phone") String phone,
+			@QueryParam("phoneNum") String phone,
 			@QueryParam("idMotherAgency") Integer idMotherAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		agencyRet.setAddress(adress);

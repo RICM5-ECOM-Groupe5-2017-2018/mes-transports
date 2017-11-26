@@ -127,13 +127,14 @@ public class UserController extends ApiController {
 	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User createUser (@QueryParam("login") String login,
-			@QueryParam("username") String username,
+			@QueryParam("userName") String username,
 			@QueryParam("password") String password,
-			@QueryParam("mail") String mail,
-			@QueryParam("phone") String phone,
+			@QueryParam("mailAddress") String mail,
+			@QueryParam("phoneNum") String phone,
 			@QueryParam("role") String role,
-			@QueryParam("firstname") String firstname,
-			@QueryParam("lastname") String lastname) {
+			@QueryParam("userFirstName") String firstname,
+			@QueryParam("lastname") String lastname,
+			@QueryParam("idAgency") Integer idAgency){
 		User userRet = new User();
 		String saltedPassword = SALT + password;
 		String hashedPassword = generateHash(saltedPassword);
@@ -146,6 +147,7 @@ public class UserController extends ApiController {
 		userRet.setUserFirstName(firstname);
 		userRet.setUserName(lastname);
 		userRet.setStatus(true);
+		userRet.setIdAgency(idAgency);
 		entityManager.persist(userRet);
 		entityManager.flush();
 		return userRet;
@@ -158,13 +160,14 @@ public class UserController extends ApiController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public User editUser (@QueryParam("id") Integer id,
 			@QueryParam("login") String login,
-			@QueryParam("username") String username,
+			@QueryParam("userName") String username,
 			@QueryParam("password") String password,
-			@QueryParam("mail") String mail,
-			@QueryParam("phone") String phone,
+			@QueryParam("mailAddress") String mail,
+			@QueryParam("phoneNum") String phone,
 			@QueryParam("role") String role,
-			@QueryParam("firstname") String firstname,
-			@QueryParam("lastname") String lastname){
+			@QueryParam("userFirstName") String firstname,
+			@QueryParam("lastname") String lastname,
+			@QueryParam("idAgency") Integer idAgency){
 		User userRet = entityManager.find(User.class, id);
 		userRet.setUserName(username);
 		userRet.setLogin(login);
@@ -177,6 +180,7 @@ public class UserController extends ApiController {
 		userRet.setUserFirstName(firstname);
 		userRet.setUserName(lastname);
 		userRet.setStatus(true);
+		userRet.setIdAgency(idAgency);
 		entityManager.merge(userRet);
 		entityManager.flush();
 		return userRet;

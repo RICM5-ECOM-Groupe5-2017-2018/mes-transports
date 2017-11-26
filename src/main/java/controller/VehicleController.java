@@ -36,7 +36,7 @@ public class VehicleController extends ApiController{
 			@QueryParam("price") Float price,
 			@QueryParam("insurance") String insurance,
 			@QueryParam("idAgency") Integer idAgency,
-			@QueryParam("idType") Integer idType){
+			@QueryParam("type") Integer idType){
 		Vehicle vehicleRet = new Vehicle();
 		vehicleRet.setBrand(brand);
 		vehicleRet.setPrice(price);
@@ -57,7 +57,7 @@ public class VehicleController extends ApiController{
 			@QueryParam("price") Float price,
 			@QueryParam("insurance") String insurance,
 			@QueryParam("idAgency") Integer idAgency,
-			@QueryParam("idType") Integer idType) {
+			@QueryParam("type") Integer idType) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		vehicleRet.setBrand(brand);
 		vehicleRet.setPrice(price);
