@@ -8,15 +8,26 @@ routes.config(function($routeProvider) {
 	
 	$routeProvider
 	.when("/", {
-        templateUrl : "search.html"
+		templateUrl:"view/users/search.html"
     })
     .when("/login", {
-    	templateUrl : "login.html",
+    	templateUrl : "view/login.html",
     	controller : "AccountController"
     })
     .when("/signin", {
-    	templateUrl : "signin.html",
+    	templateUrl : "view/signin.html",
     	controller : "AccountController"
+    })
+    .when('/registration/childAgence', {
+        templateUrl : 'html/agency/agencieyPage.html',
+        controller  : 'Resgistration'
+    })
+    .when('/agency', {
+        templateUrl : 'view/agency/agencyView.html',
+    })
+    .when('/add/vehicule', {
+        templateUrl : 'html/agency/vehiculesPage.html',
+        controller  : 'vehiculeRegisterForm'
     });
 	
 });
