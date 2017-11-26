@@ -1,4 +1,4 @@
-<form class="form-horizontal" ng-submit="signin()">
+<form ng-show="!user" class="form-horizontal" ng-submit="signin()">
 <fieldset>
 
 <!-- Form Name -->
@@ -8,7 +8,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_firstname">First name</label>  
   <div class="col-md-5">
-  <input id="signin_firstname" name="signin_firstname" type="text" placeholder="John" class="form-control input-md" required="">
+  <input id="signin_firstname" ng-model="form.signin.firstname" name="signin_firstname" type="text" placeholder="John" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -17,7 +17,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_lastname">Last name</label>  
   <div class="col-md-5">
-  <input id="signin_lastname" name="signin_lastname" type="text" placeholder="Doe" class="form-control input-md" required="">
+  <input id="signin_lastname" ng-model="form.signin.lastname" name="signin_lastname" type="text" placeholder="Doe" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -26,8 +26,8 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_login">Login</label>  
   <div class="col-md-5">
-  <input id="signin_login" name="signin_login" type="text" placeholder="johndoe" class="form-control input-md" required="">
-  <span class="help-block">Choose a login</span>  
+  <input id="signin_login" ng-model="form.signin.login" name="signin_login" type="text" placeholder="johndoe" class="form-control input-md" required="">
+  <span class="help-block">Choose a login</span>
   </div>
 </div>
 
@@ -35,7 +35,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_mail">Mail address</label>  
   <div class="col-md-5">
-  <input id="signin_mail" name="signin_mail" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+  <input id="signin_mail" ng-model="form.signin.mail" name="signin_mail" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -44,7 +44,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_mail2">Confirm mail</label>  
   <div class="col-md-5">
-  <input id="signin_mail2" name="signin_mail2" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+  <input id="signin_mail2" ng-model="form.signin.mail2" name="signin_mail2" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -53,7 +53,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_phone">Phone number</label>  
   <div class="col-md-5">
-  <input id="signin_phone" name="signin_phone" type="text" placeholder="" class="form-control input-md">
+  <input id="signin_phone" ng-model="form.signin.phone" name="signin_phone" type="text" placeholder="" class="form-control input-md">
     
   </div>
 </div>
@@ -62,7 +62,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_password">Password</label>
   <div class="col-md-5">
-    <input id="signin_password" name="signin_password" type="password" placeholder="******" class="form-control input-md" required="">
+    <input id="signin_password" ng-model="form.signin.password" name="signin_password" type="password" placeholder="******" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -71,7 +71,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_password2">Confirm password</label>
   <div class="col-md-5">
-    <input id="signin_password2" name="signin_password2" type="password" placeholder="******" class="form-control input-md" required="">
+    <input id="signin_password2" ng-model="form.signin.password2" name="signin_password2" type="password" placeholder="******" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -80,7 +80,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signin_button"></label>
   <div class="col-md-4">
-    <button id="signin_button" name="signin_button" class="btn btn-success">Confirm sign in</button>
+    <button id="signin_button" name="signin_button" class="btn btn-success btn-block">Confirm sign in</button>
   </div>
 </div>
 

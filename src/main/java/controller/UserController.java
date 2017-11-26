@@ -76,11 +76,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
-			//String saltedPassword = SALT + password;
-			//String hashedPassword = generateHash(saltedPassword);
+			String saltedPassword = SALT + password;
+			String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", /*hashedPassword*/password)
+					.setParameter("pass", hashedPassword)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
