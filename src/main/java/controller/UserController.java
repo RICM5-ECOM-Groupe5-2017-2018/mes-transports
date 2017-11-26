@@ -4,11 +4,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+
 import java.util.UUID;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -19,7 +21,9 @@ import javax.ws.rs.core.Response;
 
 //this is just a comment to test autodeploy
 import io.swagger.annotations.Api;
-
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ResponseHeader;
 import model.User;
 import security.Secured;
 import security.SecuredAdmin;
@@ -43,6 +47,7 @@ public class UserController extends ApiController {
 	@GET
 	@Secured
 	@Path("/logout")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response logout (@Context HttpHeaders httpHeaders) {
 		try {
@@ -71,11 +76,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
-			String saltedPassword = SALT + password;
-			String hashedPassword = generateHash(saltedPassword);
+			//String saltedPassword = SALT + password;
+			//String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", hashedPassword)
+					.setParameter("pass", /*hashedPassword*/password)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
@@ -151,7 +156,7 @@ public class UserController extends ApiController {
 		return userRet;
 		
 	}
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/edit")
@@ -182,7 +187,7 @@ public class UserController extends ApiController {
 		return userRet;
 		
 	}
-	
+
 	@POST
 	@Secured
 	@Path("/view")
