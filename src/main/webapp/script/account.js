@@ -74,9 +74,47 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 	
 	$scope.signin = function UserSignin() {
 		
+		$scope.form.error = {};
+		
 		if($cookies.getObject("user")) {
+			console.log("connected");
 			return "Already connected";
 		}
+		
+		if($scope.form.signin.mail != $scope.form.signin.mail2) {
+			$scope.form.error.mail = "Mails should be the same";
+		}
+		
+		if($scope.form.signin.password != $scope.form.signin.password2) {
+			$scope.form.error.password = "Passwords should be the same";
+		}
+		
+		if($scope.form.error.mail || $scope.form.error.password) {
+			console.log("error");
+			return null;
+		}
+		
+		console.log($scope.form.signin.login);
+		
+		var data = {
+			'login' : $scope.form.signin.login,
+			'username' : $scope.form.signin.login,
+			'password' : $scope.form.signin.password,
+			'mail' : $scope.form.signin.mail,
+			'phone' : $scope.form.signin.phone,
+			'role' : "user",
+			'firstname' : $scope.form.signin.firstname,
+			'lastname' : $scope.form.signin.lastname
+		}
+		
+		console.log(data);
+		
+		$http.post('api/user/create/', data)
+		.then(function successCallback(response) {
+			console.log("user created");
+		}, function errorCallback(response) {
+			console.log("user can't be created");
+		});
 		
 	}
 	
