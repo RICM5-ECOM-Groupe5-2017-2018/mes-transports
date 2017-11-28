@@ -7,12 +7,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
 import model.Agency;
 import model.Vehicle;
-import security.Secured;
 import security.SecuredAdmin;
 import security.SecuredAgency;
 
@@ -22,7 +22,7 @@ import security.SecuredAgency;
 @Api("agency")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class AgencyController extends ApiController{
+public class AgencyController extends Application {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
