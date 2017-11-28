@@ -26,7 +26,7 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		$http.get(
 			'api/user/authenticate/' + $scope.form.connect.login + '/' + $scope.form.connect.password
 		).then(function successCallback(response) {
-			response.data.isAgency = response.data.role=="gestionaire";
+			response.data.isAgency = response.data.idAgency!=null;
 			$cookies.putObject("user", response.data);
 			$cookies.put("token", response.data.token);
 			$scope.user = $cookies.getObject("user");

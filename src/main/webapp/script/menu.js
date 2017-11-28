@@ -1,4 +1,4 @@
-var menu = angular.module('menu', ['ngCookies']);
+var menu = angular.module('menu', ['ngCookies','agency']);
 
 menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl($scope,$rootScope,$cookies) {
 

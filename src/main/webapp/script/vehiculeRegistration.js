@@ -1,44 +1,63 @@
-angular.module('main').controller("vehiculeRegisterForm",function($scope,$http){
-	
-	$scope.userAgency =false;
+
+var agencyVehiculesView = angular.module("agencyVehiculesView",['ngCookies']);
+
+
+agencyVehiculesView.controller("addVehiculeForm",function($scope,$http,$cookies){
 
     $scope.sendFormVehicules = function(){
-    	if($scope.userAgency)
+    	
+    	var user = $cookies.getObject("user");
+    	if(user)
     	{
-    		
+    		var req = {
+   			 method: 'POST',
+   			 url: 'api/vehicle/create/',
+   			 headers: {'Authorization': 'Bearer ' + user.token},
+   			 data: 
+   			 { 
+   				 brand: $scope.vehicule.brand, 
+   				 price: $scope.vehicule.price,
+   				 insurance:$scope.vehicule.assurance,
+   				 idAgency:user.id ,
+   				 idType:$scope.vehicule.type,
+   			 }
+   			}
+       		sendRequest(req);
     	}
-    	else{
-    		var data = "";
-    		data+=$scope.vehicule.brand+"/";
-    		data+=$scope.vehicule.price+"/";
-    		data+=$scope.vehicule.assurance+"/";
-    		data+="1/";
-    		data+=$scope.vehicule.type;
-    		sendRequest(data);
-    		
-    	}
-    	console.log($scope.vehicule);
     };
     
     function sendRequest(param){
 
-        var config = {
-            headers : {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-            }
-        }
-        
-        $http.get('api/vehicle/create/'+param,config)
-        .success(function (data, status, headers, config) {
-        	$scope.agency={};
-        	$scope.vehiculeRegisterForm.$setPristine();
-        	alert("Le véhicule est créé");
-        })
-        .error(function (data, status, header, config) {
-            $scope.ResponseDetails = "Data: " + data +
+    	$http(req).then(
+
+			function(data, status, headers, config){
+				$scope.vehicule={};
+	        	$scope.registerForm.$setPristine();
+	        	alert("Le véhicule est créé");
+		    },
+		    function(data, status, headers, config)
+		    {
+		    	$scope.ResponseDetails = "Data: " + data +
                 "<br />status: " + status +
                 "<br />headers: " + header +
                 "<br />config: " + config;
-        });
+		    }
+    	
+    	);
     };
+    
+agencyVehiculesView.controller("viewVehicule",function($scope,$http,$cookies){
+	
+
+	
+	
+}); 
+
+
+agencyVehiculesView.controller("eraseVehiculeForm",function($scope,$http,$cookies){
+	
+	
+}); 
+
+    
 });

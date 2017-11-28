@@ -76,11 +76,11 @@ public class UserController extends ApiController {
 			@PathParam("password") String password) {
 		
 		try {
-			//String saltedPassword = SALT + password;
-			//String hashedPassword = generateHash(saltedPassword);
+			String saltedPassword = SALT + password;
+			String hashedPassword = generateHash(saltedPassword);
 			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 					.setParameter("user", login)
-					.setParameter("pass", /*hashedPassword*/password)
+					.setParameter("pass", hashedPassword)
 					.getSingleResult();
 			request.getSession(true);
 			Date date = new Date();
@@ -191,6 +191,7 @@ public class UserController extends ApiController {
 	@POST
 	@Secured
 	@Path("/view")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User consultUser (@QueryParam("id") Integer id) {
