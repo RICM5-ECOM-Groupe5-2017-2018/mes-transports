@@ -1,112 +1,66 @@
 package controller;
 
-import java.util.List;
-
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
 
-import io.swagger.annotations.Api;
 import model.Agency;
 import model.Vehicle;
-import security.SecuredAdmin;
-import security.SecuredAgency;
 
-@Stateless
-@ApplicationPath("/api")
-@Path("/agency")
-@Api("agency")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+import java.util.List;
+
+@Singleton
 public class AgencyController extends Application {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
-	
-	@POST
-	@SecuredAgency
-	@Path("/create")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Agency createAgency (@QueryParam("type") String type,
-			@QueryParam("address") String address,
-			@QueryParam("phone") String phone,
-			@QueryParam("idMotherAgency") Integer idMotherAgency){
-		Agency agencyRet = new Agency();
-		agencyRet.setAddress(address);
-		agencyRet.setIdMotherAgency(idMotherAgency);
-		agencyRet.setPhoneNum(phone);
-		agencyRet.setType(type);		
-		entityManager.persist(agencyRet);
-		entityManager.flush();
-		return agencyRet;
-	}
-	
 
-	@POST
-	@SecuredAgency
-	@Path("/edit")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Agency editAgency (@QueryParam("id") Integer id,
-			@QueryParam("type") String type,
-			@QueryParam("adress") String adress,
-			@QueryParam("phone") String phone,
-			@QueryParam("idMotherAgency") Integer idMotherAgency) {
-		Agency agencyRet = entityManager.find(Agency.class, id);
-		agencyRet.setAddress(adress);
-		agencyRet.setIdMotherAgency(idMotherAgency);
-		agencyRet.setPhoneNum(phone);
-		agencyRet.setType(type);
-		entityManager.merge(agencyRet);
+	public Agency createAgency (Agency modelAgency) {
+		Agency newAgency = new Agency (modelAgency);
+		entityManager.persist(newAgency);
 		entityManager.flush();
-		return agencyRet;
-		
+		return newAgency;
 	}
-	
-	@POST
-	@SecuredAgency
-	@Path("/view")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Agency consultAgency (@QueryParam("id") Integer id) {
-		Agency agencyRet = entityManager.find(Agency.class, id);
-		return agencyRet;
+
+	/**
+	 * TODO : Vérifier comment faire les updates avec les put
+	 */
+	public Agency updateAgency (Agency agency) {
+		entityManager.merge(agency);
+		entityManager.flush();
+		return agency;
 	}
-	
-	@POST
-	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/delete")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteAgency (@QueryParam("id") Integer id) {
-		Agency agencyRet = entityManager.find(Agency.class, id);
-		entityManager.detach(agencyRet);
+
+	public String deleteAgency (Integer idAgency) {
+		Agency agencyRet = entityManager.find(Agency.class, idAgency);
+		agencyRet.setStatus(false);
+		entityManager.merge(agencyRet);
 		entityManager.flush();
 		return ("Agency successfully deleted");
 	}
-	
-	@POST
-	@SecuredAgency
-	@Path("/vehicle")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Vehicle> View_Vehicles (@QueryParam("id") Integer id) {
-		Query q = entityManager.createQuery("SELECT * FROM VEHICLE WHERE idAgency="+id);
+
+	public String activateAgency (Integer idAgency) {
+		Agency agencyRet = entityManager.find(Agency.class, idAgency);
+		agencyRet.setStatus(true);
+		entityManager.merge(agencyRet);
+		entityManager.flush();
+		return ("Agency successfully activated");
+	}
+
+	public Agency getAgency (Integer idAgency) {
+		return (entityManager.find(Agency.class, idAgency));
+	}
+
+	public List<Vehicle> getAgencyVehicles (Integer idAgency) {
+		Query q = entityManager.createQuery("SELECT * FROM VEHICLE WHERE idAgency="+idAgency);
 		return ((List<Vehicle>)q.getResultList());
 	}
-	
-	@POST
-	@SecuredAgency
-	@Path("/list")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Vehicle> View_Agency (@QueryParam("id") Integer id) {
-		Query q = entityManager.createQuery("SELECT * FROM AGENCY WHERE id_mother_agency="+id);
+
+	public List<Vehicle> getChildAgencies (Integer idAgency) {
+		// Code douteux de la part de charles, à tester...
+		Query q = entityManager.createQuery("SELECT * FROM AGENCY WHERE id_mother_agency="+idAgency);
 		return ((List<Vehicle>)q.getResultList());
 	}
 

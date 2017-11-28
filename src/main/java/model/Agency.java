@@ -1,6 +1,8 @@
 package model;
 // Generated 11 nov. 2017 18:56:02 by Hibernate Tools 5.1.5.Final
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class Agency implements java.io.Serializable {
 	private String bankLink;
 	private String bankName;
 	private String rib;
+	private Boolean status;
 	@OneToMany(targetEntity=Transaction.class, mappedBy="agency", fetch=FetchType.LAZY)
 	private List<Transaction> transactionList;
 
@@ -40,6 +43,20 @@ public class Agency implements java.io.Serializable {
 		this.address = address;
 		this.idMotherAgency = idMotherAgency;
 		this.phoneNum = phoneNum;
+	}
+
+	public Agency(Agency modelAgency) {
+		this.address = modelAgency.getAddress();
+		this.bankLink = modelAgency.getBankLink();
+		this.bankName = modelAgency.getBankName();
+		this.city = modelAgency.getCity();
+		this.idMotherAgency = modelAgency.getIdMotherAgency();
+		this.phoneNum = modelAgency.getPhoneNum();
+		this.name = modelAgency.getName();
+		this.transactionList = modelAgency.getTransactionList();
+		this.rib = modelAgency.getRib();
+		this.type = modelAgency.getType();
+		this.status = true;
 	}
 
 	@Id
@@ -130,6 +147,7 @@ public class Agency implements java.io.Serializable {
 		this.rib = rib;
 	}
 
+	@JsonIgnore
 	@OneToMany(targetEntity=Transaction.class, mappedBy="agency", fetch=FetchType.LAZY)
 	public List<Transaction> getTransactionList() {
 		return transactionList;
@@ -137,5 +155,13 @@ public class Agency implements java.io.Serializable {
 
 	public void setTransactionList(List<Transaction> transactionList) {
 		this.transactionList = transactionList;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 }
