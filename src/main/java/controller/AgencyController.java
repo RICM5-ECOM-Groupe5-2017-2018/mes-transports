@@ -28,13 +28,13 @@ public class AgencyController extends ApiController{
     private EntityManager entityManager;
 	
 	@POST
-	@SecuredAgency
+	//@SecuredAgency
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency createAgency (@QueryParam("type") String type,
 			@QueryParam("address") String address,
-			@QueryParam("phone") String phone,
+			@QueryParam("phoneNum") String phone,
 			@QueryParam("idMotherAgency") Integer idMotherAgency){
 		Agency agencyRet = new Agency();
 		agencyRet.setAddress(address);
@@ -48,14 +48,14 @@ public class AgencyController extends ApiController{
 	
 
 	@POST
-	@SecuredAgency
+	//@SecuredAgency
 	@Path("/edit")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency editAgency (@QueryParam("id") Integer id,
 			@QueryParam("type") String type,
 			@QueryParam("adress") String adress,
-			@QueryParam("phone") String phone,
+			@QueryParam("phoneNum") String phone,
 			@QueryParam("idMotherAgency") Integer idMotherAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
 		agencyRet.setAddress(adress);
@@ -69,7 +69,7 @@ public class AgencyController extends ApiController{
 	}
 	
 	@POST
-	@SecuredAgency
+	//@SecuredAgency
 	@Path("/view")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -79,7 +79,7 @@ public class AgencyController extends ApiController{
 	}
 	
 	@POST
-	@SecuredAdmin
+	//@SecuredAdmin
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -91,22 +91,24 @@ public class AgencyController extends ApiController{
 	}
 	
 	@POST
-	@SecuredAgency
+	//@SecuredAgency
 	@Path("/vehicle")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Vehicle> View_Vehicles (@QueryParam("id") Integer id) {
-		Query q = entityManager.createQuery("SELECT * FROM VEHICLE WHERE idAgency="+id);
+		Query q = entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.id LIKE :id")
+				.setParameter("id", id);
 		return ((List<Vehicle>)q.getResultList());
 	}
 	
 	@POST
-	@SecuredAgency
+	//@SecuredAgency
 	@Path("/list")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Vehicle> View_Agency (@QueryParam("id") Integer id) {
-		Query q = entityManager.createQuery("SELECT * FROM AGENCY WHERE id_mother_agency="+id);
+		Query q = entityManager.createQuery("SELECT v FROM Agency v WHERE v.idMotherAgency LIKE :id")
+				.setParameter("id", id);
 		return ((List<Vehicle>)q.getResultList());
 	}
 
