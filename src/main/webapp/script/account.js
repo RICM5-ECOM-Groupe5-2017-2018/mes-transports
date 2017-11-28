@@ -84,7 +84,7 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 			return "Already connected";
 		}
 		
-		if($scope.form.signin.mail != $scope.form.signin.mail2) {
+		if($scope.form.signin.mailAddress != $scope.form.signin.mailAddress2) {
 			$scope.form.error.mail = "Mails should be the same";
 		}
 		
@@ -96,17 +96,12 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 			return null;
 		}
 		
-		var data = {
-			'login' : $scope.form.signin.login,
-			'username' : $scope.form.signin.login,
-			'password' : $scope.form.signin.password,
-			'mail' : $scope.form.signin.mail,
-			'phone' : $scope.form.signin.phone,
-			'role' : "user",
-			'firstname' : $scope.form.signin.firstname,
-			'lastname' : $scope.form.signin.lastname
-		};
+		var data = $scope.form.signin;
+		data.role = "user";
+		data.mailAddress2 = undefined;
+		data.password2 = undefined;
 		
+		console.log(data);
 		
 		$http.post('api/user/create/', data)
 		.then(function successCallback(response) {
@@ -114,6 +109,7 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		}, function errorCallback(data, status, headers) {
 			console.log("user can't be created");
 			console.log(data);
+			$scope.form.error.global = data;
 			/*
 			$scope.ResponseDetails = "Data : " + data + 
 			"<hr/>Status " + status + 
