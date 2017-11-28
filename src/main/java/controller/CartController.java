@@ -23,6 +23,6 @@ import java.util.List;
 @Api("cart")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class CartController extends ApiController{
+public class CartController extends Application{
 
 }

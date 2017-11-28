@@ -26,7 +26,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 
-public class MailerController extends ApiController{
+public class MailerController extends Application{
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

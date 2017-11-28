@@ -120,7 +120,7 @@ public class VehicleController extends Application {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Vehicle> searchVehicle (@QueryParam("being") Date being,
+	public List<Vehicle> searchVehicle (@QueryParam("begin") Date being,
 			@QueryParam("end") Date end) {
 		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate<'"+being.toString()+"' AND r.endDate>'"+end.toString()+"'");
 		List<Rent> lr = q.getResultList();
