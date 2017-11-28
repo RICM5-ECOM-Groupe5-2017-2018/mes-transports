@@ -35,9 +35,6 @@ public class AgencyEndpoint extends Application {
         return controller.createAgency(agency);
     }
 
-    /**
-     * TODO : Vérifier comment faire les updates avec les put
-     */
     @PUT
     @SecuredAgency
     @Path("/edit")
