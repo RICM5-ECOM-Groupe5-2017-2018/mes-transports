@@ -131,30 +131,23 @@ public class UserController extends ApiController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@QueryParam("login") String login,
-			@QueryParam("username") String username,
-			@QueryParam("password") String password,
-			@QueryParam("mail") String mail,
-			@QueryParam("phone") String phone,
-			@QueryParam("role") String role,
-			@QueryParam("firstname") String firstname,
-			@QueryParam("lastname") String lastname) {
+	public User createUser (User userQuery) {
 		User userRet = new User();
-		String saltedPassword = SALT + password;
+		String saltedPassword = SALT + userQuery.getPassword();
 		String hashedPassword = generateHash(saltedPassword);
-		userRet.setUserName(username);
-		userRet.setLogin(login);
-		userRet.setMailAddress(mail);
+		userRet.setUserName(userQuery.getUserName());
+		userRet.setLogin(userQuery.getLogin());
+		userRet.setMailAddress(userQuery.getMailAddress());
 		userRet.setPassword(hashedPassword);
-		userRet.setPhoneNum(phone);
-		userRet.setRole(role);
-		userRet.setUserFirstName(firstname);
-		userRet.setUserName(lastname);
+		userRet.setPhoneNum(userQuery.getPhoneNum());
+		userRet.setRole(userQuery.getRole());
+		userRet.setUserFirstName(userQuery.getUserFirstName());
+		userRet.setUserName(userQuery.getUserName());
 		userRet.setStatus(true);
 		entityManager.persist(userRet);
 		entityManager.flush();
 		return userRet;
-		
+
 	}
 
 	@POST

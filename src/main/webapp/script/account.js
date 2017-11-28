@@ -96,19 +96,20 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		
 		console.log($scope.form.signin.login);
 		
-		var data = {
+		var data = JSON.stringify({
 			'login' : $scope.form.signin.login,
-			'username' : $scope.form.signin.login,
+			//'userName' : $scope.form.signin.login,
 			'password' : $scope.form.signin.password,
-			'mail' : $scope.form.signin.mail,
-			'phone' : $scope.form.signin.phone,
+			'mailAddress' : $scope.form.signin.mail,
+			'phoneNum' : $scope.form.signin.phone,
 			'role' : "user",
-			'firstname' : $scope.form.signin.firstname,
-			'lastname' : $scope.form.signin.lastname
-		}
+			'userFirstName' : $scope.form.signin.firstname,
+			'userName' : $scope.form.signin.lastname,
+			'status' : true,
+		});
 		
 		console.log(data);
-		
+
 		$http.post('api/user/create/', data)
 		.then(function successCallback(response) {
 			console.log("user created");
