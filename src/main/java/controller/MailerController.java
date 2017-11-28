@@ -1,9 +1,8 @@
 package controller;
-import java.io.File;
-import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.ejb.Stateless;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -13,20 +12,47 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
 
-public class Mail {
+import io.swagger.annotations.Api;
+import model.Characteristic;
+import model.CharacteristicType;
+import model.Rent;
+import model.Vehicle;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+
+@Stateless
+@ApplicationPath("/api")
+@Path("/mailer")
+@Api("mailer")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+
+public class MailerController extends ApiController {
 
 	private static final String SMTP_HOST1 = "smtp.gmail.com";
 	private static final String LOGIN_SMTP1 = "mestransports.ecom@gmail.com";
 	private static final String IMAP_ACCOUNT1 = "mestransports.ecom@gmail.com";
 	private static final String PASSWORD_SMTP1 = "Ecom2017";
-	private static final String PATH_TO_FILE = "/home/shloumpf/Téléchargements";
 
-	public static void main(String pArgs[]) {
-	}
-
-	public static void sendMessage(String subject, String text, String destinataire, String copyDest) {
-		// 1 -> Création de la session
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/send")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void send(@QueryParam("mailAddress") String address,
+			@QueryParam("subject") String subject,
+			@QueryParam("content") String content) {
 		Properties properties = new Properties();
 		properties.setProperty("mail.transport.protocol", "smtp");
 		properties.setProperty("mail.smtp.starttls.enable", "true");
@@ -39,10 +65,9 @@ public class Mail {
 		// 2 -> Création du message
 		MimeMessage message = new MimeMessage(session);
 		try {
-			message.setText(text);
+			message.setText(content);
 			message.setSubject(subject);
-			message.addRecipients(Message.RecipientType.TO, destinataire);
-			message.addRecipients(Message.RecipientType.CC, copyDest);
+			message.addRecipients(Message.RecipientType.TO, address);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -52,8 +77,7 @@ public class Mail {
 		try {
 			transport = session.getTransport("smtp");
 			transport.connect(LOGIN_SMTP1, PASSWORD_SMTP1);
-			transport.sendMessage(message,
-					new Address[] { new InternetAddress(destinataire), new InternetAddress(copyDest) });
+			transport.sendMessage(message, new Address[] { new InternetAddress(address) });
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		} finally {
@@ -65,9 +89,17 @@ public class Mail {
 				e.printStackTrace();
 			}
 		}
+		return;
 	}
 
-	public static void sendAttachedMessage(String subject, String text, String destinataire, String copyDest) {
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/attached")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void send_attached(@QueryParam("mailAddress") String address,
+			@QueryParam("subject") String subject,
+			@QueryParam("content") String content,
+			@QueryParam("path_to_attachement") String path) {
 		// 1 -> Création de la session
 		Properties properties = new Properties();
 		properties.setProperty("mail.transport.protocol", "smtp");
@@ -79,7 +111,7 @@ public class Mail {
 		Session session = Session.getInstance(properties);
 
 		// 2 -> Création du message avec pièce jointe
-		File file = new File(PATH_TO_FILE + "/H.jpg");
+		File file = new File(path + "/H.jpg");
 		FileDataSource datasource1 = new FileDataSource(file);
 		DataHandler handler1 = new DataHandler(datasource1);
 		MimeBodyPart autruche = new MimeBodyPart();
@@ -89,15 +121,15 @@ public class Mail {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
-		MimeBodyPart content = new MimeBodyPart();
+		MimeBodyPart body = new MimeBodyPart();
 		try {
-			content.setContent("YOLO", "text/plain");
+			body.setContent("YOLO", "text/plain");
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
 		MimeMultipart mimeMultipart = new MimeMultipart();
 		try {
-			mimeMultipart.addBodyPart(content);
+			mimeMultipart.addBodyPart(body);
 			mimeMultipart.addBodyPart(autruche);
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -106,8 +138,7 @@ public class Mail {
 		try {
 			message.setContent(mimeMultipart);
 			message.setSubject(subject);
-			message.addRecipients(Message.RecipientType.TO, destinataire);
-			message.addRecipients(Message.RecipientType.CC, copyDest);
+			message.addRecipients(Message.RecipientType.TO, address);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -117,8 +148,7 @@ public class Mail {
 		try {
 			transport = session.getTransport("smtp");
 			transport.connect(LOGIN_SMTP1, PASSWORD_SMTP1);
-			transport.sendMessage(message,
-					new Address[] { new InternetAddress(destinataire), new InternetAddress(copyDest) });
+			transport.sendMessage(message, new Address[] { new InternetAddress(address) });
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		} finally {
