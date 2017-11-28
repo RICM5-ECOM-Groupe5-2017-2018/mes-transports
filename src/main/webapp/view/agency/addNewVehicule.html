@@ -1,0 +1,52 @@
+<div  ng-controller="addVehiculeForm" style="margin-left: 21%;" >
+	
+	<h1> Inscription d'un nouveau véhicule </h1>
+	<form class="form-horizontal" name="registerForm">
+	
+	
+	<!-- {insurance} {idType} -->
+	
+		<div class="form-group col-md-12">
+			<label for="brand">Marque du véhicule*</label>
+			<input type="text" class="form-control col-md-12" ng-maxlength=50 ng-model="vehicule.brand" name="brand" value="" required>
+			<span class="text-danger" ng-show="registerForm.brand.$error.maxlength">
+   				Le champ ne peux pas contenir plus de 50 caractères
+			</span>
+		</div>
+		
+		<div class="form-group col-md-12">
+			<label for="price" class="col-md-12">Prix à l'heure du véhicule*</label>
+			<input type="number" class="form-control" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" ng-model="vehicule.price" name="price" value="" required>
+			<span class="text-danger" ng-show="registerForm.price.$error.step">
+   				Il ne peux pas y avoir plus de 2 chiffre après la virgule
+			</span>
+			<span class="text-danger" ng-show="registerForm.price.$error.pattern">
+   				Vous devez entrer un nombre décimal
+			</span>
+		</div>
+		
+		<div class="form-group col-md-12" >
+			<label for="type" class="col-md-12">Type du véhicule*</label>
+			<select ng-model="vehicule.type" name="type" class="form-control col-md-12" required>
+			  <option value="vélo" selected>Vélo</option>
+			  <option value="utilitaire" >Utilitaire</option>
+			  <option value="voitureVille" >Voiture de ville</option>
+			  <option value="deuxRouesMoteur" >Deux roues moteur</option>
+			</select> 
+			<label ></label>
+		</div>
+		
+		<div class="form-group col-md-12" >
+			<label for="assurance" class="col-md-12">Nom de l'assurance*</label>
+			<select ng-model="vehicule.assurance" name="assurance" class="form-control col-md-12" required>
+			  <option value="Maif" selected>Maïf</option>
+			  <option value="Axa">Axa</option>
+			</select> 
+			<label ></label>
+		</div>
+		
+		<div class="form-group col-md-12">
+		<input class="btn btn-primary col-md-10" type="button" ng-disabled="registerForm.$invalid" value="Ajouter le véhicule" ng-click="sendFormVehicules()">
+		</div>	
+	</form>
+</div>

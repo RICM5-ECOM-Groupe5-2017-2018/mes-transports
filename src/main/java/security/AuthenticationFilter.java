@@ -1,4 +1,4 @@
-package controller;
+package security;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-
+    	
         // Get the Authorization header from the request
         String authorizationHeader =
                 requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);

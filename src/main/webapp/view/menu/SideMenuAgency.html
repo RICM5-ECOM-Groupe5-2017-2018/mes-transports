@@ -1,0 +1,40 @@
+<div class="row" ng-controller="NavController">
+    <!-- Menu -->   
+    <nav class="navbar navbar-default side-menu" role="navigation">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	        <div class="brand-wrapper">
+	            <!-- Hamburger -->
+	            <button type="button" id="nav-side" class="navbar-toggle" >
+	                <span class="sr-only">Toggle navigation</span>
+	                <span class="icon-bar"></span>
+	                <span class="icon-bar"></span>
+	                <span class="icon-bar"></span>
+	            </button>
+	         </div>
+	    </div>
+	
+	    <!-- Main Menu -->
+	    <div class="side-menu-container">
+	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
+	            <li id="accueil" class="active"><a href="#!" > Accueil</a></li>
+	            <li id="parc"> <a href="#!/add/vehicule"> Parc de Véhicules</a></li>
+	
+	            <!-- Dropdown-->
+	            <li id="agency">
+	                <a data-toggle="collapse"  ng-click="collapse()"> <a href="#!/registration/childAgence">Agences</a> <span class="caret"></span></a>
+	                <!-- Dropdown level 1 -->
+	                <div id="{{agencyCity}}" class="panel-collapse collapse">
+	                    <div class="panel-body">
+	                        <ul class="nav navbar-nav">
+	                            <li><a >Test</a></li>
+	                        </ul>
+	                    </div>
+	                </div>
+	            </li>
+	        </ul>
+	    </div><!-- /.navbar-collapse -->
+	</nav>
+</div>
+    
+    
