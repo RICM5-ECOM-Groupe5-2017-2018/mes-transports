@@ -11,11 +11,11 @@ routes.config(function($routeProvider) {
 		templateUrl:"view/users/search.html"
     })
     .when("/login", {
-    	templateUrl : "view/login.html",
+    	templateUrl : "view/users/login.html",
     	controller : "AccountController"
     })
     .when("/signin", {
-    	templateUrl : "view/signin.html",
+    	templateUrl : "view/users/signin.html",
     	controller : "AccountController"
     })
     .when('/registration/childAgence', {
