@@ -26,6 +26,7 @@ public class Rent implements java.io.Serializable {
 	private Date endDate;
 	private String locationIn;
 	private String locationOut;
+	private Transaction transaction;
 
 	public Rent() {
 	}
@@ -126,4 +127,11 @@ public class Rent implements java.io.Serializable {
 		this.locationOut = locationOut;
 	}
 
+	public Transaction getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
+	}
 }

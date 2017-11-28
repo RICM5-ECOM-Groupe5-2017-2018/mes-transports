@@ -22,6 +22,9 @@ public class Agency implements java.io.Serializable {
 	private String phoneNum;
 	private String city;
 	private String name;
+	private String bankLink;
+	private String bankName;
+	private String rib;
 
 	public Agency() {
 	}
@@ -101,5 +104,29 @@ public class Agency implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getBankLink() {
+		return bankLink;
+	}
+
+	public void setBankLink(String bankLink) {
+		this.bankLink = bankLink;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public String getRib() {
+		return rib;
+	}
+
+	public void setRib(String rib) {
+		this.rib = rib;
 	}
 }
