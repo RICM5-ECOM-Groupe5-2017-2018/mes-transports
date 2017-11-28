@@ -18,7 +18,10 @@ public class Characteristic implements java.io.Serializable {
 	private Integer id;
 	private String unit;
 	private String label;
+
+	@Column(name="rank", unique = true)
 	private Integer rank;
+
 	private boolean optional;
 
 	public Characteristic() {
@@ -28,6 +31,10 @@ public class Characteristic implements java.io.Serializable {
 		this.unit = unit;
 		this.label = label;
 		this.optional = optional;
+	}
+
+	public Integer getRank() {
+		return this.rank;
 	}
 
 	@Id
@@ -67,10 +74,6 @@ public class Characteristic implements java.io.Serializable {
 
 	public void setOptional(boolean optional) {
 		this.optional = optional;
-	}
-
-	public Integer getRank() {
-		return rank;
 	}
 
 	public void setRank(Integer rank) {

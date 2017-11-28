@@ -10,20 +10,14 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 
 //this is just a comment to test autodeploy
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ResponseHeader;
 import model.User;
 import security.Secured;
 import security.SecuredAdmin;
@@ -35,7 +29,7 @@ import security.SecuredAdmin;
 @Api("user")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class UserController extends ApiController {
+public class UserController extends Application {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
