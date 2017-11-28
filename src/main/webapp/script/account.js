@@ -95,10 +95,10 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		
 		var data = {
 			'login' : $scope.form.signin.login,
-			'username' : $scope.form.signin.login,
+			//'userName' : $scope.form.signin.login,
 			'password' : $scope.form.signin.password,
-			'mail' : $scope.form.signin.mail,
-			'phone' : $scope.form.signin.phone,
+			'mailAddress' : $scope.form.signin.mail,
+			'phoneNum' : $scope.form.signin.phone,
 			'role' : "user",
 			'firstname' : $scope.form.signin.firstname,
 			'lastname' : $scope.form.signin.lastname

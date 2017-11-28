@@ -20,6 +20,8 @@ public class Agency implements java.io.Serializable {
 	private String address;
 	private Integer idMotherAgency;
 	private String phoneNum;
+	private String city;
+	private String name;
 
 	public Agency() {
 	}
@@ -85,4 +87,19 @@ public class Agency implements java.io.Serializable {
 		this.phoneNum = phoneNum;
 	}
 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

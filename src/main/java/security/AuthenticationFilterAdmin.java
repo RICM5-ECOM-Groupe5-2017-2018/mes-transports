@@ -78,7 +78,7 @@ public class AuthenticationFilterAdmin implements ContainerRequestFilter {
 				.setParameter("token", token)
 				.getSingleResult();
 		if (! user.getRole().contains("admin")) {
-			throw new Exception("no agency");
+			throw new Exception("not an admin");
 		}
     }
 }
