@@ -12,7 +12,7 @@ import model.Vehicle;
 import java.util.List;
 
 @Singleton
-public class AgencyController extends Application {
+public class AgencyController {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
