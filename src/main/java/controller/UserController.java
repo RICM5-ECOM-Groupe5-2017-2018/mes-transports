@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+
 import java.util.UUID;
 
 import javax.ejb.Stateless;
@@ -11,15 +12,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 
 //this is just a comment to test autodeploy
 import io.swagger.annotations.Api;
-
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import model.User;
 import security.Secured;
 import security.SecuredAdmin;
@@ -31,7 +29,7 @@ import security.SecuredAdmin;
 @Api("user")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class UserController extends ApiController {
+public class UserController extends Application {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
@@ -43,6 +41,7 @@ public class UserController extends ApiController {
 	@GET
 	@Secured
 	@Path("/logout")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response logout (@Context HttpHeaders httpHeaders) {
 		try {
@@ -126,34 +125,26 @@ public class UserController extends ApiController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@QueryParam("login") String login,
-			@QueryParam("userName") String username,
-			@QueryParam("password") String password,
-			@QueryParam("mailAddress") String mail,
-			@QueryParam("phoneNum") String phone,
-			@QueryParam("role") String role,
-			@QueryParam("userFirstName") String firstname,
-			@QueryParam("lastname") String lastname,
-			@QueryParam("idAgency") Integer idAgency){
+	public User createUser (User userQuery) {
 		User userRet = new User();
-		String saltedPassword = SALT + password;
+		String saltedPassword = SALT + userQuery.getPassword();
 		String hashedPassword = generateHash(saltedPassword);
-		userRet.setUserName(username);
-		userRet.setLogin(login);
-		userRet.setMailAddress(mail);
+		userRet.setUserName(userQuery.getUserName());
+		userRet.setLogin(userQuery.getLogin());
+		userRet.setMailAddress(userQuery.getMailAddress());
 		userRet.setPassword(hashedPassword);
-		userRet.setPhoneNum(phone);
-		userRet.setRole(role);
-		userRet.setUserFirstName(firstname);
-		userRet.setUserName(lastname);
+		userRet.setPhoneNum(userQuery.getPhoneNum());
+		userRet.setRole(userQuery.getRole());
+		userRet.setUserFirstName(userQuery.getUserFirstName());
+		userRet.setUserName(userQuery.getUserName());
 		userRet.setStatus(true);
 		userRet.setIdAgency(idAgency);
 		entityManager.persist(userRet);
 		entityManager.flush();
 		return userRet;
-		
+
 	}
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/edit")
@@ -186,7 +177,7 @@ public class UserController extends ApiController {
 		return userRet;
 		
 	}
-	
+
 	@POST
 	@Secured
 	@Path("/view")
