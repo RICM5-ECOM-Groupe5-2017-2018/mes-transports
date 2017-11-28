@@ -17,7 +17,7 @@ public class SwaggerController extends Application {
 		beanConfig.setSchemes(new String[]{"http"});
 		beanConfig.setHost("localhost:8080");
 		beanConfig.setBasePath("/mes-transports/api");
-		beanConfig.setResourcePackage("controller");
+		beanConfig.setResourcePackage("endpoints");
 		beanConfig.setPrettyPrint(true);
 		beanConfig.setScan();
 	}
