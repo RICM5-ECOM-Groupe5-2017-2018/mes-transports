@@ -88,3 +88,4 @@ src/main/webapp/lib/bower
 temp
 build
 /bin
+/lib

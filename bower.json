@@ -1,11 +1,10 @@
 {
-    "name": "javaee7-angular",
+    "name": "Mes-Transports",
     "version": "1.0.0",
     "authors": [
-        "Roberto Cortez <radcortez@yahoo.com>",
-        "Paulo Grácio <paulo.gracio@gmail.com>"
+        "Héloïse Fernandes de Almeida"
     ],
-    "description": "javaee7-angular JavaScript dependencies.",
+    "description": "Application de location de véhicule",
     "private": true,
     "dependencies": {
         "angular": "~1.5.6",

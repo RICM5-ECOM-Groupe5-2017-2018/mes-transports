@@ -1,7 +1,8 @@
-package controller;
+package security;
 
 import java.io.IOException;
 
+import javax.annotation.Priority;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -9,10 +10,12 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import javax.ws.rs.Priorities;
 
 import model.User;
 
 @Provider
+@Priority(Priorities.AUTHENTICATION)
 @Secured
 public class AuthenticationFilter implements ContainerRequestFilter {
 
