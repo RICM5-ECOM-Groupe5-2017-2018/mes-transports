@@ -4,7 +4,9 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -26,6 +28,8 @@ public class User implements java.io.Serializable {
 	private String phoneNum;
 	private Integer idAgency;
 	private String token;
+	@OneToMany(targetEntity=Transaction.class, mappedBy="user", fetch=FetchType.LAZY)
+	private List<Transaction> transactionList = new ArrayList<Transaction>();
 	private Date tokenExpiration;
 	private boolean status;
 
@@ -174,4 +178,12 @@ public class User implements java.io.Serializable {
 		this.status = status;
 	}
 
+	@OneToMany(targetEntity=Transaction.class, mappedBy="user", fetch=FetchType.LAZY)
+	public List<Transaction> getTransactionList() {
+		return transactionList;
+	}
+
+	public void setTransactionList(List<Transaction> transactionList) {
+		this.transactionList = transactionList;
+	}
 }

@@ -1,12 +1,12 @@
 package model;
 // Generated 11 nov. 2017 18:56:02 by Hibernate Tools 5.1.5.Final
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "transaction", catalog = "Mes_Transports")
@@ -15,10 +15,6 @@ public class Transaction implements java.io.Serializable {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Integer id;
-    @Column(name = "user", nullable = false)
-    private User user;
-    @Column(name = "agency", nullable = false)
-    private Agency agency;
     @Column(name = "amount", nullable = false)
     private Float amount;
     @Column(name = "description", nullable = false)
@@ -27,6 +23,14 @@ public class Transaction implements java.io.Serializable {
     private String bankName;
     @Column(name = "rib", nullable = false)
     private String rib;
+    @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
+    private List<Rent> rentList = new ArrayList<Rent>();
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="agency_id")
+    private Agency agency;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
 
     public Integer getId() {
         return id;
@@ -84,4 +88,12 @@ public class Transaction implements java.io.Serializable {
         this.rib = rib;
     }
 
+    @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
+    public List<Rent> getRentList() {
+        return rentList;
+    }
+
+    public void setRentList(List<Rent> rentList) {
+        this.rentList = rentList;
+    }
 }
