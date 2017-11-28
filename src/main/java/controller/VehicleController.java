@@ -11,10 +11,12 @@ import javax.ws.rs.core.MediaType;
 import io.swagger.annotations.Api;
 import model.Characteristic;
 import model.CharacteristicType;
+import model.Rent;
 import model.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -120,7 +122,12 @@ public class VehicleController extends ApiController{
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Vehicle> searchVehicle (@QueryParam("being") Date being,
 			@QueryParam("end") Date end) {
-		Query q=entityManager.createQuery("SELECT * FROM VEHICLE INNER JOIN RENT ON VEHICLE.id=RENT.idVehicle WHERE RENT.begin_date<'"+being.toString()+"' AND RENT.end_date>'"+end.toString()+"'");
-		return ((List<Vehicle>) q.getResultList());
+		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate<'"+being.toString()+"' AND r.endDate>'"+end.toString()+"'");
+		List<Rent> lr = q.getResultList();
+		List<Vehicle> lv = new LinkedList<Vehicle>();
+		for(int i=0;i<lr.size();i++) {
+			lv.add(entityManager.find(Vehicle.class, lr.get(i).getIdVehicle()));
+		}
+		return lv;
 	}
 }
