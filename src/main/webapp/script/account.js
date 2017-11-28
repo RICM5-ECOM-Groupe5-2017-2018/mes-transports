@@ -90,11 +90,8 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		}
 		
 		if($scope.form.error.mail || $scope.form.error.password) {
-			console.log("error");
 			return null;
 		}
-		
-		console.log($scope.form.signin.login);
 		
 		var data = {
 			'login' : $scope.form.signin.login,
@@ -105,15 +102,21 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 			'role' : "user",
 			'firstname' : $scope.form.signin.firstname,
 			'lastname' : $scope.form.signin.lastname
-		}
+		};
 		
-		console.log(data);
 		
 		$http.post('api/user/create/', data)
 		.then(function successCallback(response) {
 			console.log("user created");
-		}, function errorCallback(response) {
+		}, function errorCallback(data, status, headers) {
 			console.log("user can't be created");
+			console.log(data);
+			/*
+			$scope.ResponseDetails = "Data : " + data + 
+			"<hr/>Status " + status + 
+			"<hr/>Headers " + headers + 
+			"<hr/>Config : " + config;
+			*/
 		});
 		
 	}
