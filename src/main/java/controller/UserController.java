@@ -201,8 +201,9 @@ public class UserController extends ApiController {
 	
 	@POST
 	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/disable")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String disableUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
@@ -214,8 +215,9 @@ public class UserController extends ApiController {
 
 	@POST
 	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/reactivate")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Produces(MediaType.APPLICATION_JSON)
 	public String enableUser (@QueryParam("id") Integer id) {
 		User userRet = entityManager.find(User.class, id);
