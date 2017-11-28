@@ -10,6 +10,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import model.Agency;
 import model.Vehicle;
 import security.Secured;
@@ -30,6 +32,7 @@ public class AgencyController extends ApiController{
 	@POST
 	@SecuredAgency
 	@Path("/create")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency createAgency (@QueryParam("type") String type,
@@ -50,6 +53,7 @@ public class AgencyController extends ApiController{
 	@POST
 	@SecuredAgency
 	@Path("/edit")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency editAgency (@QueryParam("id") Integer id,
@@ -71,6 +75,7 @@ public class AgencyController extends ApiController{
 	@POST
 	@SecuredAgency
 	@Path("/view")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Agency consultAgency (@QueryParam("id") Integer id) {
@@ -80,8 +85,9 @@ public class AgencyController extends ApiController{
 	
 	@POST
 	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/delete")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteAgency (@QueryParam("id") Integer id) {
 		Agency agencyRet = entityManager.find(Agency.class, id);
@@ -93,20 +99,22 @@ public class AgencyController extends ApiController{
 	@POST
 	@SecuredAgency
 	@Path("/vehicle")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Vehicle> View_Vehicles (@QueryParam("id") Integer id) {
-		Query q = entityManager.createQuery("SELECT * FROM VEHICLE WHERE idAgency="+id);
+		Query q = entityManager.createQuery("SELECT * FROM Vehicle WHERE idAgency="+id);
 		return ((List<Vehicle>)q.getResultList());
 	}
 	
 	@POST
 	@SecuredAgency
 	@Path("/list")
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Vehicle> View_Agency (@QueryParam("id") Integer id) {
-		Query q = entityManager.createQuery("SELECT * FROM AGENCY WHERE id_mother_agency="+id);
+	public List<Vehicle> View_Agency (@FormParam("id") Integer id) {
+		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+id);
 		return ((List<Vehicle>)q.getResultList());
 	}
 

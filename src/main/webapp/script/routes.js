@@ -26,8 +26,12 @@ routes.config(function($routeProvider) {
         templateUrl : 'view/agency/agencyView.html',
     })
     .when('/add/vehicule', {
-        templateUrl : 'html/agency/vehiculesPage.html',
+        templateUrl : 'html/agency/addNewVehicule.html',
         controller  : 'vehiculeRegisterForm'
+    })
+	.when('/view/vehicule', {
+        templateUrl : 'html/agency/vehiculesViewPage.html',
+        controller  : 'vehiculeView'
     });
 	
 });
