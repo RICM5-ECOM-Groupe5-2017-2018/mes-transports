@@ -23,7 +23,7 @@ import java.util.List;
 @Api("vehicle")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class VehicleController extends ApiController{
+public class VehicleController extends Application {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
