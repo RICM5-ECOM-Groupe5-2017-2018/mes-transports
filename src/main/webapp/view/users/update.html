@@ -1,0 +1,71 @@
+<form ng-show="user" class="form-horizontal" ng-submit="update()">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Informations du compte</legend>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_login">Login</label>  
+  <div class="col-md-5">
+  <input id="update_login" ng-model="form.update.login" name="update_login" type="text" placeholder="johndoe" class="form-control input-md" required="" disabled="">
+  <span class="help-block">Ce login vous permet de vous connecter, et ne peut pas être modifié</span>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_firstname">Prénom</label>  
+  <div class="col-md-5">
+  <input id="update_firstname" ng-model="form.update.userFirstName" name="update_firstname" type="text" placeholder="John" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_lastname">Nom</label>  
+  <div class="col-md-5">
+  <input id="update_lastname" ng-model="form.update.userName" name="update_lastname" type="text" placeholder="Doe" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_mail">Adresse e-mail</label>  
+  <div class="col-md-5">
+  <input id="update_mail" ng-model="form.update.mailAddress" name="update_mail" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_phone">Numéro de téléphone</label>  
+  <div class="col-md-5">
+  <input id="update_phone" ng-model="form.update.phoneNum" name="update_phone" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_password">Mot de passe</label>
+  <div class="col-md-5">
+    <input id="update_password" ng-model="form.update.password" name="update_password" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_button"></label>
+  <div class="col-md-4">
+    <button id="update_button" name="update_button" class="btn btn-success btn-block">Sauvegarder les informations</button>
+  </div>
+</div>
+
+</fieldset>
+</form>

@@ -1,4 +1,4 @@
-var app = angular.module("main",['routes','account','menu','agencyVehiculesView','agency']);
+var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency']);
 
 
 app.run(function($rootScope,$location) {
@@ -16,5 +16,11 @@ app.run(function($rootScope,$location) {
 		  else{
 			  $location.path(next.$$route.originalPath);}
 	});
+	
+});
+
+app.controller('AppController', function($scope) {
+	
+	$scope.form = {};
 	
 });

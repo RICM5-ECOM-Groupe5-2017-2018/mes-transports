@@ -7,6 +7,9 @@ var account = angular.module('account', ['ngCookies','menu']);
 account.controller('AccountController', ['$scope', '$http', '$cookies','$location','$rootScope','$route', function AccountController($scope, $http, $cookies,$location,$rootScope,$route) {
 
 	$scope.user = $cookies.getObject("user");
+	$scope.form.update = $scope.user;
+	
+	console.log($scope.user);
 	
 	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
@@ -26,7 +29,7 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		$http.get(
 			'api/user/authenticate/' + $scope.form.connect.login + '/' + $scope.form.connect.password
 		).then(function successCallback(response) {
-			response.data.isAgency = response.data.idAgency!=null;
+			response.data.isAgency = response.data.role=="gestionaire";
 			$cookies.putObject("user", response.data);
 			$cookies.put("token", response.data.token);
 			$scope.user = $cookies.getObject("user");
@@ -95,10 +98,10 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		
 		var data = {
 			'login' : $scope.form.signin.login,
-			//'userName' : $scope.form.signin.login,
+			'username' : $scope.form.signin.login,
 			'password' : $scope.form.signin.password,
-			'mailAddress' : $scope.form.signin.mail,
-			'phoneNum' : $scope.form.signin.phone,
+			'mail' : $scope.form.signin.mail,
+			'phone' : $scope.form.signin.phone,
 			'role' : "user",
 			'firstname' : $scope.form.signin.firstname,
 			'lastname' : $scope.form.signin.lastname

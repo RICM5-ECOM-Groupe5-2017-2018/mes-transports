@@ -18,12 +18,16 @@ routes.config(function($routeProvider) {
     	templateUrl : "view/users/signin.html",
     	controller : "AccountController"
     })
-    .when('/registration/childAgence', {
-        templateUrl : 'html/agency/agencieyPage.html',
-        controller  : 'Resgistration'
+    .when("/account", {
+    	templateUrl : "view/users/update.html",
+    	controller : "AccountController"
     })
     .when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
+    })
+    .when('/registration/childAgence', {
+    	templateUrl : 'html/agency/agencieyPage.html',
+    	controller  : 'Resgistration'
     })
     .when('/add/vehicule', {
         templateUrl : 'html/agency/addNewVehicule.html',
