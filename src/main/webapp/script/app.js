@@ -1,8 +1,8 @@
-var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency']);
+var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency', 'vehicle']);
 
 
+/*
 app.run(function($rootScope,$location) {
-	
 	$rootScope.$on("$routeChangeStart", function(event, next, current) {
 		
 		  if(next.$$route.originalPath == '/' && $rootScope.user) 
@@ -18,6 +18,7 @@ app.run(function($rootScope,$location) {
 	});
 	
 });
+ */
 
 app.controller('AppController', function($scope) {
 	
