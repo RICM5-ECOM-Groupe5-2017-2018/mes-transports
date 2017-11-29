@@ -4,7 +4,9 @@
 
 var account = angular.module('account', ['ngCookies','menu']);
 
-account.controller('AccountController', ['$scope', '$http', '$cookies','$location','$rootScope','$route', function AccountController($scope, $http, $cookies,$location,$rootScope,$route) {
+account.controller('AccountController', 
+	['$scope', '$http', '$cookies','$location', 
+	function AccountController($scope, $http, $cookies,$location) {
 
 	$scope.user = $cookies.getObject("user");
 	$scope.form.update = $scope.user;
