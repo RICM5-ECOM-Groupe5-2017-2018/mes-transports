@@ -94,7 +94,7 @@ public class VehicleController extends Application {
 		return characteristics;
 	}
 	
-	@POST
+	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/view")
 	@Produces(MediaType.APPLICATION_JSON)
