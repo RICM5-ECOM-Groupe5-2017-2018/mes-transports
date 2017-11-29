@@ -2,9 +2,10 @@ var agency = angular.module("agency",['ngCookies']);
 
 agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope){
 	
-	$scope.listeAgencies;
-	$scope.listeVehicules;
-	loadChildAgencies();
+	$rootScope.listChildAgencies;
+	$rootScope.MotherAgency;
+	
+	loadAgency();
 
 	function loadChildAgencies()
 	{
@@ -13,27 +14,18 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		console.log(token);
 		if(user)
 		{
-			var req = {
-			 method: 'POST',
-			 url: 'api/agency/list',
-			 headers: 
-			 {
-				 'Authorization': 'Bearer ' + token,
-				 'Content-Type' : 'application/json'
-				},
-			 data: angular.toJson({ id:user.idAgency}),
-			}
-			$http(req).then(
-
-				function(response){
-					$rootScope.listChildAgenciesDetails = response.data;
-					$rootScope.listChildAgenciesDetails.forEach(function(child,index) {
-						
+			var config = {headers: {'Authorization': 'Bearer ' + token,}};
+			
+			$http.get('api/agency/list/'+user.idAgency,config).then(
+			   function(response){
+				   
+					response.data.forEach(function(child,index) {	
 						if(!$rootScope.listChildAgencies){$rootScope.listChildAgencies={};}
-						$rootScope.listChildAgencies[child.id] = index;
+						$rootScope.listChildAgencies[child.id] = child;
 					});
 					
-					//createSubAgencyMenu($scope.listChildAgenciesDetails); 
+					$rootScope.reloadSubAgencyMenu($scope.listChildAgencies, $rootScope.MotherAgency.id_mother_agency); 
+					
 					console.log(response.data);
 					console.log($rootScope.listChildAgenciesDetails);
 					console.log($rootScope.listChildAgencies);
@@ -45,36 +37,28 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	                "<br />headers: " + response.headers +
 	                "<br />config: " + response.config;
 			    }
-	    	
-	    	);
+		    );
 		}
 			
 	};
-
 	
 	function loadAgency()
 	{
 		var user = $cookies.getObject("user");
 		var token = $cookies.get("token");
+		console.log(token);
 		if(user)
 		{
-			console.log(user.token);
-			console.log(token);
-			var req = {
-			 method: 'POST',
-			 url: 'api/agency/view',
-			 headers: {'Authorization': 'Bearer ' + user.token},
-			 data: 
-			 { 
-				 id:user.idAgency,
-			 }
-			}
-			$http(req).then(
-
-				function(response){
+			var config = {headers: {'Authorization': 'Bearer ' + token,}};
+			
+			$http.get('api/agency/view/'+user.idAgency,config).then(
+			   function(response){
+					$rootScope.MotherAgency = response.data;
 					
-					$scope.motherAgency = response.data;
-					console.log(response.data);
+					//loadChild
+					loadChildAgencies()
+					
+					console.log($rootScope.MotherAgency);
 			    },
 			    function(response)
 			    {
@@ -83,8 +67,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	                "<br />headers: " + response.headers +
 	                "<br />config: " + response.config;
 			    }
-	    	
-	    	);
+		    );
 		}
 			
 	};
@@ -122,12 +105,26 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			
 	};
 	
-	
-
-	
 }); 
 
-agency.controller("agencyChilMenu",function($scope,$http,$cookies,$rootScope){
+agency.controller("agencyChildMenu",function($scope,$http,$cookies,$rootScope){
+	
+	$scope.agencyByCity = {};
+	
+	$scope.isMother = false;
+	
+	$rootScope.reloadSubAgencyMenu=function(list, idMother)
+	{
+		if(idMother!=null)
+		{
+			$scope.isMother = true;
+			list.forEach(function(child,index) {
+				var city = child.city.toUpperCase();
+				if(!$scope.agencyByCity[city]){$scope.agencyByCity[city]=[];}
+				$scope.agencyByCity[city].push([child.id, child.name!=""?child.name:child.address]);
+			});
+		}
+	}
 	
 });
 

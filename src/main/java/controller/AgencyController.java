@@ -4,7 +4,6 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.core.Application;
 
 import model.Agency;
 import model.Vehicle;
@@ -12,7 +11,7 @@ import model.Vehicle;
 import java.util.List;
 
 @Singleton
-public class AgencyController extends Application {
+public class AgencyController {
 	
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;

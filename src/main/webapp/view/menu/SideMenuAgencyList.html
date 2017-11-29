@@ -1,0 +1,25 @@
+<div ng-controller="agencyChildMenu">
+	<li id="agency" ng-if="isMother">
+	    <a data-toggle="collapse"  ng-click="collapse()"> Agences <span class="caret"></span></a>
+	    <!-- Dropdown level 1 -->
+	    <div id="{{agencyCity}}" class="panel-collapse collapse">
+	        <div class="panel-body">
+	            <ul class="nav navbar-nav">
+	                <li><a href="#!/registration/childAgence">Ajouter une sous agence</a></li>
+	                
+	                <div ng-repeat="(city, agency) in agencyByCity">
+	                	<!-- Liste des villes -->
+	                	<a data-toggle="collapse"  ng-click="collapse()"> {{city}} <span class="caret"></span></a>
+	                	<div id="{{agencyCity}}" class="panel-collapse collapse">
+	                		<div class="panel-body">
+	                			<ul class="nav navbar-nav">
+				        			<!-- Liste des agences pour la ville -->        	
+				                	<div ng-repeat="(id, name) in {{agency}}">
+				                		<li><a href="#!">{{name}}</a></li>
+				               		</div>
+	                </div>
+	            </ul>
+	        </div>
+	    </div>
+	</li>
+</div>
