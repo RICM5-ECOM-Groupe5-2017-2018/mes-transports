@@ -26,13 +26,13 @@
 	      </form>
 	      
 	      <ul class="nav navbar-nav navbar-right">
-	      	<li ng-if="!user">
+	      	<li ng-hide="user">
 	        	<a href="#!/login">Connexion</a>
         	</li>
-	        <li ng-if="user">
+	        <li ng-show="user">
 	        	<a ng-click="logout()">Déconnexion</a>
 	       	</li>
-	       	<li ng-if="!user">
+	       	<li ng-hide="user">
 	        	<a href="#!/signin">Inscription</a>
 	       	</li>
 	      </ul>
