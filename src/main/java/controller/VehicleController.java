@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 
+import JsonEncoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Vehicle;
@@ -93,12 +94,12 @@ public class VehicleController {
 	 * @param id id of the vehicle to disable
 	 * @return Message
 	 */
-	public String deleteVehicle (@QueryParam("id") Integer id) {
+	public JsonMessage deleteVehicle (@QueryParam("id") Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		vehicleRet.setStatus(false);
 		entityManager.merge(vehicleRet);
 		entityManager.flush();
-		return ("Vehicle successfully deleted");
+		return new JsonMessage("Vehicle successfully deleted");
 	}
 
 	/**
