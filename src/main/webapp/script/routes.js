@@ -2,7 +2,7 @@
  * 
  */
 
-var routes = angular.module('routes', ['ngRoute', 'account']);
+var routes = angular.module('routes', ['ngRoute']);
 
 routes.config(function($routeProvider) {
 	
@@ -36,6 +36,13 @@ routes.config(function($routeProvider) {
 	.when('/view/vehicule', {
         templateUrl : 'html/agency/vehiculesViewPage.html',
         controller  : 'vehiculeView'
+    })
+    .when("/vehicle/view/:id", {
+    	templateUrl : 'view/vehicle/details.html',
+    	controller : 'VehicleDetailsController'
+    })
+    .otherwise({
+    	redirectTo : '/'
     });
 	
 });
