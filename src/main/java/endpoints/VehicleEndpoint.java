@@ -1,4 +1,102 @@
 package endpoints;
 
-public class VehicleEndpoint {
+import controller.VehicleController;
+import io.swagger.annotations.Api;
+import model.Vehicle;
+
+import javax.ejb.EJB;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Date;
+
+@ApplicationPath("/api")
+@Path("/vehicle")
+@Api("vehicle")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class VehicleEndpoint extends Application{
+
+    @EJB
+    protected VehicleController controller;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createVehicle (Vehicle vehicle){
+        try {
+            return Response.status(200).entity(controller.createVehicle(vehicle)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Format de l'entité invalide").build();
+        }
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/edit")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editVehicle (Vehicle vehicle) {
+        try {
+            return Response.status(200).entity(controller.editVehicle(vehicle)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Format de l'entité invalide").build();
+        }
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/list/{idType}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCharacteristics (@PathParam("idType") Integer idType){
+        try {
+            return Response.status(200).entity(controller.getCharacteristicsByType(idType)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/view/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response consultVehicle (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.consultVehicle(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
+    }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteVehicle (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.deleteVehicle(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/search/{startDate}/{endDate}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response searchVehicle (@PathParam("startDate") Date startDate,
+                                        @PathParam("endDate") Date endDate) {
+        try {
+            return Response.status(200).entity(controller.searchVehicle(startDate, endDate)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Le format de la date est invalide").build();
+        }
+    }
 }
