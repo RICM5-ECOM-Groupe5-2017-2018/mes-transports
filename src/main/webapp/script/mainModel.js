@@ -1,4 +1,4 @@
-var app = angular.module("main",['routes','account','menu','agencyVehiculesView','agency']);
+var app = angular.module("main",['routes','menu','account','agencyVehiculesView','agency']);
 
 
 app.run(function($rootScope,$location) {

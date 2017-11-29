@@ -19,19 +19,8 @@
 	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
 	            <li id="accueil" class="active"><a href="#!" > Accueil</a></li>
 	            <li id="parc"> <a href="#!/add/vehicule"> Parc de Véhicules</a></li>
-	
-	            <!-- Dropdown-->
-	            <li id="agency">
-	                <a data-toggle="collapse"  ng-click="collapse()"> <a href="#!/registration/childAgence">Agences</a> <span class="caret"></span></a>
-	                <!-- Dropdown level 1 -->
-	                <div id="{{agencyCity}}" class="panel-collapse collapse">
-	                    <div class="panel-body">
-	                        <ul class="nav navbar-nav">
-	                            <li><a >Test</a></li>
-	                        </ul>
-	                    </div>
-	                </div>
-	            </li>
+				<div ng-include="view/menu/SideMenuAgencyList"></div>
+	            
 	        </ul>
 	    </div><!-- /.navbar-collapse -->
 	</nav>

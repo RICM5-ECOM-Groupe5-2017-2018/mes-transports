@@ -4,6 +4,8 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
+	$scope.agencyByCity={};
+	$scope.isMother = false;
 	
 	loadAgency();
 
@@ -11,7 +13,6 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	{
 		var user = $cookies.getObject("user");
 		var token = $cookies.get("token");
-		console.log(token);
 		if(user)
 		{
 			var config = {headers: {'Authorization': 'Bearer ' + token,}};
@@ -24,11 +25,9 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 						$rootScope.listChildAgencies[child.id] = child;
 					});
 					
-					$rootScope.reloadSubAgencyMenu($scope.listChildAgencies, $rootScope.MotherAgency.id_mother_agency); 
-					
-					console.log(response.data);
-					console.log($rootScope.listChildAgenciesDetails);
 					console.log($rootScope.listChildAgencies);
+					
+					reloadSubAgencyMenu($scope.listChildAgencies, $rootScope.MotherAgency.id_mother_agency); 
 			    },
 			    function(response)
 			    {
@@ -46,7 +45,6 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	{
 		var user = $cookies.getObject("user");
 		var token = $cookies.get("token");
-		console.log(token);
 		if(user)
 		{
 			var config = {headers: {'Authorization': 'Bearer ' + token,}};
@@ -54,11 +52,10 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			$http.get('api/agency/view/'+user.idAgency,config).then(
 			   function(response){
 					$rootScope.MotherAgency = response.data;
+					console.log($rootScope.MotherAgency);
 					
 					//loadChild
-					loadChildAgencies()
-					
-					console.log($rootScope.MotherAgency);
+					loadChildAgencies()					
 			    },
 			    function(response)
 			    {
@@ -71,6 +68,24 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		}
 			
 	};
+	
+	function reloadSubAgencyMenu(list, idMother)
+	{
+		console.log("Debut Load menu")
+		console.log(list);
+		console.log(idMother);
+		if(idMother==undefined)
+		{
+			console.log("C'est une agence mère")
+			$scope.isMother = true;
+			$.each(list, function(key, child){
+				var city = child.city.toUpperCase();
+				if(!$scope.agencyByCity[city]){$scope.agencyByCity[city]=[];}
+				$scope.agencyByCity[city].push([child.id, child.name!=""?child.name:child.address]);
+			});
+			console.log($scope.agencyByCity);
+		}
+	}
 	
 	function loadVehicules(idAgency, token)
 	{
@@ -107,26 +122,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	
 }); 
 
-agency.controller("agencyChildMenu",function($scope,$http,$cookies,$rootScope){
-	
-	$scope.agencyByCity = {};
-	
-	$scope.isMother = false;
-	
-	$rootScope.reloadSubAgencyMenu=function(list, idMother)
-	{
-		if(idMother!=null)
-		{
-			$scope.isMother = true;
-			list.forEach(function(child,index) {
-				var city = child.city.toUpperCase();
-				if(!$scope.agencyByCity[city]){$scope.agencyByCity[city]=[];}
-				$scope.agencyByCity[city].push([child.id, child.name!=""?child.name:child.address]);
-			});
-		}
-	}
-	
-});
+
 
 agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
 	

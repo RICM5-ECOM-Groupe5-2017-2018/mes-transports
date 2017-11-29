@@ -34,8 +34,6 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 			
 			console.log($scope.user);
 			
-			$scope.loadTopMenu();
-			$scope.loadSideMenu();
 			$location.path('/');
 			
 			
