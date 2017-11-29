@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import JsonEncoders.JsonMessage;
 import model.Agency;
 import model.Vehicle;
 
@@ -58,12 +59,12 @@ public class AgencyController {
 	 * @param idAgency the id of the agency to manipulate
 	 * @return message
 	 */
-	public String deleteAgency (Integer idAgency) {
+	public JsonMessage deleteAgency (Integer idAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, idAgency);
 		agencyRet.setStatus(false);
 		entityManager.merge(agencyRet);
 		entityManager.flush();
-		return ("Agency successfully deleted");
+		return new JsonMessage("Agency successfully deleted");
 	}
 
 	/**
@@ -72,12 +73,12 @@ public class AgencyController {
 	 * @param idAgency the id of the agency to manipulate
 	 * @return message
 	 */
-	public String activateAgency (Integer idAgency) {
+	public JsonMessage activateAgency (Integer idAgency) {
 		Agency agencyRet = entityManager.find(Agency.class, idAgency);
 		agencyRet.setStatus(true);
 		entityManager.merge(agencyRet);
 		entityManager.flush();
-		return ("Agency successfully activated");
+		return new JsonMessage("Agency successfully activated");
 	}
 
 	/**
