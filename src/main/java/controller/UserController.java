@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.*;
 
+import JsonEncoders.JsonMessage;
 import model.User;
 import security.PasswordEncryption;
 
@@ -86,12 +87,12 @@ public class UserController extends Application {
 	 * @param userId The id of the user you want to disable
 	 * @return String A confirmation String
 	 */
-	public String disableUser(Integer userId) {
+	public JsonMessage disableUser(Integer userId) {
 		User u = entityManager.find(User.class, userId);
 		u.setStatus(false);
 		entityManager.merge(u);
 		entityManager.flush();
-		return "User successfully disabled";
+		return new JsonMessage("User successfully disabled");
 
 	}
 
@@ -101,12 +102,12 @@ public class UserController extends Application {
 	 * @param userId The id of the user you want to enable
 	 * @return String A confirmation String
 	 */
-	public String enableUser(Integer userId) {
+	public JsonMessage enableUser(Integer userId) {
 		User u = entityManager.find(User.class, userId);
 		u.setStatus(true);
 		entityManager.merge(u);
 		entityManager.flush();
-		return "User successfully enabled";
+		return (new JsonMessage("User successfully enabled"));
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class UserController extends Application {
 	 * @param httpHeaders the header to retrieve token
 	 * @return Message or error
 	 */
-	public String logout(HttpHeaders httpHeaders) {
+	public JsonMessage logout(HttpHeaders httpHeaders) {
 		String token = httpHeaders.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
 		User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
 				.setParameter("token", token)
@@ -136,7 +137,7 @@ public class UserController extends Application {
 		entityManager.merge(user);
 		entityManager.flush();
 		request.getSession(false);
-		return "Déconnexion réussie";
+		return new JsonMessage("Déconnexion réussie");
 	}
 
 	/**

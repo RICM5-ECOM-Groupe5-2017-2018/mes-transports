@@ -119,7 +119,7 @@ public class UserEndpoint extends Application{
     @Path("/disable/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response disableUser(@PathParam("userId") Integer userId) {
+    public Response disableUser(@PathParam("id") Integer userId) {
         try {
             return Response.status(200).entity(controller.disableUser(userId)).build();
         }
@@ -134,7 +134,7 @@ public class UserEndpoint extends Application{
     @Path("/reactivate/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reactiveUser(@PathParam("userId") Integer userId) {
+    public Response reactiveUser(@PathParam("id") Integer userId) {
         try {
             return Response.status(200).entity(controller.enableUser(userId)).build();
         }
