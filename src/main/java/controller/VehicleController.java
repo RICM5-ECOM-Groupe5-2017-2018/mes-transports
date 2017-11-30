@@ -1,14 +1,12 @@
 package controller;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
 
-import io.swagger.annotations.Api;
+import JsonEncoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Vehicle;
@@ -17,110 +15,104 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Stateless
-@ApplicationPath("/api")
-@Path("/vehicle")
-@Api("vehicle")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class VehicleController extends Application {
-	
+@Singleton
+public class VehicleController {
+
 	@PersistenceContext(unitName="myPU")
-    private EntityManager entityManager;
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/create")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle createVehicle (@QueryParam("brand") String brand,
-			@QueryParam("price") Float price,
-			@QueryParam("insurance") String insurance,
-			@QueryParam("idAgency") Integer idAgency,
-			@QueryParam("idType") Integer idType){
-		Vehicle vehicleRet = new Vehicle();
-		vehicleRet.setBrand(brand);
-		vehicleRet.setPrice(price);
-		vehicleRet.setInsurance(insurance);
-		vehicleRet.setIdAgency(idAgency);
-		vehicleRet.setType(idType);
-		entityManager.persist(vehicleRet);
+	private EntityManager entityManager;
+
+	/**
+	 * Creates new vehicle based on given model
+	 *
+	 * @param vehicle model vehicle
+	 * @return new vehicle or error
+	 */
+	public Vehicle createVehicle (Vehicle vehicle){
+		Vehicle newVehicle = new Vehicle(vehicle);
+		entityManager.persist(newVehicle);
 		entityManager.flush();
-		return vehicleRet;
+		return newVehicle;
 	}
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/edit")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle editVehicle (@QueryParam("id") Integer id,
-			@QueryParam("brand") String brand,
-			@QueryParam("price") Float price,
-			@QueryParam("insurance") String insurance,
-			@QueryParam("idAgency") Integer idAgency,
-			@QueryParam("idType") Integer idType) {
-		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
-		vehicleRet.setBrand(brand);
-		vehicleRet.setPrice(price);
-		vehicleRet.setInsurance(insurance);
-		vehicleRet.setIdAgency(idAgency);
-		vehicleRet.setType(idType);
+
+	/**
+	 * Edit vehicle based on given model
+	 *
+	 * @param vehicle model vehicle
+	 * @return edited vehicle or error
+	 */
+	public Vehicle editVehicle (Vehicle vehicle) {
+		Vehicle vehicleRet = entityManager.find(Vehicle.class, vehicle.getId());
+		vehicleRet.setBrand(vehicle.getBrand());
+		vehicleRet.setPrice(vehicle.getPrice());
+		vehicleRet.setInsurance(vehicle.getInsurance());
+		vehicleRet.setIdAgency(vehicle.getIdAgency());
+		vehicleRet.setType(vehicle.getType());
 		entityManager.merge(vehicleRet);
 		entityManager.flush();
 		return vehicleRet;
 		
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/list")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Characteristic> createVehicle (@QueryParam("idType") Integer idType){
+	/**
+	 * Returns characteristics of vehicle that match typeId
+	 *
+	 * @param idType the type chosen
+	 * @return List of characteristics or error
+	 */
+	public List<Characteristic> getCharacteristicsByType (Integer idType){
+		List<Characteristic> characteristics;
 		if (idType == null){
 			List<Characteristic> characteristicList = entityManager
 					.createQuery("FROM Characteristic ")
 					.getResultList();
 			return characteristicList;
 		}
-
-		List<Characteristic> characteristics = new ArrayList<Characteristic>();
-
+		characteristics = new ArrayList<>();
 		List<CharacteristicType> charatypeList = entityManager.createQuery("FROM CharacteristicType WHERE idType = :idType")
 				.setParameter("idType", idType)
 				.getResultList();
-
 		for (CharacteristicType chara: charatypeList){
 			characteristics.add(entityManager.find(Characteristic.class, chara.getId().getIdCharacteristic()));
 		}
 		return characteristics;
 	}
-	
-	@GET
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/view")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Vehicle consultVehicle (@QueryParam("id") Integer id) {
+
+	/**
+	 * Returns the vehicle identified by id
+	 *
+	 * @param id the id of the vehicle
+	 * @return the vehicle
+	 */
+	public Vehicle consultVehicle (Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		return vehicleRet;
 	}
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/delete")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteVehicle (@QueryParam("id") Integer id) {
+
+	/**
+	 * Delete the vehicle (disable)
+	 *
+	 * @param id id of the vehicle to disable
+	 * @return Message
+	 */
+	public JsonMessage deleteVehicle (@QueryParam("id") Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
-		entityManager.detach(vehicleRet);
+		vehicleRet.setStatus(false);
+		entityManager.merge(vehicleRet);
 		entityManager.flush();
-		return ("Vehicle successfully deleted");
+		return new JsonMessage("Vehicle successfully deleted");
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/search")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Vehicle> searchVehicle (@QueryParam("being") Date being,
-			@QueryParam("end") Date end) {
-		Query q=entityManager.createQuery("SELECT * FROM VEHICLE INNER JOIN RENT ON VEHICLE.id=RENT.idVehicle WHERE RENT.begin_date<'"+being.toString()+"' AND RENT.end_date>'"+end.toString()+"'");
+	/**
+	 * Returns all vehicle available from startDate to endDate
+	 *
+	 * @param startDate date of begining
+	 * @param endDate date of end
+	 * @return
+	 */
+	public List<Vehicle> searchVehicle (Date startDate, Date endDate) {
+		Query q=entityManager.createQuery("SELECT v FROM Vehicle v INNER JOIN Rent r ON v.id=r.idVehicle WHERE r.begin_date<'"
+				+startDate.toString()+"' AND r.end_date>'"
+				+endDate.toString()+"'");
 		return ((List<Vehicle>) q.getResultList());
 	}
 }
