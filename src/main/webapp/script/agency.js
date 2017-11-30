@@ -4,11 +4,33 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
-	$scope.agencyByCity={};
+	$rootScope.agencyByCity={};
 	$scope.isMother = false;
 	
-	loadAgency();
-
+	$scope.loadMainAgency = loadMainAgency();
+	
+	function loadMainAgency()
+	{
+		var user = $cookies.getObject("user");
+		var token = $cookies.get("token");
+		if(user)
+		{
+			var config = {headers: {'Authorization': 'Bearer ' + token,}};
+			
+			$http.get('api/agency/view/'+user.idAgency,config).then(
+			   function(response){
+					$rootScope.MotherAgency = response.data;
+					console.log($rootScope.MotherAgency);	
+					loadChildAgencies();
+			    },
+			    function(response)
+			    {
+			    	
+			    }
+		    );
+		}		
+	};
+	
 	function loadChildAgencies()
 	{
 		var user = $cookies.getObject("user");
@@ -26,64 +48,46 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 					});
 					
 					console.log($rootScope.listChildAgencies);
-					
-					reloadSubAgencyMenu($scope.listChildAgencies, $rootScope.MotherAgency.id_mother_agency); 
+					reloadSubAgencyMenu(); 
 			    },
 			    function(response)
 			    {
-			    	$scope.ResponseDetails = "Data: " + response.data +
-	                "<br />status: " + response.status +
-	                "<br />headers: " + response.headers +
-	                "<br />config: " + response.config;
+			    	
 			    }
 		    );
 		}
 			
 	};
 	
-	function loadAgency()
+	
+	$rootScope.loadOneChildAgency=function(id)
 	{
-		var user = $cookies.getObject("user");
 		var token = $cookies.get("token");
-		if(user)
-		{
-			var config = {headers: {'Authorization': 'Bearer ' + token,}};
-			
-			$http.get('api/agency/view/'+user.idAgency,config).then(
-			   function(response){
-					$rootScope.MotherAgency = response.data;
-					console.log($rootScope.MotherAgency);
-					
-					//loadChild
-					loadChildAgencies()					
-			    },
-			    function(response)
-			    {
-			    	$scope.ResponseDetails = "Data: " + response.data +
-	                "<br />status: " + response.status +
-	                "<br />headers: " + response.headers +
-	                "<br />config: " + response.config;
-			    }
-		    );
-		}
+		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		
+		$http.get('api/agency/view/'+id,config).then(
+		   function(response){
+			   $rootScope.listChildAgencies[response.data.id] = response.data;
+			   reloadSubAgencyMenu()
+		    },
+		    function(response)
+		    {
+		    	
+		    }
+	    );
 			
 	};
 	
-	function reloadSubAgencyMenu(list, idMother)
+	function reloadSubAgencyMenu(list)
 	{
-		console.log("Debut Load menu")
-		console.log(list);
-		console.log(idMother);
-		if(idMother==undefined)
+		if($rootScope.MotherAgency.idAgency==undefined)
 		{
-			console.log("C'est une agence mère")
 			$scope.isMother = true;
-			$.each(list, function(key, child){
+			$.each($rootScope.listChildAgencies, function(key, child){
 				var city = child.city.toUpperCase();
-				if(!$scope.agencyByCity[city]){$scope.agencyByCity[city]=[];}
-				$scope.agencyByCity[city].push([child.id, child.name!=""?child.name:child.address]);
+				if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
+				$rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
 			});
-			console.log($scope.agencyByCity);
 		}
 	}
 	
@@ -109,16 +113,13 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			    },
 			    function(response)
 			    {
-			    	$scope.ResponseDetails = "Data: " + response.data +
-	                "<br />status: " + response.status +
-	                "<br />headers: " + response.headers +
-	                "<br />config: " + response.config;
+			    	
 			    }
-	    	
 	    	);
 		}
-			
 	};
+	
+	
 	
 }); 
 
@@ -130,3 +131,59 @@ agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
 	
 	
 }); 
+
+agency.controller("childRegistration",function($scope,$http,$cookies){
+
+	$scope.banks = [
+			{"name":"CIC","link":"link",},
+			{"name":"LCL","link":"link",},
+			{"name":"La caisse d\'épargne","link":"link",},
+			{"name":"Crédit mutuel","link":"link",},
+			{"name":"La banque populaire","link":"link",},
+			{"name":"Crédit agricole","link":"link",},
+			{"name":"BNP","link":"link",},
+			{"name":"Société générale","link":"link",},
+			{"name":"La banque postale","link":"link",},
+	];
+	
+	
+    $scope.sendFormAgency = function(){
+    	var user = $cookies.getObject("user");
+    	if(user && user.isAgency)
+    	{
+    		var data = {
+    				"id":null,
+    				"type":agency.type,
+    				"address":agency.addressp1+" "+agency.addressp2+" "+agency.city,
+    				"idMotherAgency":user.idAgency,
+    				"phoneNum":agency.phone,
+    				"city":agency.city.toUpperCase(),
+    				"name":agency.name,
+    				"bankLink":$scope.banks[agency.bank],
+    				"bankName":agency.bank,
+    				"rib":agency.rib,
+    				"status":null,
+    				"transactionList":null,
+    		};
+    		var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+    		
+    		$http.post('api/agency/create/', data, config)
+    		.then(function successCallback(response) {
+    			$scope.agency={};
+	        	$scope.registerForm.$setPristine();
+	        	alert("L'agence est créée");
+    		}, function errorCallback(data, status, headers) {
+    		
+    		});
+    		
+    	}
+    }
+
+});
+
+agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$routeParams){
+	
+	$scope.currentIdAgency = $routeParams.id
+	
+	
+});

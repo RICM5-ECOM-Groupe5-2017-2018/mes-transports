@@ -18,20 +18,23 @@ routes.config(function($routeProvider) {
     	templateUrl : "view/signin.html",
     	controller : "AccountController"
     })
-    .when('/registration/childAgence', {
-        templateUrl : 'html/agency/agencieyPage.html',
-        controller  : 'Resgistration'
+    .when('/agency/add/childAgence', {
+        templateUrl : 'view/agency/addNewChildAgency.html',
+        controller  : 'childRegistration'
     })
     .when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
     })
-    .when('/add/vehicule', {
-        templateUrl : 'html/agency/addNewVehicule.html',
-        controller  : 'vehiculeRegisterForm'
+    .when('/agency/add/vehicule', {
+        templateUrl : 'view/agency/addNewVehicule.html',
+        controller  : 'addVehiculeForm'
     })
-	.when('/view/vehicule', {
-        templateUrl : 'html/agency/vehiculesViewPage.html',
-        controller  : 'vehiculeView'
-    });
+	.when('agency/view/vehicule', {
+        templateUrl : 'view/agency/viewVehicule.html'
+    })
+	.when('agency/view/chagency/:id', {
+        templateUrl : 'view/agency/chidAgencyView.html',
+        controller : 'childAgencyView'
+    })
 	
 });

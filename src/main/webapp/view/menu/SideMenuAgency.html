@@ -17,9 +17,32 @@
 	    <!-- Main Menu -->
 	    <div class="side-menu-container">
 	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
-	            <li id="accueil" class="active"><a href="#!" > Accueil</a></li>
+	            <li id="accueil"><a href="#!/" > Accueil</a></li>
 	            <li id="parc"> <a href="#!/add/vehicule"> Parc de Véhicules</a></li>
-				<div ng-include="view/menu/SideMenuAgencyList"></div>
+	            
+				<div ng-controller="agencyMainPageCtrl">
+					<li id="agency">
+					    <a data-toggle="collapse" ng-click="collapseL1()"> Agences <span class="caret"></span></a>
+					    <div id="listAgence" class="panel-collapse collapse">
+					        <div class="panel-body">
+					            <ul class="nav navbar-nav">
+					                <li><a href="#!/agency/add/childAgence">Ajouter une sous agence</a></li>
+					                
+					                <div ng-repeat="(city, agencies) in agencyByCity">
+					                	<a data-toggle="collapse"  ng-click="collapseL2(city)"> {{city}} <span class="caret"></span></a>
+					                	<div id="{{city}}" class="panel-collapse collapse">
+					                		<div class="panel-body">
+					                			<ul class="nav navbar-nav">
+								        			<!-- Liste des agences pour la ville -->        	
+								                	<div ng-repeat="(index,data) in agencies">
+								                			<li><a href="#!/agency/view/chagency/{{data.id}}" >{{data.name}}</a></li>
+								               		</div>
+					                </div>
+					            </ul>
+					        </div>
+					    </div>
+					</li>
+				</div>
 	            
 	        </ul>
 	    </div><!-- /.navbar-collapse -->

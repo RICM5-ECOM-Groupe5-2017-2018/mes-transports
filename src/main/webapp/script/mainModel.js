@@ -7,14 +7,16 @@ app.run(function($rootScope,$location) {
 		
 		  if(next.$$route.originalPath == '/' && $rootScope.user) 
 		  {
+			  console.log(next);
+			  console.log(event);
+			  console.log(current);
+			  console.log(next.$$route.originalPath);
 			  if($rootScope.user.isAgency)
 			  {
 				  $location.path('/agency');
 			  }
 			  else{$location.path('/');}
-		  } 
-		  else{
-			  $location.path(next.$$route.originalPath);}
+		  }
 	});
 	
 });
