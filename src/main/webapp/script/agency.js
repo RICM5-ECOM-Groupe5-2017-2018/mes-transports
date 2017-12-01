@@ -1,13 +1,23 @@
 var agency = angular.module("agency",['ngCookies']);
 
-agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope){
-	
+agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route){
+
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
 	$rootScope.agencyByCity={};
-	$scope.isMother = false;
+	$rootScope.isMother = false;
 	
-	$scope.loadMainAgency = loadMainAgency();
+	$rootScope.$route = $route;
+	
+	$rootScope.getClass = function (path) {
+		  return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+	}
+	
+}); 
+
+agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope){
+	
+	loadMainAgency();
 	
 	function loadMainAgency()
 	{
@@ -78,13 +88,14 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			
 	};
 	
-	function reloadSubAgencyMenu(list)
+	function reloadSubAgencyMenu()
 	{
 		if($rootScope.MotherAgency.idAgency==undefined)
 		{
 			$scope.isMother = true;
 			$.each($rootScope.listChildAgencies, function(key, child){
 				var city = child.city.toUpperCase();
+				
 				if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
 				$rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
 			});
@@ -120,9 +131,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	};
 	
 	
-	
-}); 
-
+});
 
 
 agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
@@ -133,7 +142,7 @@ agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
 }); 
 
 agency.controller("childRegistration",function($scope,$http,$cookies){
-
+	
 	$scope.banks = [
 			{"name":"CIC","link":"link",},
 			{"name":"LCL","link":"link",},
@@ -184,6 +193,11 @@ agency.controller("childRegistration",function($scope,$http,$cookies){
 agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$routeParams){
 	
 	$scope.currentIdAgency = $routeParams.id
+	$scope.idMenu = '#'+$rootScope.listChildAgencies[$scope.currentIdAgency].city+'-'+$rootScope.listChildAgencies[$scope.currentIdAgency].name;
 	
+	
+});
+
+agency.controller("agencySideMenu",function($scope,$http,$cookies,$rootScope){
 	
 });

@@ -15,18 +15,18 @@
 	    </div>
 	
 	    <!-- Main Menu -->
-	    <div class="side-menu-container">
+	    <div class="side-menu-container" id="sideMenu">
 	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
-	            <li id="accueil"><a href="#!/" > Accueil</a></li>
-	            <li id="parc"> <a href="#!/add/vehicule"> Parc de Véhicules</a></li>
+	            <li id="accueil" ng-class="{active: $route.current.activetab == 'main'}"><a href="#!/"> Accueil</a></li>
+	            <li id="parc" ng-class="{active: $route.current.activetab == 'viewVehicules'}"> <a href="#!/add/vehicule"> Parc de Véhicules</a></li>
 	            
-				<div ng-controller="agencyMainPageCtrl">
+				<div>
 					<li id="agency">
 					    <a data-toggle="collapse" ng-click="collapseL1()"> Agences <span class="caret"></span></a>
 					    <div id="listAgence" class="panel-collapse collapse">
 					        <div class="panel-body">
 					            <ul class="nav navbar-nav">
-					                <li><a href="#!/agency/add/childAgence">Ajouter une sous agence</a></li>
+					                <li id="addAgency" ng-class="{active: $route.current.activetab == 'addchildAgency'}"><a href="#!/agency/add/childAgency">Ajouter une sous agence</a></li>
 					                
 					                <div ng-repeat="(city, agencies) in agencyByCity">
 					                	<a data-toggle="collapse"  ng-click="collapseL2(city)"> {{city}} <span class="caret"></span></a>
@@ -35,7 +35,7 @@
 					                			<ul class="nav navbar-nav">
 								        			<!-- Liste des agences pour la ville -->        	
 								                	<div ng-repeat="(index,data) in agencies">
-								                			<li><a href="#!/agency/view/chagency/{{data.id}}" >{{data.name}}</a></li>
+								                			<li id="{{city}}-{{data.name}}" ng-class="{active: $route.current.activetab == 'childAgency'}"><a href="#!/agency/view/chagency/{{data.id}}" >{{data.name}}</a></li>
 								               		</div>
 					                </div>
 					            </ul>
