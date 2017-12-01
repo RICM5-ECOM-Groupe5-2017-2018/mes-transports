@@ -121,12 +121,13 @@ account.controller('AccountController',
 	$scope.updateInfo = function UserUpdateInfo() {
 		console.log($scope.form.update);
 		var data = $scope.form.update;
+		data.isAgency = undefined;
 		
-		$http.put('api/user/edit', {
+		$http.put('api/user/edit', data, {
 			headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
-		}, data)
+		})
 		.then(function successCallback(response) {
-			$cookies.setObject("user", response.data);
+			$cookies.putObject("user", response.data);
 			console.log(response);
 		}, function errorCallback(response) {
 			console.log(response);
