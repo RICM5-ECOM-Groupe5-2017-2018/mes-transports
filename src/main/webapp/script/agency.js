@@ -150,40 +150,42 @@ agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
 
 agency.controller("childRegistration",function($scope,$http,$cookies){
 	
-	$scope.banks = [
-			{"name":"CIC","link":"link",},
-			{"name":"LCL","link":"link",},
-			{"name":"La caisse d\'épargne","link":"link",},
-			{"name":"Crédit mutuel","link":"link",},
-			{"name":"La banque populaire","link":"link",},
-			{"name":"Crédit agricole","link":"link",},
-			{"name":"BNP","link":"link",},
-			{"name":"Société générale","link":"link",},
-			{"name":"La banque postale","link":"link",},
-	];
-	
+	$scope.data = {
+	    availableBanks: [
+			{id:'0',name:'CIC',value:'link',},
+			{id:'1',name:'LCL',value:'link',},
+			{id:'2',name:'La caisse d\'épargne',value:'link',},
+			{id:'3',name:'Crédit mutuel',value:'link',},
+			{id:'4',name:'La banque populaire',value:'link',},
+			{id:'5',name:'Crédit agricole',value:'link',},
+			{id:'6',name:'BNP',value:'link',},
+			{id:'7',name:'Société générale',value:'link',},
+			{id:'8',name:'La banque postale',value:'link',},
+		],
+	    //selectedBank: {id:'0',name:'CIC',value:'link',}
+	};
 	
     $scope.sendFormAgency = function(){
     	var user = $cookies.getObject("user");
     	if(user && user.isAgency)
     	{
-    		var data = {
+    		var dataToSend = {
     				"id":null,
-    				"type":agency.type,
-    				"address":agency.addressp1+" "+agency.addressp2+" "+agency.city,
+    				"type":$scope.agency.type,
+    				"address":$scope.agency.addressp1+" "+$scope.agency.addressp2+" "+$scope.agency.city,
     				"idMotherAgency":user.idAgency,
-    				"phoneNum":agency.phone,
-    				"city":agency.city.toUpperCase(),
-    				"name":agency.name,
-    				"bankLink":$scope.banks[agency.bank],
-    				"bankName":agency.bank,
-    				"rib":agency.rib,
+    				"phoneNum":$scope.agency.phoneNum,
+    				"city":$scope.agency.city.toUpperCase(),
+    				"name":$scope.agency.name,
+    				"bankLink":$scope.agency.selectedBank.value,
+    				"bankName":$scope.agency.selectedBank.name,
+    				"rib":$scope.agency.rib,
     				"status":null,
     				"transactionList":null,
     		};
     		var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
     		
-    		$http.post('api/agency/create/', data, config)
+    		$http.post('api/agency/create/', dataToSend, config)
     		.then(function successCallback(response) {
     			$scope.agency={};
 	        	$scope.registerForm.$setPristine();

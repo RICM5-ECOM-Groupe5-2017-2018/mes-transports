@@ -29,12 +29,15 @@
 			<div class="form-group row">
 					<label for="postal" class="col-sm-2 col-form-label">Code Postale*</label>
 					<div class="col-sm-4"> 
-						<input type="tel" class="form-control" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-model="agency.addressp2" name="postal" value="" required>
+						<input type="tel" class="form-control" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-minlength=5 ng-model="agency.addressp2" name="postal" value="" required>
 						<span class="text-danger" ng-show="registerForm.postal.$error.maxlength">
-			   				Le champ ne peux pas contenir plus de 5 chiffres
+			   				Le champ doit contenir 5 chiffres
 						</span>
 						<span class="text-danger" ng-show="registerForm.postal.$error.pattern">
 			   				Le champ ne doit contenir que des chiffres
+						</span>
+						<span class="text-danger" ng-show="registerForm.postal.$error.minlength">
+			   				Le champ doit contenir 5 chiffres
 						</span>
 					</div>
 			
@@ -61,7 +64,7 @@
 			<div class="form-group row">
 				<label for="phone" class="col-sm-2 col-form-label">Numéro de Téléphone*</label>
 				<div class="col-sm-10"> 
-					<input type="tel" class="form-control" ng-pattern= "/^[0-9]+[0-9]*$/" ng-maxlength=15 ng-model="agency.phone" name="phone" value="" required>
+					<input type="tel" class="form-control" ng-pattern= "/^[0-9]+[0-9]*$/" ng-maxlength=15 ng-model="agency.phoneNum" name="phone" value="" required>
 					<span class="text-danger" ng-show="registerForm.phone.$error.maxlength">
 		   				Le champ ne peux pas contenir plus de 15 nombres
 					</span>
@@ -72,13 +75,11 @@
 			</div>
 			
 			<div class="form-group row" >
-				<label for="bank" class="col-sm-2 col-form-label">Banque*</label>
+				<label for="Selectbank" class="col-sm-2 col-form-label">Banque*</label>
 				<div class="col-sm-10"> 
-					<select ng-model="agency.bank" name="bank" class="form-control" required>
-						<div ng-repeat=" bankData in banks">
-							<option value="">{{bankData.name}}</option>
-						</div>
-					</select> 
+					<select name="Selectbank" id="Selectbank" class="form-control" required
+				      ng-options="bank.name for bank in data.availableBanks track by bank.id"
+				      ng-model="agency.selectedBank"></select>
 				</div>
 			</div>
 			
