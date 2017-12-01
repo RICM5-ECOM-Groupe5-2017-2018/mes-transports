@@ -39,5 +39,9 @@ routes.config(function($routeProvider) {
         templateUrl : 'view/agency/chidAgencyView.html',
         activetab : 'childAgency'
     })
+    .when('/agency/update/:idupdate', {
+    	templateUrl : 'view/agency/addNewChildAgency.html',
+        activetab : 'main'
+    })
 	
 });

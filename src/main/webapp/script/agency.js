@@ -148,7 +148,31 @@ agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
 	
 }); 
 
-agency.controller("childRegistration",function($scope,$http,$cookies){
+agency.controller("childRegistration",function($scope,$http,$cookies,$route, $routeParams,$location){
+
+	$scope.isUpdate = false;
+	if(!$route.routes[$location.path()]){
+		$scope.isUpdate = true;
+		$scope.idUpdatedAgency = $routeParams.idupdate;
+		
+		var token = $cookies.get("token");
+		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		
+		$http.get('api/agency/view/'+$scope.idUpdatedAgency,config).then(
+		   function(response){
+			   $scope.agency = response.data.type
+			   var adressWithoutCity = ($scope.agency.address.slice(0,$scope.agency.address.lastIndexOf($scope.agency.city))).trim();
+			   var postal = adressWithoutCity.slice(-5);
+			   var adresse = adressWithoutCity.slice(0, adressWithoutCity.length-6);
+			   
+		    },
+		    function(response)
+		    {
+		    	
+		    }
+	    );
+		
+	}
 	
 	$scope.data = {
 	    availableBanks: [
@@ -165,14 +189,30 @@ agency.controller("childRegistration",function($scope,$http,$cookies){
 	    //selectedBank: {id:'0',name:'CIC',value:'link',}
 	};
 	
+	
     $scope.sendFormAgency = function(){
     	var user = $cookies.getObject("user");
+    	if($scope.isUpdate)
+    	{
+    		$scope.agency.bankLink =$scope.agency.selectedBank.value;
+    		$scope.agency.bankName = $scope.agency.selectedBank.name;
+    		$scope.agency.selectedBank = undefined;
+    		
+    	}
+    	else{
+    		sendNew(user);
+    	}
+    	
+    }
+    
+    function sendNew(user)
+    {
     	if(user && user.isAgency)
     	{
     		var dataToSend = {
     				"id":null,
     				"type":$scope.agency.type,
-    				"address":$scope.agency.addressp1+" "+$scope.agency.addressp2+" "+$scope.agency.city,
+    				"address":$scope.agency.addressp1+" "+$scope.agency.addressp2+" "+$scope.agency.city.toUpperCase(),
     				"idMotherAgency":user.idAgency,
     				"phoneNum":$scope.agency.phoneNum,
     				"city":$scope.agency.city.toUpperCase(),
@@ -195,6 +235,10 @@ agency.controller("childRegistration",function($scope,$http,$cookies){
     		});
     		
     	}
+    }
+    
+    function sendUpdate(user){
+    	
     }
 
 });
