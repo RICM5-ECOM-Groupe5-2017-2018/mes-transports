@@ -11,8 +11,6 @@ account.controller('AccountController',
 	$scope.user = $cookies.getObject("user");
 	$scope.form.update = $scope.user;
 	
-	console.log($scope.user);
-	
 	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
 			/* Disconnect the user when the token has expired */
@@ -35,13 +33,12 @@ account.controller('AccountController',
 			$cookies.putObject("user", response.data);
 			$cookies.put("token", response.data.token);
 			$scope.user = $cookies.getObject("user");
-			$rootScope.user = $scope.user;
 			
 			console.log($scope.user);
 			
+			$location.path('/');
 			$scope.loadTopMenu();
 			$scope.loadSideMenu();
-			$location.path('/');
 			
 			
 		}, function errorCallback(response) {
@@ -70,7 +67,6 @@ account.controller('AccountController',
 		$cookies.remove("user");
 		$cookies.remove("token");
 		$scope.user = undefined;
-		$rootScope.user = undefined;
 		
 		$scope.loadTopMenu();
 		$scope.loadSideMenu();
@@ -126,8 +122,11 @@ account.controller('AccountController',
 		console.log($scope.form.update);
 		var data = $scope.form.update;
 		
-		$http.post('api/user/edit', data)
+		$http.put('api/user/edit', {
+			headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
+		}, data)
 		.then(function successCallback(response) {
+			$cookies.setObject("user", response.data);
 			console.log(response);
 		}, function errorCallback(response) {
 			console.log(response);
