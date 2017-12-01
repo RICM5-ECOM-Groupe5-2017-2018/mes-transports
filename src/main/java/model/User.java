@@ -77,6 +77,17 @@ public class User implements java.io.Serializable {
 		this.status = NewUser.isStatus();
 	}
 
+	public User(User NewUser) {
+		this.userName = NewUser.getUserName();
+		this.userFirstName = NewUser.getUserFirstName();
+		this.role = NewUser.getRole();
+		this.mailAddress = NewUser.getMailAddress();
+		this.login = NewUser.getLogin();
+		this.password = NewUser.getPassword();
+		this.phoneNum = NewUser.getPhoneNum();
+		this.status = true;
+	}
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 

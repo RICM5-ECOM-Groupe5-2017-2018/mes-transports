@@ -4,9 +4,14 @@
 
 var account = angular.module('account', ['ngCookies','menu']);
 
-account.controller('AccountController', ['$scope', '$http', '$cookies','$location','$rootScope','$route', function AccountController($scope, $http, $cookies,$location,$rootScope,$route) {
+account.controller('AccountController', 
+	['$scope', '$http', '$cookies','$location', 
+	function AccountController($scope, $http, $cookies,$location) {
 
 	$scope.user = $cookies.getObject("user");
+	$scope.form.update = $scope.user;
+	
+	console.log($scope.user);
 	
 	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
@@ -81,7 +86,7 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 			return "Already connected";
 		}
 		
-		if($scope.form.signin.mail != $scope.form.signin.mail2) {
+		if($scope.form.signin.mailAddress != $scope.form.signin.mailAddress2) {
 			$scope.form.error.mail = "Mails should be the same";
 		}
 		
@@ -90,31 +95,29 @@ account.controller('AccountController', ['$scope', '$http', '$cookies','$locatio
 		}
 		
 		if($scope.form.error.mail || $scope.form.error.password) {
-			console.log("error");
 			return null;
 		}
 		
-		console.log($scope.form.signin.login);
-		
-		var data = JSON.stringify({
-			'login' : $scope.form.signin.login,
-			//'userName' : $scope.form.signin.login,
-			'password' : $scope.form.signin.password,
-			'mailAddress' : $scope.form.signin.mail,
-			'phoneNum' : $scope.form.signin.phone,
-			'role' : "user",
-			'userFirstName' : $scope.form.signin.firstname,
-			'userName' : $scope.form.signin.lastname,
-			'status' : true,
-		});
+		var data = $scope.form.signin;
+		data.role = "user";
+		data.mailAddress2 = undefined;
+		data.password2 = undefined;
 		
 		console.log(data);
-
+		
 		$http.post('api/user/create/', data)
 		.then(function successCallback(response) {
 			console.log("user created");
-		}, function errorCallback(response) {
+		}, function errorCallback(data, status, headers) {
 			console.log("user can't be created");
+			console.log(data);
+			$scope.form.error.global = data;
+			/*
+			$scope.ResponseDetails = "Data : " + data + 
+			"<hr/>Status " + status + 
+			"<hr/>Headers " + headers + 
+			"<hr/>Config : " + config;
+			*/
 		});
 		
 	}

@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Stateless
@@ -30,9 +31,13 @@ public class AgencyEndpoint extends Application {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Agency createAgency (Agency agency){
-        System.out.println(agency.toString());
-        return controller.createAgency(agency);
+    public Response createAgency (Agency agency){
+        try {
+            return Response.status(200).entity(controller.createAgency(agency)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Format de l'entité invalide").build();
+        }
     }
 
     @PUT
@@ -40,8 +45,13 @@ public class AgencyEndpoint extends Application {
     @Path("/edit")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Agency editAgency (Agency agency) {
-        return controller.updateAgency(agency);
+    public Response editAgency (Agency agency) {
+        try {
+            return Response.status(200).entity(controller.updateAgency(agency)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Format de l'entité invalide").build();
+        }
     }
 
     @GET
@@ -49,8 +59,13 @@ public class AgencyEndpoint extends Application {
     @Path("/view/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Agency consultAgency (@PathParam("id") Integer id) {
-        return controller.getAgency(id);
+    public Response consultAgency (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.getAgency(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
     }
 
     @PUT
@@ -58,8 +73,13 @@ public class AgencyEndpoint extends Application {
     @Path("/activate/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String activateAgency (@QueryParam("id") Integer id) {
-        return controller.activateAgency(id);
+    public Response activateAgency (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.activateAgency(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
     }
 
     @DELETE
@@ -67,8 +87,13 @@ public class AgencyEndpoint extends Application {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String deleteAgency (@PathParam("id") Integer id) {
-        return controller.deleteAgency(id);
+    public Response deleteAgency (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.deleteAgency(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
     }
 
     @GET
@@ -76,17 +101,27 @@ public class AgencyEndpoint extends Application {
     @Path("/vehicle/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Vehicle> View_Vehicles (@PathParam("id") Integer id) {
-        return controller.getAgencyVehicles(id);
+    public Response View_Vehicles (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.getAgencyVehicles(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
     }
 
-    @POST
+    @GET
     @SecuredAgency
-    @Path("/list")
+    @Path("/list/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Vehicle> View_Agency (@QueryParam("id") Integer id) {
-        return controller.getChildAgencies(id);
+    public Response View_Agency (@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.getChildAgencies(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
     }
 
 }

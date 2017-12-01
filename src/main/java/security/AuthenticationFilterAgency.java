@@ -27,7 +27,7 @@ public class AuthenticationFilterAgency implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-
+    	System.out.println("Filter");
         // Get the Authorization header from the request
         String authorizationHeader =
                 requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -53,7 +53,7 @@ public class AuthenticationFilterAgency implements ContainerRequestFilter {
     }
 
     private boolean isTokenBasedAuthentication(String authorizationHeader) {
-
+    	System.out.println("isTokenBasedAuthentication");
         // Check if the Authorization header is valid
         // It must not be null and must be prefixed with "Bearer" plus a whitespace
         // The authentication scheme comparison must be case-insensitive
@@ -62,7 +62,7 @@ public class AuthenticationFilterAgency implements ContainerRequestFilter {
     }
 
     private void abortWithUnauthorized(ContainerRequestContext requestContext) {
-
+    	System.out.println("abortWithUnauthorized");
         // Abort the filter chain with a 401 status code response
         // The WWW-Authenticate header is sent along with the response
         requestContext.abortWith(
@@ -73,11 +73,20 @@ public class AuthenticationFilterAgency implements ContainerRequestFilter {
     }
 
     private void validateToken(String token) throws Exception {
+    	//System.out.println("validateToken");
         // Check if the token was issued by the server and if it's not expired
         // Throw an Exception if the token is invalid
-		User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
+		
+    	//System.out.println(token);
+    	User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
 				.setParameter("token", token)
 				.getSingleResult();
+		
+		//System.out.println(user.getUserName());
+		//System.out.println(user.getIdAgency());
+		//System.out.println(user.getToken());
+		
+		
 		if (user.getIdAgency() == null) {
 			throw new Exception("no agency");
 		}

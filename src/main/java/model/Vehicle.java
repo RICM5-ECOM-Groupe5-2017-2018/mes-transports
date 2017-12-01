@@ -21,8 +21,18 @@ public class Vehicle implements java.io.Serializable {
 	private float price;
 	private String insurance;
 	private int idAgency;
+	private boolean status;
 
 	public Vehicle() {
+	}
+
+	public Vehicle(Vehicle vehicle) {
+		this.brand = vehicle.getBrand();
+		this.idAgency = vehicle.getIdAgency();
+		this.insurance = vehicle.getInsurance();
+		this.price = vehicle.getPrice();
+		this.type = vehicle.getType();
+		this.status = true;
 	}
 
 	public Vehicle(int type, String brand, float price, String insurance, int idAgency) {
@@ -90,4 +100,11 @@ public class Vehicle implements java.io.Serializable {
 		this.idAgency = idAgency;
 	}
 
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 }

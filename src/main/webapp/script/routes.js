@@ -2,7 +2,7 @@
  * 
  */
 
-var routes = angular.module('routes', ['ngRoute', 'account']);
+var routes = angular.module('routes', ['ngRoute']);
 
 routes.config(function($routeProvider) {
 	
@@ -11,23 +11,38 @@ routes.config(function($routeProvider) {
 		templateUrl:"view/users/search.html"
     })
     .when("/login", {
-    	templateUrl : "view/login.html",
+    	templateUrl : "view/users/login.html",
     	controller : "AccountController"
     })
     .when("/signin", {
-    	templateUrl : "view/signin.html",
+    	templateUrl : "view/users/signin.html",
     	controller : "AccountController"
     })
-    .when('/registration/childAgence', {
-        templateUrl : 'html/agency/agencieyPage.html',
-        controller  : 'Resgistration'
+    .when("/account", {
+    	templateUrl : "view/users/update.html",
+    	controller : "AccountController"
     })
     .when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
     })
+    .when('/registration/childAgence', {
+    	templateUrl : 'html/agency/agencieyPage.html',
+    	controller  : 'Resgistration'
+    })
     .when('/add/vehicule', {
-        templateUrl : 'html/agency/vehiculesPage.html',
+        templateUrl : 'html/agency/addNewVehicule.html',
         controller  : 'vehiculeRegisterForm'
+    })
+	.when('/view/vehicule', {
+        templateUrl : 'html/agency/vehiculesViewPage.html',
+        controller  : 'vehiculeView'
+    })
+    .when("/vehicle/view/:id", {
+    	templateUrl : 'view/vehicle/details.html',
+    	controller : 'VehicleDetailsController'
+    })
+    .otherwise({
+    	redirectTo : '/'
     });
 	
 });
