@@ -122,4 +122,17 @@ account.controller('AccountController',
 		
 	}
 	
+	$scope.updateInfo = function UserUpdateInfo() {
+		console.log($scope.form.update);
+		var data = $scope.form.update;
+		
+		$http.post('api/user/edit', data)
+		.then(function successCallback(response) {
+			console.log(response);
+		}, function errorCallback(response) {
+			console.log(response);
+		});
+		
+	}
+	
 }]);
