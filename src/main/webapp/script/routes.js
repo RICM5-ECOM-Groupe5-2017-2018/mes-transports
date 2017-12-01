@@ -32,12 +32,11 @@ routes.config(function($routeProvider) {
         controller  : 'addVehiculeForm',
         activetab : 'addVehicules'
     })
-	.when('agency/view/vehicule', {
+	.when('/agency/view/vehicule', {
         templateUrl : 'view/agency/viewVehicule.html'
     })
-	.when('agency/view/chagency/:id', {
+	.when('/agency/view/chagency/:idA', {
         templateUrl : 'view/agency/chidAgencyView.html',
-        controller : 'childAgencyView',
         activetab : 'childAgency'
     })
 	

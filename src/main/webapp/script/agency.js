@@ -1,13 +1,14 @@
 var agency = angular.module("agency",['ngCookies']);
 
-agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route){
+agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route,$routeParams){
 
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
-	$rootScope.agencyByCity={};
+	$rootScope.agencyByCity;
 	$rootScope.isMother = false;
 	
 	$rootScope.$route = $route;
+	$rootScope.paramIdAgency = $routeParams.idA;
 	
 	$rootScope.getClass = function (path) {
 		  return ($location.path().substr(0, path.length) === path) ? 'active' : '';
@@ -15,7 +16,7 @@ agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route){
 	
 }); 
 
-agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope){
+agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope,$routeParams){
 	
 	loadMainAgency();
 	
@@ -30,7 +31,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			$http.get('api/agency/view/'+user.idAgency,config).then(
 			   function(response){
 					$rootScope.MotherAgency = response.data;
-					console.log($rootScope.MotherAgency);	
+					//console.log($rootScope.MotherAgency);	
 					loadChildAgencies();
 			    },
 			    function(response)
@@ -57,7 +58,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 						$rootScope.listChildAgencies[child.id] = child;
 					});
 					
-					console.log($rootScope.listChildAgencies);
+					//console.log($rootScope.listChildAgencies);
 					reloadSubAgencyMenu(); 
 			    },
 			    function(response)
@@ -96,6 +97,8 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			$.each($rootScope.listChildAgencies, function(key, child){
 				var city = child.city.toUpperCase();
 				
+				if(!$rootScope.agencyByCity){$rootScope.agencyByCity={};}
+				
 				if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
 				$rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
 			});
@@ -130,7 +133,11 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		}
 	};
 	
-	
+	$scope.setIDParam=function(id)
+	{
+		console.log("setParam");
+		$routeParams.idA = id;
+	}
 });
 
 
@@ -191,9 +198,11 @@ agency.controller("childRegistration",function($scope,$http,$cookies){
 });
 
 agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$routeParams){
-	
-	$scope.currentIdAgency = $routeParams.id
-	$scope.idMenu = '#'+$rootScope.listChildAgencies[$scope.currentIdAgency].city+'-'+$rootScope.listChildAgencies[$scope.currentIdAgency].name;
+
+	$scope.currentIdAgency = $routeParams.idA
+	console.log($rootScope.listChildAgencies);
+	console.log($rootScope.agencyByCity);
+	//$scope.idMenu = '#'+$rootScope.listChildAgencies[$scope.currentIdAgency].city+'-'+$rootScope.listChildAgencies[$scope.currentIdAgency].name;
 	
 	
 });

@@ -1,5 +1,9 @@
 <div style="margin:0;" ng-controller="agencyMainCtrl">
-	<div ng-controller="childAgencyView">
-		{{currentIdAgency}}
+
+	<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
+	
+	<div ng-controller="childAgencyView" style="margin-left: 25%;" >
+			<h1>CHILD AGENCY</h1>
+			{{currentIdAgency}}
 	</div>
 </div>

@@ -35,7 +35,7 @@
 					                			<ul class="nav navbar-nav">
 								        			<!-- Liste des agences pour la ville -->        	
 								                	<div ng-repeat="(index,data) in agencies">
-								                			<li id="{{city}}-{{data.name}}" ng-class="{active: $route.current.activetab == 'childAgency'}"><a href="#!/agency/view/chagency/{{data.id}}" >{{data.name}}</a></li>
+								                			<li id="{{city}}-{{data.name}}" ng-class="{active: ($route.current.activetab == 'childAgency')&&(data.id==paramIdAgency)}"><a href="#!/agency/view/chagency/{{data.id}}">{{data.name}}</a></li>
 								               		</div>
 					                </div>
 					            </ul>
