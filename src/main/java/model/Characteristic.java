@@ -1,6 +1,7 @@
 package model;
 // Generated 11 nov. 2017 18:56:02 by Hibernate Tools 5.1.5.Final
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,13 +9,17 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -28,8 +33,8 @@ public class Characteristic implements java.io.Serializable {
 	private String unit;
 	private String label;
 	
-	@ManyToMany(mappedBy = "projects")
-    private List<Vehicle> characteristicList = new ArrayList<Vehicle>();
+	@JsonIgnore
+    private List<AssignCharacteristic> characteristicList = new ArrayList<AssignCharacteristic>();
 
 	@Column(name="rank", unique = true)
 	private Integer rank;
@@ -92,12 +97,13 @@ public class Characteristic implements java.io.Serializable {
 		this.rank = rank;
 	}
 	
-	@ManyToMany(mappedBy = "projects")
-	public List<Vehicle> getCharacteristicList() {
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "characteristic")
+	@JsonIgnore
+	public List<AssignCharacteristic> getCharacteristicList() {
 		return characteristicList;
 	}
 
-	public void setCharacteristicList(List<Vehicle> characteristicList) {
+	public void setCharacteristicList(List<AssignCharacteristic> characteristicList) {
 		this.characteristicList = characteristicList;
 	}
 	

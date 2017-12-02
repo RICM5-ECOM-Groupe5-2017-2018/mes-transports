@@ -98,19 +98,6 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
         }
     }
-    
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/view/details/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response consultVehicleDetails(@PathParam("id") Integer id) {
-        try {
-            return Response.status(200).entity(controller.consultVehicleDetails(id)).build();
-        } catch (Exception ex) {
-            return Response.status(400).type("text/plain")
-                    .entity("Aucune entité correspondant à cet Id").build();
-        }
-    }
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)

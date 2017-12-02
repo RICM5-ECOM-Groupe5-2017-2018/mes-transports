@@ -9,13 +9,18 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.JoinColumn;
 
 /**
@@ -33,13 +38,8 @@ public class Vehicle implements java.io.Serializable {
 	private int idAgency;
 	private boolean status;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "AssignCharacteristic", 
-        joinColumns = { @JoinColumn(name = "idVehicle") }, 
-        inverseJoinColumns = { @JoinColumn(name = "idCharacteristic") }
-    )
-	private List<Characteristic> characteristicList = new ArrayList<Characteristic>();
+	
+	private List<AssignCharacteristic> characteristicList = new ArrayList<AssignCharacteristic>();
 
 	public Vehicle() {
 	}
@@ -126,18 +126,13 @@ public class Vehicle implements java.io.Serializable {
 		this.status = status;
 	}
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "AssignCharacteristic", 
-        joinColumns = { @JoinColumn(name = "idVehicle") }, 
-        inverseJoinColumns = { @JoinColumn(name = "idCharacteristic") }
-    )
-	public List<Characteristic> getProjects() {
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+	public List<AssignCharacteristic> getCharacteristicList() {
 		return characteristicList;
 	}
 
-	public void setProjects(List<Characteristic> projects) {
-		this.characteristicList = projects;
+	public void setCharacteristicList(List<AssignCharacteristic> characteristicList) {
+		this.characteristicList = characteristicList;
 	}
 	
 	

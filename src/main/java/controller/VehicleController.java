@@ -110,18 +110,6 @@ public class VehicleController {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		return vehicleRet;
 	}
-	
-	/**
-	 * Returns the vehicle identified with caracteristic list by id
-	 *
-	 * @param id the id of the vehicle
-	 * @return the vehicle
-	 */
-	public Object consultVehicleDetails(Integer id) {
-		Query q=entityManager.createQuery("FROM Vehicle v INNER JOIN AssignCharacteristicId ac ON v.id=ac.idVehicle INNER JOIN Characteristic c ON ac.idCharacteristic=c.id WHERE v.id=:id")
-				.setParameter("id", id);
-		return q.getResultList();
-	}
 
 	/**
 	 * Delete the vehicle (disable)
