@@ -112,34 +112,6 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		}
 	}
 	
-	function loadVehicules(idAgency, token)
-	{
-		if(user)
-		{
-			console.log(token);
-			var req = {
-			 method: 'POST',
-			 url: 'api/agency/vehicle',
-			 headers: {'Authorization': 'Bearer ' + token},
-			 data: 
-			 { 
-				 id:user.idAgency,
-			 }
-			}
-			$http(req).then(
-
-				function(response){
-					$scope.listeVehicules["\""+idAgency+"\""] = response.data;
-					console.log(response.data);
-			    },
-			    function(response)
-			    {
-			    	
-			    }
-	    	);
-		}
-	};
-	
 	$scope.setIDParam=function(id)
 	{
 		console.log("setParam");
@@ -324,6 +296,75 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
 	
 	
 });
+
+
+agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
+
+	$scope.currentIdVehicules = $routeParams.idV
+	
+	$scope.changeAddNewVehicules=function(){
+		$location.path('/agency/add/vehicule');
+	};
+	
+	loadVehicles();
+	
+	function loadVehicles()
+	{
+		var user = $cookies.getObject("user");
+		if(user)
+		{
+			var req = {
+			 method: 'GET',
+			 url: 'api/agency/vehicle/'+user.idAgency,
+			 headers: {'Authorization': 'Bearer ' + user.token},
+			}
+			$http(req).then(
+
+				function(response){
+					response.data.forEach(function(child,index) {	
+						if(!$rootScope.listeVehicules){$rootScope.listeVehicules={};}
+						$rootScope.listeVehicules[child.id] = child;
+					});
+			    },
+			    function(response)
+			    {
+			    	
+			    }
+	    	);
+		}
+	};
+	
+	$scope.loadOneVehicle=function(id)
+	{
+		var token = $cookies.get("token");
+		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		
+		$http.get('api/vehicle/view/'+id,config).then(
+		   function(response){
+			   $rootScope.listeVehicules[response.data.id] = response.data;
+			   reloadVehicleList()
+		    },
+		    function(response)
+		    {
+		    	
+		    }
+	    );
+			
+	};
+	
+	function reloadVehicleList()
+	{
+		console.log($rootScope.listeVehicules);
+		$.each($rootScope.listChildAgencies, function(key, child){
+			
+		});
+	}
+	
+	//$scope.idMenu = '#'+$rootScope.listChildAgencies[$scope.currentIdAgency].city+'-'+$rootScope.listChildAgencies[$scope.currentIdAgency].name;
+	
+	
+});
+
 
 agency.controller("agencySideMenu",function($scope,$http,$cookies,$rootScope){
 	

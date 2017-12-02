@@ -1,0 +1,14 @@
+<div style="margin:0;" ng-controller="agencyMainCtrl">
+
+	<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
+	
+	<div ng-controller="viewVehicules" style="margin-left: 25%;" >
+			<div name="myForm">
+			    <label for="SelectVehicle">Make a choice:</label>
+			    <select name="SelectVehicle" id="SelectVehicle"
+			      ng-options="data.name for option in data.availableOptions track by option.id"
+			      ng-model="data.selectedOption"></select>
+		  	</div>
+			<input class="btn btn-primary col-md-10"  type="button" ng-click="changeAddNewVehicules()" name="New" value="Ajouter un nouveau vehicule" >
+	</div>
+</div>

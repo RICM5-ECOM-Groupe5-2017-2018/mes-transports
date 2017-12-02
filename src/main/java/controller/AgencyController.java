@@ -98,7 +98,9 @@ public class AgencyController {
 	 * @return the list of agency's vehicles
 	 */
 	public List<Vehicle> getAgencyVehicles (Integer idAgency) {
-		Query q = entityManager.createQuery("SELECT * FROM Vehicule WHERE idAgency="+idAgency);
+		//Query q = entityManager.createQuery("SELECT * FROM Vehicule WHERE idAgency="+idAgency);
+		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE id_mother_agency=:idAgency OR id=:idAgency)")
+				.setParameter("idAgency", idAgency);
 		return ((List<Vehicle>)q.getResultList());
 	}
 
@@ -108,10 +110,9 @@ public class AgencyController {
 	 * @param idAgency the id of the agency
 	 * @return UNKNOWN
 	 */
-	public List<Vehicle> getChildAgencies (Integer idAgency) {
-		// Code douteux de la part de charles, à tester...
+	public List<Agency> getChildAgencies (Integer idAgency) {
 		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+idAgency);
-		return ((List<Vehicle>)q.getResultList());
+		return ((List<Agency>)q.getResultList());
 	}
 
 }

@@ -29,11 +29,15 @@ routes.config(function($routeProvider) {
     })
     .when('/agency/add/vehicule', {
         templateUrl : 'view/agency/addNewVehicule.html',
-        controller  : 'addVehiculeForm',
-        activetab : 'addVehicules'
+        activetab : 'seeVehicules'
     })
-	.when('/agency/view/vehicule', {
-        templateUrl : 'view/agency/viewVehicule.html'
+    .when('/agency/view/vehicule', {
+        templateUrl : 'view/agency/viewVehicule.html',
+        activetab : 'seeVehicules',
+    })
+	.when('/agency/view/vehicule/:idV', {
+        templateUrl : 'view/agency/viewVehicule.html',
+        activetab : 'seeVehicules',
     })
 	.when('/agency/view/chagency/:idA', {
         templateUrl : 'view/agency/chidAgencyView.html',
