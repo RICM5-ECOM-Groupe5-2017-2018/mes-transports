@@ -10,6 +10,7 @@ import JsonEncoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Vehicle;
+import model.VehicleType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,6 +77,28 @@ public class VehicleController {
 		}
 		return characteristics;
 	}
+	
+	/**
+	 * Returns all characteristics of vehicle 
+	 *
+	 * @param idType the type chosen
+	 * @return List of characteristics or error
+	 */
+	public List<Characteristic> getCharacteristics (){
+		List<Characteristic> characteristicList = entityManager
+				.createQuery("FROM Characteristic ")
+				.getResultList();
+		return characteristicList;
+	}
+	
+	public List<VehicleType> getTypeVehicle(){
+		List<VehicleType> typeList = entityManager
+				.createQuery("FROM  VehicleType")
+				.getResultList();
+		return typeList;
+	}
+	
+	
 
 	/**
 	 * Returns the vehicle identified by id
@@ -86,6 +109,18 @@ public class VehicleController {
 	public Vehicle consultVehicle (Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
 		return vehicleRet;
+	}
+	
+	/**
+	 * Returns the vehicle identified with caracteristic list by id
+	 *
+	 * @param id the id of the vehicle
+	 * @return the vehicle
+	 */
+	public Object consultVehicleDetails(Integer id) {
+		Query q=entityManager.createQuery("FROM Vehicle v INNER JOIN AssignCharacteristicId ac ON v.id=ac.idVehicle INNER JOIN Characteristic c ON ac.idCharacteristic=c.id WHERE v.id=:id")
+				.setParameter("id", id);
+		return q.getResultList();
 	}
 
 	/**

@@ -98,7 +98,6 @@ public class AgencyController {
 	 * @return the list of agency's vehicles
 	 */
 	public List<Vehicle> getAgencyVehicles (Integer idAgency) {
-		//Query q = entityManager.createQuery("SELECT * FROM Vehicule WHERE idAgency="+idAgency);
 		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE id_mother_agency=:idAgency OR id=:idAgency)")
 				.setParameter("idAgency", idAgency);
 		return ((List<Vehicle>)q.getResultList());

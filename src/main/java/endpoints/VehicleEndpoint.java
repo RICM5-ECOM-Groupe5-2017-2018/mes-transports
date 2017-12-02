@@ -59,6 +59,32 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
         }
     }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCharacteristics (){
+        try {
+            return Response.status(200).entity(controller.getCharacteristics()).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondante").build();
+        }
+    }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/type")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTypeVehicle (){
+        try {
+            return Response.status(200).entity(controller.getTypeVehicle()).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondante ").build();
+        }
+    }
 
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,6 +93,19 @@ public class VehicleEndpoint extends Application{
     public Response consultVehicle (@PathParam("id") Integer id) {
         try {
             return Response.status(200).entity(controller.consultVehicle(id)).build();
+        } catch (Exception ex) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
+    }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/view/details/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response consultVehicleDetails(@PathParam("id") Integer id) {
+        try {
+            return Response.status(200).entity(controller.consultVehicleDetails(id)).build();
         } catch (Exception ex) {
             return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();
