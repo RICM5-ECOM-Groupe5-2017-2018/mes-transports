@@ -17,7 +17,7 @@ agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route,$
 	
 }); 
 
-agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope,$routeParams){
+agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
 	
 	loadMainAgency();
 	
@@ -145,6 +145,11 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		console.log("setParam");
 		$routeParams.idA = id;
 	}
+	
+	$scope.changeLocationToUpdatePage=function(){
+		$location.path('/agency/update/'+$rootScope.MotherAgency.id);
+	};
+	
 });
 
 
