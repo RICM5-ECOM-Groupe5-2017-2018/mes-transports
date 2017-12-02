@@ -4,11 +4,19 @@
 	
 	<div ng-controller="viewVehicules" style="margin-left: 25%;" >
 			<div name="myForm">
-			    <label for="SelectVehicle">Make a choice:</label>
-			    <select name="SelectVehicle" id="SelectVehicle"
-			      ng-options="data.name for option in data.availableOptions track by option.id"
-			      ng-model="data.selectedOption"></select>
+				
+			    <select size="20" name="SelectVehicle" id="SelectVehicle"
+			      ng-options="vehicle.name for vehicle in listeVehicules track by vehicle.id"
+			      ng-model="selectedVehicule"
+			      ng-change="onChange(vehicle.id)"></select>
 		  	</div>
+		  	
+		  	<div ng-show="isVehiculeSelected">
+			  {{selectedVehiculeDetails}}
+			</div>
+		  	
+		  	
+		  	
 			<input class="btn btn-primary col-md-10"  type="button" ng-click="changeAddNewVehicules()" name="New" value="Ajouter un nouveau vehicule" >
 	</div>
 </div>

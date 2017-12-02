@@ -299,14 +299,32 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
 
 
 agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
-
+	
+	
+	
 	$scope.currentIdVehicules = $routeParams.idV
+	$scope.selectedVehicule;
+	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
+	
+	if($scope.currentIdVehicules){
+		
+		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
+			   return element.id == $scope.currentIdVehicules;
+		 });
+		loadSelectedVehicle($scope.currentIdVehicules);
+		//$scope.selectedVehiculeDetails
+	}
+	else{
+		loadTypes(true);
+	}
 	
 	$scope.changeAddNewVehicules=function(){
 		$location.path('/agency/add/vehicule');
 	};
 	
-	loadVehicles();
+	$scope.onChange = function() {
+        $location.path('agency/view/vehicule/' + $scope.selectedVehicule.id);
+    }
 	
 	function loadVehicles()
 	{
@@ -321,10 +339,17 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 			$http(req).then(
 
 				function(response){
+					$rootScope.listeVehicules=[];
 					response.data.forEach(function(child,index) {	
-						if(!$rootScope.listeVehicules){$rootScope.listeVehicules={};}
-						$rootScope.listeVehicules[child.id] = child;
+						var agencyName = ($rootScope.MotherAgency.id == child.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[child.idAgency].name
+						$rootScope.listeVehicules.push({
+							id : child.id, 
+							name: agencyName +"-"+child.brand+"-"+$rootScope.listTypes[child.type].label, 
+							details : child,
+							});
 					});
+					console.log("Liste vehicule")
+					console.log($rootScope.listeVehicules)
 			    },
 			    function(response)
 			    {
@@ -334,15 +359,73 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		}
 	};
 	
-	$scope.loadOneVehicle=function(id)
+	function loadCarateristics()
+	{
+		var user = $cookies.getObject("user");
+		if(user)
+		{
+			var req = {
+			 method: 'GET',
+			 url: 'api/vehicle/list',
+			 headers: {'Authorization': 'Bearer ' + user.token},
+			}
+			$http(req).then(
+
+				function(response){
+					response.data.forEach(function(child,index) {	
+						if(!$rootScope.listCharacteristic){$rootScope.listCharacteristic={};}
+						$rootScope.listCharacteristic[child.id] = child;
+					});
+					console.log("Carac")
+					console.log($rootScope.listCharacteristic);
+			    },
+			    function(response)
+			    {
+			    	
+			    }
+	    	);
+		}
+	};
+	
+	function loadTypes(loadVehiculesToo)
+	{
+		var user = $cookies.getObject("user");
+		if(user)
+		{
+			var req = {
+			 method: 'GET',
+			 url: 'api/vehicle/type',
+			 headers: {'Authorization': 'Bearer ' + user.token},
+			}
+			$http(req).then(
+
+				function(response){
+					response.data.forEach(function(child,index) {	
+						if(!$rootScope.listTypes){$rootScope.listTypes={};}
+						$rootScope.listTypes[child.id] = child;
+					});
+					
+					if(loadVehiculesToo){loadVehicles();}
+					
+					console.log("Types")
+					console.log($rootScope.listTypes);
+			    },
+			    function(response)
+			    {
+			    	
+			    }
+	    	);
+		}
+	};
+	
+	function loadSelectedVehicle(id)
 	{
 		var token = $cookies.get("token");
 		var config = {headers: {'Authorization': 'Bearer ' + token,}};
 		
-		$http.get('api/vehicle/view/'+id,config).then(
+		$http.get('api/vehicle/view/details/'+id,config).then(
 		   function(response){
-			   $rootScope.listeVehicules[response.data.id] = response.data;
-			   reloadVehicleList()
+			   $scope.selectedVehiculeDetails = response.data;
 		    },
 		    function(response)
 		    {
@@ -352,13 +435,36 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 			
 	};
 	
-	function reloadVehicleList()
+	$scope.loadUpdateOrCreateVehicle=function(id)
 	{
-		console.log($rootScope.listeVehicules);
-		$.each($rootScope.listChildAgencies, function(key, child){
+		var token = $cookies.get("token");
+		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		
+		$http.get('api/vehicle/view/'+id,config).then(
+		   function(response){
+			   
+			   var vehicle = response.data;
+			   
+			   var agencyName = ($rootScope.MotherAgency.id == vehicle.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[vehicle.idAgency].name
+			   var newVehicules = {
+									id : vehicle.id, 
+									name: agencyName +"-"+vehicle.brand+"-"+$rootScope.listTypes[vehicle.type].label, 
+									details : vehicle,
+								  }
+			   
+			   var index= $rootScope.listeVehicules.findIndex(function(element) {
+				   return element.id == newVehicules.id;
+			   });
+			   if(index!=-1){$rootScope.listeVehicules.splice(index,1);}
+			   $rootScope.listeVehicules.push(newVehicules);
+		    },
+		    function(response)
+		    {
+		    	
+		    }
+	    );
 			
-		});
-	}
+	};
 	
 	//$scope.idMenu = '#'+$rootScope.listChildAgencies[$scope.currentIdAgency].city+'-'+$rootScope.listChildAgencies[$scope.currentIdAgency].name;
 	
