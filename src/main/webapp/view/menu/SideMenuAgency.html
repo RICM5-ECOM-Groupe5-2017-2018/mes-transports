@@ -17,7 +17,7 @@
 	    <!-- Main Menu -->
 	    <div class="side-menu-container" id="sideMenu">
 	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
-	            <li id="accueil" ng-class="{active: $route.current.activetab == 'main'}"><a href="#!/"> Accueil</a></li>
+	            <li id="accueil" ng-class="{active: ($route.current.activetab == 'main') && (data.id==currentAgencyUpdate)}"><a href="#!/"> Accueil</a></li>
 	            <li id="parc" ng-class="{active: $route.current.activetab == 'viewVehicules'}"> <a href="#!/add/vehicule"> Parc de Véhicules</a></li>
 	            
 				<div>
@@ -35,7 +35,7 @@
 					                			<ul class="nav navbar-nav">
 								        			<!-- Liste des agences pour la ville -->        	
 								                	<div ng-repeat="(index,data) in agencies">
-								                			<li id="{{city}}-{{data.name}}" ng-class="{active: ($route.current.activetab == 'childAgency')&&(data.id==paramIdAgency)}"><a href="#!/agency/view/chagency/{{data.id}}">{{data.name}}</a></li>
+								                			<li id="{{city}}-{{data.name}}" ng-class="{active: ($route.current.activetab == 'childAgency')&&((data.id==currentAgencyView)||(data.id==currentAgencyUpdate))}"><a href="#!/agency/view/chagency/{{data.id}}">{{data.name}}</a></li>
 								               		</div>
 					                </div>
 					            </ul>
