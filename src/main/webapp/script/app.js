@@ -1,4 +1,4 @@
-var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency', 'vehicle']);
+var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency', 'vehicle', 'search']);
 
 
 /*
