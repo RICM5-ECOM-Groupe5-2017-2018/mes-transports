@@ -23,6 +23,10 @@ routes.config(function($routeProvider) {
     	templateUrl : "view/users/update.html",
     	controller : "AccountController"
     })
+    .when("/cart", {
+    	templateUrl : 'view/users/cart.html',
+    	controller : 'CartController'
+    })
     .when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
     })

@@ -1,4 +1,4 @@
-var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency', 'vehicle', 'search']);
+var app = angular.module("app",['routes','account','menu','agencyVehiculesView','agency', 'vehicle', 'search', 'cart']);
 
 
 /*
@@ -20,8 +20,9 @@ app.run(function($rootScope,$location) {
 });
  */
 
-app.controller('AppController', function($scope) {
+app.controller('AppController', function($scope, $cookies) {
 	
+	$scope.user = $cookies.getObject("user");
 	$scope.form = {};
 	
 });
