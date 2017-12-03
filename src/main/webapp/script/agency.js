@@ -102,7 +102,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		if($rootScope.MotherAgency.idAgency==undefined)
 		{
 			$scope.isMother = true;
-			console.log($rootScope.listChildAgencies);
+			//console.log($rootScope.listChildAgencies);
 			$rootScope.agencyByCity={};
 			$.each($rootScope.listChildAgencies, function(key, child){
 				var city = child.city.toUpperCase();
@@ -114,7 +114,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	
 	$scope.setIDParam=function(id)
 	{
-		console.log("setParam");
+		//console.log("setParam");
 		$routeParams.idA = id;
 	}
 	
@@ -181,7 +181,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 				   return element.id == $scope.agency.type;
 				 }); 
 			   
-			   console.log($scope.data.selectedType);
+			   //console.log($scope.data.selectedType);
 			   
 		    },
 		    function(response)
@@ -286,7 +286,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
 
 	$scope.currentIdAgency = $routeParams.idA
-	console.log($rootScope.agencyByCity);
+	//console.log($rootScope.agencyByCity);
 	
 	$scope.changeLocationToUpdatePage=function(){
 		$location.path('/agency/update/'+$scope.currentIdAgency);
@@ -297,36 +297,14 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
 	
 });
 
-
-agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
+agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
 	
 	
+	$rootScope.listTypes;
+	$rootScope.listeVehicules;
+	$rootScope.listCharacteristic;
 	
-	$scope.currentIdVehicules = $routeParams.idV
-	$scope.selectedVehicule;
-	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
-	
-	if($scope.currentIdVehicules){
-		
-		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
-			   return element.id == $scope.currentIdVehicules;
-		 });
-		loadSelectedVehicle($scope.currentIdVehicules);
-		//$scope.selectedVehiculeDetails
-	}
-	else{
-		loadTypes(true);
-	}
-	
-	$scope.changeAddNewVehicules=function(){
-		$location.path('/agency/add/vehicule');
-	};
-	
-	$scope.onChange = function() {
-        $location.path('agency/view/vehicule/' + $scope.selectedVehicule.id);
-    }
-	
-	function loadVehicles()
+	$rootScope.loadVehicles=function()
 	{
 		var user = $cookies.getObject("user");
 		if(user)
@@ -348,8 +326,6 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 							details : child,
 							});
 					});
-					console.log("Liste vehicule")
-					console.log($rootScope.listeVehicules)
 			    },
 			    function(response)
 			    {
@@ -359,7 +335,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		}
 	};
 	
-	function loadCarateristics()
+	$rootScope.loadCarateristics=function()
 	{
 		var user = $cookies.getObject("user");
 		if(user)
@@ -376,8 +352,6 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 						if(!$rootScope.listCharacteristic){$rootScope.listCharacteristic={};}
 						$rootScope.listCharacteristic[child.id] = child;
 					});
-					console.log("Carac")
-					console.log($rootScope.listCharacteristic);
 			    },
 			    function(response)
 			    {
@@ -387,7 +361,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		}
 	};
 	
-	function loadTypes(loadVehiculesToo)
+	$rootScope.loadTypes=function(loadVehiculesToo)
 	{
 		var user = $cookies.getObject("user");
 		if(user)
@@ -405,10 +379,8 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 						$rootScope.listTypes[child.id] = child;
 					});
 					
-					if(loadVehiculesToo){loadVehicles();}
+					if(loadVehiculesToo){$rootScope.loadVehicles();}
 					
-					console.log("Types")
-					console.log($rootScope.listTypes);
 			    },
 			    function(response)
 			    {
@@ -418,24 +390,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		}
 	};
 	
-	function loadSelectedVehicle(id)
-	{
-		var token = $cookies.get("token");
-		var config = {headers: {'Authorization': 'Bearer ' + token,}};
-		
-		$http.get('api/vehicle/view/details/'+id,config).then(
-		   function(response){
-			   $scope.selectedVehiculeDetails = response.data;
-		    },
-		    function(response)
-		    {
-		    	
-		    }
-	    );
-			
-	};
-	
-	$scope.loadUpdateOrCreateVehicle=function(id)
+	$rootScope.loadUpdateOrCreateVehicle=function(id)
 	{
 		var token = $cookies.get("token");
 		var config = {headers: {'Authorization': 'Bearer ' + token,}};
@@ -466,12 +421,282 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 			
 	};
 	
-	//$scope.idMenu = '#'+$rootScope.listChildAgencies[$scope.currentIdAgency].city+'-'+$rootScope.listChildAgencies[$scope.currentIdAgency].name;
-	
+	if($rootScope.listTypes==undefined && $rootScope.listeVehicules==undefined)
+	{
+		$rootScope.loadTypes(true);
+	}
+	else if($rootScope.listTypes==undefined){
+		$rootScope.loadTypes(false);
+	}
+	else if($rootScope.listeVehicules==undefined){
+		$rootScope.loadVehicles();
+	}
+	else if($rootScope.listCharacteristic==undefined){
+		$rootScope.loadCarateristics();
+	}
 	
 });
 
 
-agency.controller("agencySideMenu",function($scope,$http,$cookies,$rootScope){
+agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
+	
+	$scope.currentIdVehicules = $routeParams.idV
+	$scope.selectedVehicule;
+	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
+	
+	if($scope.currentIdVehicules){
+		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
+			   return element.id == $scope.currentIdVehicules;
+		 });
+		//console.log($scope.selectedVehicule);
+	}
+	else{
+		
+	}
+	
+	$scope.changeAddNewVehicules=function(){
+		$location.path('/agency/add/vehicule');
+	};
+	
+	$scope.changeUpdateVehicules=function(){
+		console.log("Update");
+		if($scope.selectedVehicule){
+			console.log("blop");
+			$location.path('/agency/update/vehicule/'+$scope.selectedVehicule.id);}
+	}
+	
+	$scope.onChange = function() {
+        $location.path('agency/view/vehicule/' + $scope.selectedVehicule.id);
+    }
+	
+
+});
+
+agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location,$route){
+	
+	var token = $cookies.get("token");
+	var user = $cookies.getObject("user");
+	$scope.data = {
+	    availableInsurance: [
+			{name:'MAIF',value:'link',},
+			{name:'AXA',value:'link',},
+			{name:'Direct assurance',value:'link',},
+			{name:'Matmut',value:'link',},
+		],
+		
+		selectedInsurance: {name:'MAIF',value:'link',},
+		
+		availableTypes : $rootScope.listTypes,
+		
+		availableAgency : listAgency(),
+		
+		slectedCharacteristic : [],
+
+	};
+	
+	//console.log($scope.data);
+	
+	$scope.isUpdate = false;
+	
+	if(!$route.routes[$location.path()]){
+		
+		loadUpdateForm()
+	}
+	
+	function listAgency(){
+		var listAgencyForVehicle = [];
+		$.each($rootScope.listChildAgencies, function(key, child){
+			listAgencyForVehicle.push({"id" : child.id, "name": child.name!=""?(child.name+" "+child.city.toUpperCase()):child.address,});
+		});
+		
+		var mother = $rootScope.MotherAgency;
+		listAgencyForVehicle.push({"id" :mother.id, "name": mother.name!=""?(mother.name+" "+mother.city.toUpperCase()):mother.address,});
+		return listAgencyForVehicle;		
+	}
+	
+	$scope.showCharacteristics=function(){
+		
+		parseCharacteristics();
+	}
+	
+	
+	$scope.sendFormVehicules=function(){
+		
+		
+		console.log($scope.data.beforTreatementCharacteristicsForType);
+		console.log($scope.data.characteristicsForType);
+		if($scope.isUpdate)
+		{
+			$scope.vehicle.id = $scope.selectedVehicule.details.id;
+		}
+		else{
+			$scope.vehicle.id = null;
+		}
+		$scope.vehicle.status = null;
+		
+		$scope.vehicle.insurance = $scope.data.selectedInsurance.name;
+		$scope.vehicle.idAgency = $scope.data.selectedAgency.id;
+		$scope.vehicle.type = $scope.data.selectedTypeVehicule.id;
+		
+		
+		$scope.vehicle.characteristicList = [];
+		console.log($scope.data.slectedCharacteristic);
+		
+		 $.each( $scope.data.beforTreatementCharacteristicsForType , function(key , value){
+			 var newChar = {
+					 valueCharacteristic : $scope.data.slectedCharacteristic[value.label],
+					 idCharacteristic : value
+			 }
+			 $scope.vehicle.characteristicList.push(newChar);
+		 });
+		 
+		 
+		 console.log($scope.vehicle);
+		 
+		 if($scope.isUpdate)
+		 {sendUpdateVehicle();}
+		 else{sendNewVehicle();}
+	}
+	
+	function loadUpdateForm(){
+		$scope.isUpdate = true;
+		$scope.currentIdVehicules = $routeParams.idVupdate
+		
+		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
+			   return element.id == $scope.currentIdVehicules;
+		 });
+		
+		console.log($scope.selectedVehicule);
+		console.log($scope.data);
+		
+		$scope.vehicle={};
+		$scope.vehicle.brand = $scope.selectedVehicule.details.brand;
+		$scope.vehicle.price = $scope.selectedVehicule.details.price;
+		$scope.data.selectedAgency =  $scope.data.availableAgency.find(function(element) {
+			   return element.id == $scope.selectedVehicule.details.idAgency;
+		 });
+			
+		$scope.data.selectedInsurance = $scope.data.availableInsurance.find(function(element) {
+			   return element.name == $scope.selectedVehicule.details.insurance;
+		 });
+		
+		console.log($scope.data.availableTypes);
+		
+		$scope.data.selectedTypeVehicule = $scope.data.availableTypes[$scope.selectedVehicule.details.type];
+		
+		$.each($scope.selectedVehicule.details.characteristicList, function(key , characteristic){
+			$scope.data.slectedCharacteristic[characteristic.idCharacteristic.label] = characteristic.valueCharacteristic;
+		});
+		
+		parseCharacteristics();
+		console.log($scope.data);
+		
+	}
+	
+
+	function parseCharacteristics(){
+		console.log($scope.data.selectedTypeVehicule);
+		$http.get('api/vehicle/list/'+$scope.data.selectedTypeVehicule.id).then(
+		   function(response){
+			   
+			   console.log($scope.selectedVehicule);
+			   console.log($scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id);
+			   
+			   if($scope.selectedVehicule && $scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id){
+				   console.log("update");
+				   $.each($scope.selectedVehicule.details.characteristicList, function(key , characteristic){
+						$scope.data.slectedCharacteristic[characteristic.idCharacteristic.label] = characteristic.valueCharacteristic;
+					});  
+			   }
+			   else{
+				   console.log("new");
+				   $scope.data.slectedCharacteristic=[];}
+			   
+			   
+			   $scope.data.beforTreatementCharacteristicsForType = $.extend(true, {}, response.data.sort(function (a, b) {return a.rank - b.rank;}));
+	
+			   $.each(response.data, function(key , characteristic){
+				   
+				   //required or not
+				   if(!characteristic.optional){
+					   characteristic.labelSee=characteristic.label+"*";
+				   }
+				   else{
+					   characteristic.labelSee=characteristic.label;
+				   }
+				   
+				   //type+patern
+				   switch (characteristic.unit) {
+				   		case "str":
+				   			characteristic.type ="text";
+				   			characteristic.typeWait ="Texte";
+				   			characteristic.pattern ="";
+				   			break;
+				   		case "int":
+				   			characteristic.type ="number";
+				   			characteristic.pattern ="/^[0-9]+[0-9]*$/";
+				   			characteristic.typeWait ="Nombre entier";
+				   			break;
+				   		case "float":
+				   			characteristic.type ="number";
+				   			characteristic.pattern ="/^[0-9]+(\.[0-9]{1,2})?$/";
+				   			characteristic.typeWait ="Décimale";
+				   			break;
+				   		default:
+				   			break;
+				   }
+				   
+				   //size
+				   characteristic.max ="255";
+			   });
+			   
+			   $scope.data.characteristicsForType = response.data.sort(function (a, b) {return a.rank - b.rank;});;
+	
+		    },
+		    function(response)
+		    {
+		    	
+		    }
+	    );
+	}
+
+	function sendNewVehicle(){
+		if(user && user.isAgency)
+		{
+			var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+			
+			$http.post('api/vehicle/create/', $scope.vehicle, config)
+			.then(function successCallback(response) {
+				$scope.vehicle={};
+	        	$scope.registerForm.$setPristine();
+	        	$rootScope.loadUpdateOrCreateVehicle(response.data.id);
+	        	
+	        	alert("Le vehicule a été créé");
+	        	$location.path('/agency/view/vehicule');
+			}, function errorCallback(data, status, headers) {
+			
+			});
+		}		
+	}
+	
+	function sendUpdateVehicle(){
+		if(user && user.isAgency)
+		{
+			var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+			
+			$http.put('api/vehicle/edit/', $scope.vehicle, config)
+			.then(function successCallback(response) {
+				$scope.vehicle={};
+	        	$scope.registerForm.$setPristine();
+	        	$rootScope.loadUpdateOrCreateVehicle(response.data.id);
+	        	
+	        	alert("Le vehicule a été modifié");
+	        	$location.path('/agency/view/vehicule/'+response.data.id);
+			}, function errorCallback(data, status, headers) {
+			
+			});
+		}
+	}
 	
 });
+

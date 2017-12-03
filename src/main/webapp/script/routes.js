@@ -18,18 +18,22 @@ routes.config(function($routeProvider) {
     	templateUrl : "view/signin.html",
     	controller : "AccountController"
     })
+    .when('/agency', {
+        templateUrl : 'view/agency/agencyView.html',
+        activetab : 'main'
+    })
+	.when('/agency/view/chagency/:idA', {
+        templateUrl : 'view/agency/chidAgencyView.html',
+        activetab : 'childAgency'
+    })
     .when('/agency/add/childAgency', {
         templateUrl : 'view/agency/addNewChildAgency.html',
         controller  : 'childRegistration',
         activetab : 'addchildAgency'
     })
-    .when('/agency', {
-        templateUrl : 'view/agency/agencyView.html',
+    .when('/agency/update/:idupdate', {
+    	templateUrl : 'view/agency/addNewChildAgency.html',
         activetab : 'main'
-    })
-    .when('/agency/add/vehicule', {
-        templateUrl : 'view/agency/addNewVehicule.html',
-        activetab : 'seeVehicules'
     })
     .when('/agency/view/vehicule', {
         templateUrl : 'view/agency/viewVehicule.html',
@@ -39,13 +43,13 @@ routes.config(function($routeProvider) {
         templateUrl : 'view/agency/viewVehicule.html',
         activetab : 'seeVehicules',
     })
-	.when('/agency/view/chagency/:idA', {
-        templateUrl : 'view/agency/chidAgencyView.html',
-        activetab : 'childAgency'
+    .when('/agency/add/vehicule', {
+        templateUrl : 'view/agency/addNewVehicule.html',
+        activetab : 'seeVehicules'
     })
-    .when('/agency/update/:idupdate', {
-    	templateUrl : 'view/agency/addNewChildAgency.html',
-        activetab : 'main'
+    .when('/agency/update/vehicule/:idVupdate', {
+    	templateUrl : 'view/agency/addNewVehicule.html',
+        activetab : 'seeVehicules'
     })
 	
 });
