@@ -1,11 +1,13 @@
 var agency = angular.module("agency",['ngCookies']);
 
-agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route,$routeParams){
+agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$location,$route,$routeParams){
 
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
 	$rootScope.agencyByCity;
 	$rootScope.isMother = false;
+	$rootScope.user = $cookies.getObject("user");
+	$rootScope.token = $cookies.get("token");
 	
 	$rootScope.$route = $route;
 	$rootScope.currentAgencyView = $routeParams.idA;
@@ -15,43 +17,13 @@ agency.controller("agencyMainCtrl",function($rootScope,$scope,$location,$route,$
 		  return ($location.path().substr(0, path.length) === path) ? 'active' : '';
 	}
 	
-}); 
-
-agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
-	
-	loadMainAgency();
-	
-	function loadMainAgency()
+	$rootScope.loadChildAgencies=function()
 	{
-		var user = $cookies.getObject("user");
-		var token = $cookies.get("token");
-		if(user)
+		if($rootScope.user)
 		{
-			var config = {headers: {'Authorization': 'Bearer ' + token,}};
+			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 			
-			$http.get('api/agency/view/'+user.idAgency,config).then(
-			   function(response){
-					$rootScope.MotherAgency = response.data;
-					//console.log($rootScope.MotherAgency);	
-					loadChildAgencies();
-			    },
-			    function(response)
-			    {
-			    	
-			    }
-		    );
-		}		
-	};
-	
-	function loadChildAgencies()
-	{
-		var user = $cookies.getObject("user");
-		var token = $cookies.get("token");
-		if(user)
-		{
-			var config = {headers: {'Authorization': 'Bearer ' + token,}};
-			
-			$http.get('api/agency/list/'+user.idAgency,config).then(
+			$http.get('api/agency/list/'+$rootScope.user.idAgency,config).then(
 			   function(response){
 				   
 					response.data.forEach(function(child,index) {	
@@ -59,7 +31,6 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 						$rootScope.listChildAgencies[child.id] = child;
 					});
 					
-					//console.log($rootScope.listChildAgencies);
 					reloadSubAgencyMenu(); 
 			    },
 			    function(response)
@@ -71,11 +42,29 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 			
 	};
 	
+	$rootScope.loadMainAgency=function()
+	{
+
+		if($rootScope.user)
+		{
+			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
+			
+			$http.get('api/agency/view/'+$rootScope.user.idAgency,config).then(
+			   function(response){
+					$rootScope.MotherAgency = response.data;
+					$rootScope.loadChildAgencies();
+			    },
+			    function(response)
+			    {
+			    	
+			    }
+		    );
+		}		
+	};
 	
 	$rootScope.loadOneChildAgency=function(id)
 	{
-		var token = $cookies.get("token");
-		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 		
 		$http.get('api/agency/view/'+id,config).then(
 		   function(response){
@@ -102,7 +91,6 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		if($rootScope.MotherAgency.idAgency==undefined)
 		{
 			$scope.isMother = true;
-			//console.log($rootScope.listChildAgencies);
 			$rootScope.agencyByCity={};
 			$.each($rootScope.listChildAgencies, function(key, child){
 				var city = child.city.toUpperCase();
@@ -112,9 +100,18 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		}
 	}
 	
+	if(!$rootScope.MotherAgency || !$rootScope.listChildAgencies){
+		$rootScope.loadMainAgency();
+	}
+	else if(!$rootScope.agencyByCity){
+		reloadSubAgencyMenu();
+	}	
+}); 
+
+agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
+	
 	$scope.setIDParam=function(id)
 	{
-		//console.log("setParam");
 		$routeParams.idA = id;
 	}
 	
@@ -134,8 +131,6 @@ agency.controller("graphics",function($scope,$http,$cookies,$rootScope){
 
 agency.controller("childRegistration",function($scope,$http,$cookies,$route, $routeParams,$location,$rootScope){
 
-	var token = $cookies.get("token");
-	var user = $cookies.getObject("user");
 	$scope.data = {
 		    availableBanks: [
 				{id:'0',name:'CIC',value:'link',},
@@ -161,7 +156,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 		$scope.idUpdatedAgency = $routeParams.idupdate;
 		
 		
-		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 		
 		$http.get('api/agency/view/'+$scope.idUpdatedAgency,config).then(
 		   function(response){
@@ -214,13 +209,13 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     
     function sendNew()
     {
-    	if(user && user.isAgency)
+    	if($rootScope.user && $rootScope.user.isAgency)
     	{
     		var dataToSend = {
     				"id":null,
     				"type":$scope.data.selectedType.id,
     				"address":$scope.data.addressp1+" "+$scope.data.addressp2+" "+$scope.agency.city.toUpperCase(),
-    				"idMotherAgency":user.idAgency,
+    				"idMotherAgency":$rootScope.user.idAgency,
     				"phoneNum":$scope.agency.phoneNum,
     				"city":$scope.agency.city.toUpperCase(),
     				"name":$scope.agency.name,
@@ -236,7 +231,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     		$scope.data.addressp2 = undefined;
     		$scope.data.selectedType = undefined;
     		
-    		var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+    		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
     		
     		$http.post('api/agency/create/', dataToSend, config)
     		.then(function successCallback(response) {
@@ -252,9 +247,9 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     }
     
     function sendUpdate(){
-    	if(user && user.isAgency)
+    	if($rootScope.user && $rootScope.user.isAgency)
     	{
-    		var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+    		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
     		
     		$http.put('api/agency/edit/', $scope.agency, config)
     		.then(function successCallback(response) {
@@ -263,7 +258,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 	    		
 	        	alert("L'agence est modifier");
 	        	
-	        	if($scope.idUpdatedAgency==user.idAgency)
+	        	if($scope.idUpdatedAgency==$rootScope.user.idAgency)
 	        	{
 	        		$location.path('/agency');
 	        		$rootScope.loadOneChildAgency($scope.idUpdatedAgency);
@@ -306,13 +301,12 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	
 	$rootScope.loadVehicles=function()
 	{
-		var user = $cookies.getObject("user");
-		if(user)
+		if($rootScope.user)
 		{
 			var req = {
 			 method: 'GET',
-			 url: 'api/agency/vehicle/'+user.idAgency,
-			 headers: {'Authorization': 'Bearer ' + user.token},
+			 url: 'api/agency/vehicle/'+$rootScope.user.idAgency,
+			 headers: {'Authorization': 'Bearer ' + $rootScope.user.token},
 			}
 			$http(req).then(
 
@@ -337,13 +331,12 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	
 	$rootScope.loadCarateristics=function()
 	{
-		var user = $cookies.getObject("user");
-		if(user)
+		if($rootScope.user)
 		{
 			var req = {
 			 method: 'GET',
 			 url: 'api/vehicle/list',
-			 headers: {'Authorization': 'Bearer ' + user.token},
+			 headers: {'Authorization': 'Bearer ' + $rootScope.user.token},
 			}
 			$http(req).then(
 
@@ -363,13 +356,12 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	
 	$rootScope.loadTypes=function(loadVehiculesToo)
 	{
-		var user = $cookies.getObject("user");
-		if(user)
+		if($rootScope.user)
 		{
 			var req = {
 			 method: 'GET',
 			 url: 'api/vehicle/type',
-			 headers: {'Authorization': 'Bearer ' + user.token},
+			 headers: {'Authorization': 'Bearer ' + $rootScope.user.token},
 			}
 			$http(req).then(
 
@@ -392,8 +384,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	
 	$rootScope.loadUpdateOrCreateVehicle=function(id)
 	{
-		var token = $cookies.get("token");
-		var config = {headers: {'Authorization': 'Bearer ' + token,}};
+		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 		
 		$http.get('api/vehicle/view/'+id,config).then(
 		   function(response){
@@ -474,8 +465,6 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 
 agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location,$route){
 	
-	var token = $cookies.get("token");
-	var user = $cookies.getObject("user");
 	$scope.data = {
 	    availableInsurance: [
 			{name:'MAIF',value:'link',},
@@ -599,8 +588,6 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		$http.get('api/vehicle/list/'+$scope.data.selectedTypeVehicule.id).then(
 		   function(response){
 			   
-			   console.log($scope.selectedVehicule);
-			   console.log($scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id);
 			   
 			   if($scope.selectedVehicule && $scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id){
 				   console.log("update");
@@ -661,9 +648,9 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 	}
 
 	function sendNewVehicle(){
-		if(user && user.isAgency)
+		if($rootScope.user && $rootScope.user.isAgency)
 		{
-			var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
 			
 			$http.post('api/vehicle/create/', $scope.vehicle, config)
 			.then(function successCallback(response) {
@@ -680,9 +667,9 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 	}
 	
 	function sendUpdateVehicle(){
-		if(user && user.isAgency)
+		if($rootScope.user && $rootScope.user.isAgency)
 		{
-			var config = {headers: {'Authorization': 'Bearer ' + user.token,}};
+			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
 			
 			$http.put('api/vehicle/edit/', $scope.vehicle, config)
 			.then(function successCallback(response) {
