@@ -8,11 +8,12 @@ module.controller('VehicleDetailsController', function($scope, $http, $routePara
 	$scope.vehicle = {};	
 	
 	$http.get(
-		'api/vehicle/view?id=' + $routeParams.id
+		'api/vehicle/view/' + $routeParams.id
 	).then(function successCallback(response){
 		$scope.vehicle = response.data;
+		console.log($scope.vehicle);
 	}, function errorCallback(response) {
-		console.log(reponse);
+		console.log(response);
 	});
 	
 	

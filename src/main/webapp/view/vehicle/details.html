@@ -1,4 +1,10 @@
 <h1>Page de véhicule : {{vehicle.brand}}</h1>
 
 <div>Assurance : {{vehicle.insurance}}</div>
-<div>Price : {{vehicle.price}}</div>
+<div>
+	Price : {{vehicle.price}}
+
+	<div ng-repeat="chara in vehicle.characteristicList">
+		{{chara.idCharacteristic.label}} : {{chara.valueCharacteristic}}{{chara.idCharacteristic.unit}} 
+	</div>
+</div>
