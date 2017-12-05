@@ -26,13 +26,12 @@
     <script src="lib/dependencies/daterangepicker.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-    
+
     <!-- build:js script/all.js -->
 
     <script src="script/routes.js"></script>
     <script src="script/menu.js"></script>
     <script src="script/app.js"></script> 
-    <script src="script/agencyRegitration.js"></script> 
     <script src="script/vehiculeRegistration.js"></script>
     <script src="script/account.js"></script>
     <script src="script/history.js"></script>
@@ -41,20 +40,20 @@
     <script src="script/agency.js"></script>
     <script src="script/search.js"></script>
     <!-- endbuild -->
-	
+
 </head>
 <body ng-app="app" ng-controller="AppController">
 
 <div ng-controller="menuCtrl">
-	
+
 	<!-- <ng-include src="getTopMenu()"></ng-include>
-	
+
 	<ng-include src="getSideMenu()"></ng-include>-->
-	
+
 	<div ng-include="getTopMenu()"></div>
-	
+
 	<!-- <div class="row" ng-include="getSideMenu()"></div> -->
-	
+
 </div>
 <div class="container-fluid">
 	<div ng-view></div>

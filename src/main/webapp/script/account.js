@@ -5,8 +5,8 @@
 var account = angular.module('account', ['ngCookies','menu']);
 
 account.controller('AccountController',
-	['$scope', '$http', '$cookies','$location',
-	function AccountController($scope, $http, $cookies,$location) {
+	['$scope', '$http', '$cookies','$location','$rootScope',
+	function AccountController($scope, $http, $cookies,$location,$rootScope) {
 
 	$scope.user = $cookies.getObject("user");
 	$scope.form.update = $scope.user;
@@ -29,15 +29,14 @@ account.controller('AccountController',
 		$http.get(
 			'api/user/authenticate/' + $scope.form.connect.login + '/' + $scope.form.connect.password
 		).then(function successCallback(response) {
-			response.data.isAgency = response.data.role=="gestionaire";
+			response.data.isAgency = response.data.idAgency!=null;
 			$cookies.putObject("user", response.data);
 			$cookies.put("token", response.data.token);
 			$scope.user = $cookies.getObject("user");
+			$rootScope.user = $scope.user;
 
 			console.log($scope.user);
 
-			$scope.loadTopMenu();
-			$scope.loadSideMenu();
 			$location.path('/');
 
 
@@ -67,9 +66,8 @@ account.controller('AccountController',
 		$cookies.remove("user");
 		$cookies.remove("token");
 		$scope.user = undefined;
+		$rootScope.user = undefined;
 
-		$scope.loadTopMenu();
-		$scope.loadSideMenu();
 		$location.path('/');
 	}
 
