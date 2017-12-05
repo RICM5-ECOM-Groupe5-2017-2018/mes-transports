@@ -1,9 +1,23 @@
 <div style="margin:0;" ng-controller="agencyMainCtrl">
 
 	<div style="margin:0;" ng-controller="agencyMainPageCtrl">
-	
+
 		<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
-		
+
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="search_input">Dates</label>
+		  <div class="col-md-7 inner-addon left-addon">
+			  <i class="glyphicon glyphicon-calendar"></i>
+			  <input type="text" name="daterange" class="form-control input-md" />
+		  </div>
+		</div>
+
+		<div id="benefitGlobal"></div>
+
+		<div id="benefitByAgency"></div>
+
+
+
 		<div style="margin-left: 25%;" >
 			<input class="btn btn-primary col-md-10"  type="button" ng-click="changeLocationToUpdatePage()" name="Update" value="Modifier les données relative à l'agence" >
 		</div>
