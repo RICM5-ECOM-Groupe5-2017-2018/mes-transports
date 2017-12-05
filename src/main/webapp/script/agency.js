@@ -427,7 +427,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
 			   return element.id == $scope.currentIdVehicules;
 		 });
-		//console.log($scope.selectedVehicule);
+		 loadVehicleRent();
 	}
 	else{
 
@@ -449,11 +449,10 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
     }
 
 	function loadVehicleRent(){
-		$http.get('api/vehicle/rents/'+$scope.data.selectedTypeVehicule.id).then(
+		$http.get('api/vehicle/rents/'+$scope.selectedVehicule.id).then(
 		   function(response){
-				 $scope.data.rents = reponse.data;
-				 console.log(reponse.data);
-
+			   	 console.log(response.data);
+				 $scope.rents = response.data;
 		    },
 		    function(response){}
 	    );
@@ -624,11 +623,11 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 	    );
 	}
 
-	function endUpdateAdd(text, url)
+	function endUpdateAdd(text, url, id)
 	{
 		$scope.vehicle={};
 		$scope.registerForm.$setPristine();
-		$rootScope.loadUpdateOrCreateVehicle(response.data.id);
+		$rootScope.loadUpdateOrCreateVehicle(id);
 		alert(text);
 		$location.path(url);
 	}
@@ -650,13 +649,13 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 								{
 									var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,} };
 
-									$http.post('api/vehicle/addCharac/'+id, value, config)
-									.then(function successCallback(response) {resolve("ouki");},
-											function errorCallback(data, status, headers) {reject("not ouki");});
+									$http.post('api/vehicle/addCharac/'+id+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
+									.then(function successCallback(response) {resolve("success");},
+											function errorCallback(data, status, headers) {reject("failed");});
 								}
 							}));
 					});
-					Promise.all(promises).then(values => {endUpdateAdd("Le vehicule a été créé", '/agency/view/vehicule');});
+					Promise.all(promises).then(values => {endUpdateAdd("Le vehicule a été créé", '/agency/view/vehicule', id);});
 				}, function errorCallback(data, status, headers) {});
 		}
 	}
@@ -680,18 +679,18 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 									{
 										var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
 
-										$http.put('TODO'+id, value, config)
+										$http.put('TODO/'+id+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
 										.then(function successCallback(response) {
-											resolve('ouki');
+											resolve('success');
 										}, function errorCallback(data, status, headers) {
-											reject('not ouki');
+											reject('failed');
 										});
 									}
 								}));
 						});
 
 						Promise.all(promises).then(values => {
-						  endUpdateAdd("Le vehicule a été modifié", '/agency/view/vehicule/'+id);
+						  endUpdateAdd("Le vehicule a été modifié", '/agency/view/vehicule/'+id, id);
 						});
 
 			}, function errorCallback(data, status, headers) {
