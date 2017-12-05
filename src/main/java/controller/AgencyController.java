@@ -21,7 +21,7 @@ public class AgencyController {
     private EntityManager entityManager;
 
 	/**
-	 * Createsthe agency based on modelAgency
+	 * Create the agency based on modelAgency
 	 *
 	 * @param modelAgency The model of the agency you want to create
 	 * @return agency the concrete agency obtained
@@ -33,6 +33,14 @@ public class AgencyController {
 		return newAgency;
 	}
 
+	/**
+	 * Get the rents list from all the vehicles for the Agency defined by agencyId from start_date to end_date
+	 * 
+	 * @param agencyId
+	 * @param start_date
+	 * @param end_date
+	 * @return
+	 */
 	public List<Rent> getRents(Integer agencyId,String start_date, String end_date){
 		List<Vehicle> lv = entityManager.createQuery("Select v FROM Vehicle v WHERE v.idAgency=:id")
 		.setParameter("id", agencyId)
