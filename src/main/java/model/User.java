@@ -62,6 +62,17 @@ public class User implements java.io.Serializable {
 		this.status = status;
 	}
 
+	public User(User NewUser) {
+		this.userName = NewUser.getUserName();
+		this.userFirstName = NewUser.getUserFirstName();
+		this.role = NewUser.getRole();
+		this.mailAddress = NewUser.getMailAddress();
+		this.login = NewUser.getLogin();
+		this.password = NewUser.getPassword();
+		this.phoneNum = NewUser.getPhoneNum();
+		this.status = true;
+	}
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
@@ -178,6 +189,7 @@ public class User implements java.io.Serializable {
 		this.status = status;
 	}
 
+	@JsonIgnore
 	@OneToMany(targetEntity=Transaction.class, mappedBy="user", fetch=FetchType.LAZY)
 	public List<Transaction> getTransactionList() {
 		return transactionList;
