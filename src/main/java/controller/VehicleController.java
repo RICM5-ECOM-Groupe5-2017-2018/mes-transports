@@ -48,6 +48,10 @@ public class VehicleController {
 	 */
 	public Vehicle editVehicle (Vehicle vehicle) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, vehicle.getId());
+		if(vehicle.getType() != vehicleRet.getType()) {
+			entityManager.createNativeQuery("DELETE FROM assign_characteristic WHERE idVehicle="+vehicle.getId()+" ")
+			.executeUpdate();
+		}
 		vehicleRet.setBrand(vehicle.getBrand());
 		vehicleRet.setPrice(vehicle.getPrice());
 		vehicleRet.setInsurance(vehicle.getInsurance());
@@ -71,12 +75,26 @@ public class VehicleController {
 	 * @param idVehicule
 	 * @param idCharac
 	 * @param valueCharac
-	 * @return
+	 * @return a JsonMessage
 	 */
 	public JsonMessage addCharacteristic(Integer idVehicule, Integer idCharac, String valueCharac) {
 		Query q= entityManager.createNativeQuery("insert into assign_characteristic values("+idVehicule+","+idCharac+",'"+valueCharac+"')");
 		q.executeUpdate();
 		return new JsonMessage("Characteristic added successfully");
+	}
+	
+	/**
+	 * Edit the value valueCharac to the Characteristic defined by idCharac to the vehicle defined by idVehicule
+	 * 
+	 * @param idVehicule
+	 * @param idCharac
+	 * @param valueCharac
+	 * @return a JsonMessage
+	 */
+	public JsonMessage editCharacteristic(Integer idVehicule, Integer idCharac, String valueCharac) {
+		Query q= entityManager.createNativeQuery("update assign_characteristic SET valueCharacteristic='"+valueCharac+"' WHERE idVehicle="+idVehicule+" AND idCharacteristic="+idCharac);
+		q.executeUpdate();
+		return new JsonMessage("Characteristic updated successfully");
 	}
 	
 	/**
@@ -177,5 +195,5 @@ public class VehicleController {
 			}
 		}
 		return all_vehicles;
-	} 
+	}
 }

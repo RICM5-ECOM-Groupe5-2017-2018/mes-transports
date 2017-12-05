@@ -62,7 +62,6 @@ public class User implements java.io.Serializable {
 		this.tokenExpiration = tokenExpiration;
 		this.status = status;
 	}
-	
 
 	public User(User NewUser) {
 		this.userName = NewUser.getUserName();
