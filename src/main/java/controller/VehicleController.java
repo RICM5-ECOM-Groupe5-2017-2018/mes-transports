@@ -9,11 +9,13 @@ import javax.ws.rs.*;
 import JsonEncoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
+import model.Rent;
 import model.Vehicle;
 import model.VehicleType;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Singleton

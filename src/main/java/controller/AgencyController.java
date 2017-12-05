@@ -24,11 +24,12 @@ public class AgencyController {
 	 * @return agency the concrete agency obtained
 	 */
 	public Agency createAgency (Agency modelAgency) {
-		Agency newAgency = new Agency (modelAgency);
+		Agency newAgency = new Agency(modelAgency);
 		entityManager.persist(newAgency);
 		entityManager.flush();
 		return newAgency;
 	}
+
 
 	/**
 	 * Update the agency matching the modelAgency
