@@ -5,13 +5,16 @@ var search = angular.module('search', []);
 
 search.controller('SearchController', ['$scope', '$http', function SearchController($scope, $http) {
 
-	$scope.form.search = {};
-	$scope.form.search.keyword = "";
-	$scope.form.search.vehicleType = "";
-	$scope.form.search.start = new Date();
-	$scope.form.search.end = new Date($scope.form.search.start.getFullYear(),
-										$scope.form.search.start.getMonth(),
-										$scope.form.search.start.getDate()+7);
+	if($scope.form.search == undefined) {		
+		$scope.form.search = {};
+		$scope.form.search.keyword = "";
+		$scope.form.search.vehicleType = "";
+		
+		$scope.form.search.start = new Date();
+		$scope.form.search.end = new Date($scope.form.search.start.getFullYear(),
+											$scope.form.search.start.getMonth(),
+											$scope.form.search.start.getDate()+7);
+	}
 	
 	$scope.vehicleTypes = [];
 	$scope.vehicleCharas = [];
@@ -47,6 +50,21 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 		$scope.form.search.end = end;
 		$scope.updateSearch();
 	});
+	
+	$scope.updateFilter = function() {
+		$scope.searchFiltered = [];
+		
+		$scope.searchRes.forEach( function(vehicle) {
+			
+			if(
+					($scope.form.search.vehicleType == "" || vehicle.type == $scope.form.search.vehicleType)
+					&& ($scope.form.search.keyword == "" || vehicle.brand.toLowerCase().indexOf($scope.form.search.keyword.toLowerCase()) !== -1)
+			) {
+				$scope.searchFiltered.push(vehicle);
+			}
+			
+		});
+	}
 
 	/**
 	 * Function that updates the vehicle list according to the current chosen dates
@@ -58,6 +76,9 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 				+ moment($scope.form.search.end).format('YYYY-MM-DD hh:mm'))
 		.then(function successCallback(response) {
 			$scope.searchRes = response.data;
+			
+			$scope.updateFilter();
+			
 		}, function errorCallback(response) {
 			console.log(response);
 		});
@@ -76,7 +97,7 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 			// TODO
 		});
 		
-		$scope.updateSearch();
+		$scope.updateFilter();
 		
 	}
 	

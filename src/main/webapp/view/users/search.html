@@ -11,7 +11,7 @@
 	<div class="form-group">
 	  <label class="col-md-4 control-label" for="search_input">Mot-clef</label>  
 	  <div class="col-md-7">
-	  <input id="search_input" ng-model="form.search.keyword" name="search_input" type="text" placeholder="Rechercher" class="form-control input-md"> 
+	  <input id="search_input" ng-model="form.search.keyword" ng-change="updateFilter()" name="search_input" type="text" placeholder="Rechercher" class="form-control input-md"> 
 	  </div>
 	</div>
 	
@@ -58,7 +58,7 @@
 
 <div class="col-sm-8">
 <div class="row">
- <div class="col-sm-6 col-md-4" ng-repeat="vehicle in searchRes">
+ <div class="col-sm-6 col-md-4" ng-repeat="vehicle in searchFiltered">
    <div class="thumbnail">
      <img src="" alt="" width=200 height=200>
      <div class="caption">
