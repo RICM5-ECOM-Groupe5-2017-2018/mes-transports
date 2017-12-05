@@ -35,7 +35,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/addCharac/{idVehicle}/{idCharacteristic}")
@@ -50,10 +50,10 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
     	}
     }
-    
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/addCharac/{idVehicle}/{idCharacteristic}")
+    @Path("/editCharac/{idVehicle}/{idCharacteristic}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response editCharacteristic(AssignCharacteristic Assign_characteristic
     								  ,@PathParam("idVehicle") Integer idVehicle
@@ -78,9 +78,9 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
-    
-    
-    
+
+
+
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list/{idType}")
@@ -93,7 +93,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
         }
     }
-    
+
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list")
@@ -106,7 +106,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondante").build();
         }
     }
-    
+
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/type")
@@ -145,7 +145,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
     	}
     }
-    
+
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/delete/{id}")
