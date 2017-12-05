@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 
 var routes = angular.module('routes', ['ngRoute']);
 
 routes.config(function($routeProvider) {
-	
+
 	$routeProvider
 	.when("/", {
 		templateUrl : "view/users/search.html",
@@ -31,27 +31,42 @@ routes.config(function($routeProvider) {
     	templateUrl : 'view/users/history.html',
     	controller : 'HistoryController'
     })
-    .when('/agency', {
+		.when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
+        activetab : 'main'
     })
-    .when('/registration/childAgence', {
-    	templateUrl : 'html/agency/agencieyPage.html',
-    	controller  : 'Resgistration'
+	.when('/agency/view/chagency/:idA', {
+        templateUrl : 'view/agency/chidAgencyView.html',
+        activetab : 'childAgency'
     })
-    .when('/add/vehicule', {
-        templateUrl : 'html/agency/addNewVehicule.html',
-        controller  : 'vehiculeRegisterForm'
+    .when('/agency/add/childAgency', {
+        templateUrl : 'view/agency/addNewChildAgency.html',
+        controller  : 'childRegistration',
+        activetab : 'addchildAgency'
     })
-	.when('/view/vehicule', {
-        templateUrl : 'html/agency/vehiculesViewPage.html',
-        controller  : 'vehiculeView'
+    .when('/agency/update/:idupdate', {
+    	templateUrl : 'view/agency/addNewChildAgency.html',
+        activetab : 'main'
     })
-    .when("/vehicle/view/:id", {
-    	templateUrl : 'view/vehicle/details.html',
-    	controller : 'VehicleDetailsController'
+    .when('/agency/view/vehicule', {
+        templateUrl : 'view/agency/viewVehicule.html',
+        activetab : 'seeVehicules',
+    })
+	.when('/agency/view/vehicule/:idV', {
+        templateUrl : 'view/agency/viewVehicule.html',
+        activetab : 'seeVehicules',
+    })
+    .when('/agency/add/vehicule', {
+        templateUrl : 'view/agency/addNewVehicule.html',
+        activetab : 'seeVehicules'
+    })
+    .when('/agency/update/vehicule/:idVupdate', {
+    	templateUrl : 'view/agency/addNewVehicule.html',
+        activetab : 'seeVehicules'
     })
     .otherwise({
     	redirectTo : '/'
     });
-	
+
+
 });
