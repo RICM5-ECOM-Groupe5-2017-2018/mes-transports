@@ -63,6 +63,12 @@ public class VehicleController {
 		
 	}
 
+	/**
+	 * Return the rent history for a specified Vehicle defined by idVehicle
+	 * @param idVehicle
+	 * @return
+	 */
+	
 	public List<Rent> getRents(Integer idVehicle){
 		return entityManager.createQuery("Select r FROM Rent r WHERE r.idVehicle=:id")
 		.setParameter("id", idVehicle)
@@ -171,7 +177,7 @@ public class VehicleController {
 	/**
 	 * Returns all vehicle available from startDate to endDate
 	 *
-	 * @param startDate date of begining
+	 * @param startDate date of beginning
 	 * @param endDate date of end
 	 * @return
 	 */
