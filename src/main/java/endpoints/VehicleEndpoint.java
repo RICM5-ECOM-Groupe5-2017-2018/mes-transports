@@ -63,19 +63,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
-
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/characteristic/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCharacteristic(@PathParam("id") Integer id) {
-    	try {
-    		return Response.status(200).entity(controller.viewCharact(id)).build();
-    	} catch(Exception ex) {
-    		return Response.status(400).type("text/plain")
-                    .entity("Aucune entité correspondant à cet Id").build();
-    	}
-    }
+    
     
     
     @GET

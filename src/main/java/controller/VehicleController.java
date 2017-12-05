@@ -73,13 +73,6 @@ public class VehicleController {
 		return new JsonMessage("Characteristic added successfully");
 	}
 	
-	
-	public List viewCharact(Integer id) {
-		return  entityManager.createQuery("SELECT c FROM AssignCharacteristic c WHERE c.idVehicle=:id")
-				.setParameter("id", id)
-				.getResultList();
-	}
-	
 	/**
 	 * Returns characteristics of vehicle that match typeId
 	 *
@@ -137,12 +130,24 @@ public class VehicleController {
 	 * @return
 	 */
 	public List<Vehicle> searchVehicle (String startDate, String endDate) {
-		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate<'"+startDate+"' AND r.endDate>'"+endDate+"'"); 
+		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	'"+startDate+"' AND '"+endDate+"' OR r.endDate BETWEEN '"+startDate+"' AND '"+endDate+"'");
+		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v");
+
 	    List<Rent> lr = q.getResultList(); 
-	    List<Vehicle> lv = new LinkedList<Vehicle>(); 
+	    List<Vehicle> excluded = new LinkedList<Vehicle>();
 	    for(int i=0;i<lr.size();i++) {
-	    	lv.add(entityManager.find(Vehicle.class, lr.get(i).getIdVehicle())); 
-	    } 
-	    return lv; 
+	    	excluded.add(entityManager.find(Vehicle.class, lr.get(i).getIdVehicle()));
+	    }
+	    
+		List<Vehicle> all_vehicles = q2.getResultList();
+		for(int i=0;i<all_vehicles.size();i++) {
+			for(int j=0;j<excluded.size();j++) {
+				if(all_vehicles.get(i).getId() == excluded.get(j).getId()) {
+					excluded.remove(j);
+					all_vehicles.remove(i);
+				}
+			}
+		}
+		return all_vehicles;
 	} 
 }
