@@ -1,24 +1,37 @@
 /**
- * 
+ *
  */
 
-var routes = angular.module('routes', ['ngRoute', 'account']);
+var routes = angular.module('routes', ['ngRoute']);
 
 routes.config(function($routeProvider) {
-	
+
 	$routeProvider
 	.when("/", {
-		templateUrl:"view/users/search.html"
+		templateUrl : "view/users/search.html",
+		controller : "SearchController"
     })
     .when("/login", {
-    	templateUrl : "view/login.html",
+    	templateUrl : "view/users/login.html",
     	controller : "AccountController"
     })
     .when("/signin", {
-    	templateUrl : "view/signin.html",
+    	templateUrl : "view/users/signin.html",
     	controller : "AccountController"
     })
-    .when('/agency', {
+    .when("/account", {
+    	templateUrl : "view/users/update.html",
+    	controller : "AccountController"
+    })
+    .when("/cart", {
+    	templateUrl : 'view/users/cart.html',
+    	controller : 'CartController'
+    })
+    .when('/history', {
+    	templateUrl : 'view/users/history.html',
+    	controller : 'HistoryController'
+    })
+		.when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
         activetab : 'main'
     })
@@ -51,5 +64,9 @@ routes.config(function($routeProvider) {
     	templateUrl : 'view/agency/addNewVehicule.html',
         activetab : 'seeVehicules'
     })
-	
+    .otherwise({
+    	redirectTo : '/'
+    });
+
+
 });

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Singleton
 public class AgencyController {
-	
+
 	@PersistenceContext(unitName="myPU")
     private EntityManager entityManager;
 

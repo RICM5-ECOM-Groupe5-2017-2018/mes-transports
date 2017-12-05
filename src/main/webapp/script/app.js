@@ -1,19 +1,19 @@
-var app = angular.module("main",['routes','menu','account','agencyVehiculesView','agency']);
+
+var app = angular.module("app",['routes','account','menu','agency', 'vehicle', 'search', 'cart', 'history']);
+
 
 
 app.run(function($rootScope,$location,$route,$window) {
-	
-	$rootScope.$on("$locationChangeStart", function(event, nextUrl, currentUrl) {
-		
+	$rootScope.$on("$routeChangeStart", function(event, nextUrl, currentUrl) {
+
 		if($rootScope.user)
-		{	
-		
+		{
+
 			var route = nextUrl;
 			if($route.routes[$location.path()]){route = ($route.routes[$location.path()]).originalPath;}
-	
-			if(route == '/') 
-			{	 
-				console.log("redirection user et agency");
+
+			if(route == '/')
+			{
 				  if($rootScope.user.isAgency)
 				  {
 					  $location.path('/agency');
@@ -24,9 +24,7 @@ app.run(function($rootScope,$location,$route,$window) {
 				$window.location.href=currentUrl;
 			}
 			else if (($rootScope.user.isAgency && !nextUrl.includes("agency"))||(!$rootScope.user.isAgency && nextUrl.includes("agency"))){
-				
 				event.preventDefault();
-				//$window.location.href=currentUrl;
 			}
 		}
 		else{
@@ -34,7 +32,15 @@ app.run(function($rootScope,$location,$route,$window) {
 				event.preventDefault();
 			}
 		}
-		  
+
 	});
-	
+
+});
+
+
+app.controller('AppController', function($scope, $cookies) {
+
+	$scope.user = $cookies.getObject("user");
+	$scope.form = {};
+
 });
