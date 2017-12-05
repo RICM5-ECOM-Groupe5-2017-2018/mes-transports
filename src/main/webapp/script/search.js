@@ -8,6 +8,14 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	$scope.start = new Date();
 	$scope.end = new Date($scope.start.getFullYear(), $scope.start.getMonth(), $scope.start.getDate()+7);
 	
+	$scope.vehicleTypes = [];
+	
+	$http.get('api/vehicle/type')
+	.then(function successCallback(response) {
+		$scope.vehicleTypes = response.data;
+	}, function errorCallback(response) {
+		// TODO
+	});
 	
 	$('input[name="daterange"]').daterangepicker({
 		"startDate": $scope.start,
