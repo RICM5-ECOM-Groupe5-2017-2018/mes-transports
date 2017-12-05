@@ -448,6 +448,17 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
         $location.path('agency/view/vehicule/' + $scope.selectedVehicule.id);
     }
 
+	function loadVehicleRent(){
+		$http.get('api/vehicle/rents/'+$scope.data.selectedTypeVehicule.id).then(
+		   function(response){
+				 $scope.data.rents = reponse.data;
+				 console.log(reponse.data);
+
+		    },
+		    function(response){}
+	    );
+	}
+
 
 });
 
@@ -471,10 +482,12 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 	$scope.isUpdate = false;
 
 	if(!$route.routes[$location.path()]){
-
 		loadUpdateForm()
 	}
 
+	/**
+	*Permet de charger la liste des noms et id des sous-agences et de l'agence mere
+	*/
 	function listAgency(){
 		var listAgencyForVehicle = [];
 		$.each($rootScope.listChildAgencies, function(key, child){
@@ -486,17 +499,16 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		return listAgencyForVehicle;
 	}
 
+	/**
+	*Fonction appelée quand le type de véhicule change dans le formulaire
+	*/
 	$scope.showCharacteristics=function(){
-
 		parseCharacteristics();
 	}
 
 
 	$scope.sendFormVehicules=function(){
 
-
-		console.log($scope.data.beforTreatementCharacteristicsForType);
-		console.log($scope.data.characteristicsForType);
 		if($scope.isUpdate)
 		{
 			$scope.vehicle.id = $scope.selectedVehicule.details.id;
@@ -512,7 +524,6 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 
 		$scope.vehicle.characteristicList = [];
-		console.log($scope.data.slectedCharacteristic);
 
 		 $.each( $scope.data.beforTreatementCharacteristicsForType , function(key , value){
 			 var newChar = {
@@ -522,24 +533,18 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 			 $scope.vehicle.characteristicList.push(newChar);
 		 });
 
-
-		 console.log($scope.vehicle);
-
-		 if($scope.isUpdate)
-		 {sendUpdateVehicle();}
+		 if($scope.isUpdate){sendUpdateVehicle();}
 		 else{sendNewVehicle();}
 	}
 
+	/*Fonction qui prér-empli le formulaire lors d'un update*/
 	function loadUpdateForm(){
 		$scope.isUpdate = true;
-		$scope.currentIdVehicules = $routeParams.idVupdate
+		$scope.currentIdVehicules = $routeParams.idVupdate;
 
 		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
 			   return element.id == $scope.currentIdVehicules;
 		 });
-
-		console.log($scope.selectedVehicule);
-		console.log($scope.data);
 
 		$scope.vehicle={};
 		$scope.vehicle.brand = $scope.selectedVehicule.details.brand;
@@ -552,8 +557,6 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 			   return element.name == $scope.selectedVehicule.details.insurance;
 		 });
 
-		console.log($scope.data.availableTypes);
-
 		$scope.data.selectedTypeVehicule = $scope.data.availableTypes[$scope.selectedVehicule.details.type];
 
 		$.each($scope.selectedVehicule.details.characteristicList, function(key , characteristic){
@@ -561,26 +564,20 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		});
 
 		parseCharacteristics();
-		console.log($scope.data);
 
 	}
 
-
+	/*Load les charactéristics pour un type de véhicule*/
 	function parseCharacteristics(){
-		console.log($scope.data.selectedTypeVehicule);
 		$http.get('api/vehicle/list/'+$scope.data.selectedTypeVehicule.id).then(
 		   function(response){
 
-
 			   if($scope.selectedVehicule && $scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id){
-				   console.log("update");
 				   $.each($scope.selectedVehicule.details.characteristicList, function(key , characteristic){
 						$scope.data.slectedCharacteristic[characteristic.idCharacteristic.label] = characteristic.valueCharacteristic;
 					});
 			   }
-			   else{
-				   console.log("new");
-				   $scope.data.slectedCharacteristic=[];}
+			   else{$scope.data.slectedCharacteristic=[];}
 
 
 			   $scope.data.beforTreatementCharacteristicsForType = $.extend(true, {}, response.data.sort(function (a, b) {return a.rank - b.rank;}));
@@ -623,45 +620,80 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 			   $scope.data.characteristicsForType = response.data.sort(function (a, b) {return a.rank - b.rank;});;
 
 		    },
-		    function(response)
-		    {
-
-		    }
+		    function(response){}
 	    );
 	}
 
-	function sendNewVehicle(){
+	function endUpdateAdd(text, url)
+	{
+		$scope.vehicle={};
+		$scope.registerForm.$setPristine();
+		$rootScope.loadUpdateOrCreateVehicle(response.data.id);
+		alert(text);
+		$location.path(url);
+	}
+
+	function sendNewVehicle()
+	{
 		if($rootScope.user && $rootScope.user.isAgency)
 		{
+			var promises = [];
 			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
 
-			$http.post('api/vehicle/create/', $scope.vehicle, config)
-			.then(function successCallback(response) {
-				$scope.vehicle={};
-	        	$scope.registerForm.$setPristine();
-	        	$rootScope.loadUpdateOrCreateVehicle(response.data.id);
+			$http.post('api/vehicle/create/', $scope.vehicle, config).then(function successCallback(response){
 
-	        	alert("Le vehicule a été créé");
-	        	$location.path('/agency/view/vehicule');
-			}, function errorCallback(data, status, headers) {
+					var id = response.data.id
+					$.each( $scope.vehicle.characteristicList, function(key , value){
+							promises.push(new Promise(function(resolve, reject)
+							{
+								if($rootScope.user && $rootScope.user.isAgency)
+								{
+									var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,} };
 
-			});
+									$http.post('api/vehicle/addCharac/'+id, value, config)
+									.then(function successCallback(response) {resolve("ouki");},
+											function errorCallback(data, status, headers) {reject("not ouki");});
+								}
+							}));
+					});
+					Promise.all(promises).then(values => {endUpdateAdd("Le vehicule a été créé", '/agency/view/vehicule');});
+				}, function errorCallback(data, status, headers) {});
 		}
 	}
 
-	function sendUpdateVehicle(){
+
+	function sendUpdateVehicle()
+	{
 		if($rootScope.user && $rootScope.user.isAgency)
 		{
+			var promises = [];
 			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
 
 			$http.put('api/vehicle/edit/', $scope.vehicle, config)
 			.then(function successCallback(response) {
-				$scope.vehicle={};
-	        	$scope.registerForm.$setPristine();
-	        	$rootScope.loadUpdateOrCreateVehicle(response.data.id);
+						var id = response.data.id;
 
-	        	alert("Le vehicule a été modifié");
-	        	$location.path('/agency/view/vehicule/'+response.data.id);
+						$.each( $scope.vehicle.characteristicList, function(key , value){
+
+								promises.push(new Promise(function(resolve, reject){
+									if($rootScope.user && $rootScope.user.isAgency)
+									{
+										var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
+
+										$http.put('TODO'+id, value, config)
+										.then(function successCallback(response) {
+											resolve('ouki');
+										}, function errorCallback(data, status, headers) {
+											reject('not ouki');
+										});
+									}
+								}));
+						});
+
+						Promise.all(promises).then(values => {
+						  endUpdateAdd("Le vehicule a été modifié", '/agency/view/vehicule/'+id);
+						});
+
 			}, function errorCallback(data, status, headers) {
 
 			});

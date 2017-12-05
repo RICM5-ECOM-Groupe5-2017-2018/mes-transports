@@ -2,9 +2,6 @@
 var app = angular.module("app",['routes','account','menu','agency', 'vehicle', 'search', 'cart', 'history']);
 
 
-//var app = angular.module("main",['routes','menu','account','agencyVehiculesView','agency']);
-
-
 app.run(function($rootScope,$location,$route,$window) {
 
 	$rootScope.$on("$locationChangeStart", function(event, nextUrl, currentUrl) {

@@ -42,7 +42,7 @@ public class VehicleEndpoint extends Application{
     @Produces(MediaType.APPLICATION_JSON)
     public Response addCharacteristic(AssignCharacteristic Assign_characteristic) {
     	try {
-    		return Response.status(200).entity(controller.addCharacteristic(Assign_characteristic.getId().getIdVehicle(),Assign_characteristic.getId().getIdCharacteristic(),Assign_characteristic.getValueCharacteristic())).build();
+    		return Response.status(200).entity(controller.addCharacteristic(Assign_characteristic.getPk().getIdVehicle(),Assign_characteristic.getPk().getIdCharacteristic(),Assign_characteristic.getValueCharacteristic())).build();
     	} catch(Exception ex) {
     		return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();
