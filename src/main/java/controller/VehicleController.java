@@ -7,6 +7,8 @@ import javax.persistence.Query;
 import javax.ws.rs.*;
 
 import JsonEncoders.JsonMessage;
+import model.AssignCharacteristic;
+import model.AssignCharacteristicId;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Rent;
@@ -30,12 +32,13 @@ public class VehicleController {
 	 * @param vehicle model vehicle
 	 * @return new vehicle or error
 	 */
-	public Vehicle createVehicle (Vehicle vehicle){
-		Vehicle newVehicle = new Vehicle(vehicle);
-		entityManager.persist(newVehicle);
-		entityManager.flush();
-		return newVehicle;
-	}
+			public Vehicle createVehicle (Vehicle vehicle){
+				
+				Vehicle newVehicle = new Vehicle(vehicle);
+				entityManager.persist(newVehicle);
+				entityManager.flush();
+				return newVehicle;
+			}
 
 	/**
 	 * Edit vehicle based on given model
@@ -56,6 +59,28 @@ public class VehicleController {
 		
 	}
 
+	
+	/**
+	 * Add the value valueCharac to the Characteristic defined by idCharac to the vehicle defined by idVehicule
+	 *
+	 * @param idVehicule
+	 * @param idCharac
+	 * @param valueCharac
+	 * @return
+	 */
+	public JsonMessage addCharacteristic(Integer idVehicule, Integer idCharac, String valueCharac) {
+		Query q= entityManager.createNativeQuery("insert into assign_characteristic values("+idVehicule+","+idCharac+",'"+valueCharac+"')");
+		q.executeUpdate();
+		return new JsonMessage("Characteristic added successfully");
+	}
+	
+	
+	public List viewCharact(Integer id) {
+		return  entityManager.createQuery("SELECT c FROM AssignCharacteristic c WHERE c.idVehicle=:id")
+				.setParameter("id", id)
+				.getResultList();
+	}
+	
 	/**
 	 * Returns characteristics of vehicle that match typeId
 	 *
@@ -134,10 +159,13 @@ public class VehicleController {
 	 * @param endDate date of end
 	 * @return
 	 */
-	public List<Vehicle> searchVehicle (Date startDate, Date endDate) {
-		Query q=entityManager.createQuery("SELECT v FROM Vehicle v INNER JOIN Rent r ON v.id=r.idVehicle WHERE r.begin_date<'"
-				+startDate.toString()+"' AND r.end_date>'"
-				+endDate.toString()+"'");
-		return ((List<Vehicle>) q.getResultList());
-	}
+	public List<Vehicle> searchVehicle (String startDate, String endDate) {
+		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate<'"+startDate+"' AND r.endDate>'"+endDate+"'"); 
+	    List<Rent> lr = q.getResultList(); 
+	    List<Vehicle> lv = new LinkedList<Vehicle>(); 
+	    for(int i=0;i<lr.size();i++) {
+	    	lv.add(entityManager.find(Vehicle.class, lr.get(i).getIdVehicle())); 
+	    } 
+	    return lv; 
+	} 
 }
