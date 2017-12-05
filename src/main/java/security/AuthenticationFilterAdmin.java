@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-@SecuredAgency
+@SecuredAdmin
 public class AuthenticationFilterAdmin implements ContainerRequestFilter {
 
 	@PersistenceContext(unitName="myPU")
