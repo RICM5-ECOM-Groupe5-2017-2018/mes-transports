@@ -53,7 +53,7 @@ public class VehicleEndpoint extends Application{
     
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/addCharac/{idVehicle}/{idCharacteristic}")
+    @Path("/editCharac/{idVehicle}/{idCharacteristic}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response editCharacteristic(AssignCharacteristic Assign_characteristic
     								  ,@PathParam("idVehicle") Integer idVehicle
