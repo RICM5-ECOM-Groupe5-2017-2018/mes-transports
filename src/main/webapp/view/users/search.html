@@ -9,37 +9,42 @@
 	
 	<!-- Text input-->
 	<div class="form-group">
-	  <label class="col-md-1 control-label" for="search_input">Mot-clef</label>  
-	  <div class="col-md-11">
-	  <input id="search_input" name="search_input" type="text" placeholder="Rechercher" class="form-control input-md"> 
+	  <label class="col-md-4 control-label" for="search_input">Mot-clef</label>  
+	  <div class="col-md-7">
+	  <input id="search_input" ng-model="form.search.keyword" name="search_input" type="text" placeholder="Rechercher" class="form-control input-md"> 
 	  </div>
 	</div>
 	
 	<div class="form-group">
-	  <label class="col-md-1 control-label" for="search_input">Dates</label>  
-	  <div class="col-md-11 inner-addon left-addon">
+	  <label class="col-md-4 control-label" for="search_input">Dates</label>  
+	  <div class="col-md-7 inner-addon left-addon">
 	  <i class="glyphicon glyphicon-calendar"></i>
-	  <input type="text" name="daterange" value="01/01/2015 - 01/31/2015" class="form-control input-md" />
+	  <input type="text" name="daterange" class="form-control input-md" />
 	  </div>
 	</div>
 	
 	<!-- Select Basic -->
 	<div class="form-group">
-	  <label class="col-md-1 control-label" for="select_type_vh">Type de véhicule</label>
-	  <div class="col-md-11">
-	    <select id="select_type_vh" name="select_type_vh" class="form-control">
-	      <option ng-repeat="type in vehicleTypes" value="{{type.id}}">{{type.label}}</option>
+	  <label class="col-md-4 control-label" for="select_type_vh">Véhicule</label>
+	  <div class="col-md-7">
+	    <select 
+	    	id="select_type_vh"
+	    	ng-change="updateType()"
+	    	ng-model="form.search.vehicleType" 
+	    	name="select_type_vh" 
+	    	ng-options="type.id as type.label for type in vehicleTypes" 
+	    	class="form-control">
 	    </select>
 	  </div>
 	</div>
 	
 	<div class="form-group">
-	  <label class="col-md-1 control-label" for="chk_chara">Caractéristiques</label>
-	  <div class="col-md-11">
-	  <div class="checkbox">
-	    <label for="chk_chara-0">
-	      <input type="checkbox" name="chk_chara" id="chk_chara-0" value="1">
-	      Option one
+	  <label class="col-md-4 control-label" for="chk_chara">Caractéristiques</label>
+	  <div class="col-md-7">
+	  <div class="checkbox" ng-repeat="chara in vehicleCharas">
+	    <label for="chk_chara-{{chara.id}}">
+	      <input type="checkbox" name="chk_chara" id="chk_chara-{{chara.id}}" value="{{chara.id}}">
+	      {{chara.label}}
 	    </label>
 		</div>
 	  </div>
@@ -52,19 +57,19 @@
 </div>
 
 <div class="col-sm-8">
-<button ng-click="search()">BUTTON</button>
-	
- <div ng-repeat="vehicle in searchRes" class="col-sm-6 col-md-4">
+<div class="row">
+ <div class="col-sm-6 col-md-4" ng-repeat="vehicle in searchRes">
    <div class="thumbnail">
      <img src="" alt="" width=200 height=200>
      <div class="caption">
-       <h3>Renault Clio</h3>
-       <p>Quelques détails importants concernant la voiture...</p>
-</div>
+       <h3>{{vehicle.brand}}</h3>
+       <p>{{vehicle.price}}</p>
+	</div>
        <p>
-       	<a href="#!/vehicle/view/2" class="btn btn-default" role="button"><span class="glyphicon glyphicon-eye-open"></span> Détails</a>
+       	<a href="#!/vehicle/view/{{vehicle.id}}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-eye-open"></span> Détails</a>
        	<a href="#" class="btn btn-success" role="button"><span class="glyphicon glyphicon-shopping-cart"></span> Ajouter au panier</a></p>
      </div>
    </div>
  </div>
+</div>
 </div>
