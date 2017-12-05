@@ -50,6 +50,21 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
     	}
     }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/addCharac/{idVehicle}/{idCharacteristic}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editCharacteristic(AssignCharacteristic Assign_characteristic
+    								  ,@PathParam("idVehicle") Integer idVehicle
+    								  ,@PathParam("idCharacteristic") Integer idCharacteristic){
+    	try {
+    		return Response.status(200).entity(controller.editCharacteristic(idVehicle,idCharacteristic,Assign_characteristic.getValueCharacteristic())).build();
+    	} catch(Exception ex) {
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
+    }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
