@@ -28,7 +28,6 @@ public class User implements java.io.Serializable {
 	private String phoneNum;
 	private Integer idAgency;
 	private String token;
-	
 	@OneToMany(targetEntity=Transaction.class, mappedBy="user", fetch=FetchType.LAZY)
 	private List<Transaction> transactionList = new ArrayList<Transaction>();
 	private Date tokenExpiration;

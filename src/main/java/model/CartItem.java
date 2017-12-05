@@ -43,16 +43,6 @@ public class CartItem implements java.io.Serializable {
 		this.locationIn = locationIn;
 		this.locationOut = locationOut;
 	}
-	
-	public CartItem(CartItem c) {
-		this.idUser = c.getIdUser();
-		this.idVehicle = c.getIdVehicle();
-		this.totalPrice = c.getTotalPrice();
-		this.startDate = c.getStartDate();
-		this.endDate = c.getEndDate();
-		this.locationIn = c.getLocationIn();
-		this.locationOut = c.getLocationOut();
-	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

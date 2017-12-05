@@ -266,29 +266,3 @@ ALTER TABLE `user`
 ALTER TABLE `vehicle`
   ADD CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`idAgency`) REFERENCES `agency` (`id`),
   ADD CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`type`) REFERENCES `vehicle_type` (`id`);
-  
---
--- Table des carts avec les contraintes
---
-CREATE TABLE `cart`(
-	`idUser` int(11) NOT NULL,
-	`idVehicle` int(11) NOT NULL,
-	`date_begin` DATETIME NOT NULL,
-	`date_end` DATETIME NOT NULL,
-	`date_selection` DATETIME NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Index pour la table `cart`
---
-
-ALTER TABLE `cart`
-  ADD PRIMARY KEY (`idUser`,`idVehicle`,`date_selection`);
- 
---
--- Contraintes pour la table `cart`
---
-
-ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user`(`id`),
-  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`idVehicle`) REFERENCES `vehicle` (`id`);
