@@ -13,6 +13,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -53,6 +55,22 @@ public class AgencyEndpoint extends Application {
                     .entity("Format de l'entité invalide").build();
         }
     }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/rents/{id}/{start_date}/{end_date}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response rentVehicle(@PathParam("id") Integer id
+    						   ,@PathParam("start_date") String start_date
+    						   ,@PathParam("end_date") String end_date){
+    	try {
+    		return Response.status(200).entity(controller.getRents(id,start_date,end_date)).build();
+    	} catch(Exception ex){
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
+    }
+    
 
     @GET
     @SecuredAgency
