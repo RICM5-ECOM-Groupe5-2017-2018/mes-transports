@@ -2,6 +2,8 @@ package endpoints;
 
 import controller.AgencyController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import model.Agency;
 import model.Vehicle;
 import security.SecuredAdmin;
@@ -31,6 +33,7 @@ public class AgencyEndpoint extends Application {
     @POST
     @SecuredAgency
     @Path("/create")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createAgency (Agency agency){
@@ -45,6 +48,7 @@ public class AgencyEndpoint extends Application {
     @PUT
     @SecuredAgency
     @Path("/edit")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editAgency (Agency agency) {
@@ -75,6 +79,7 @@ public class AgencyEndpoint extends Application {
     @GET
     @SecuredAgency
     @Path("/view/{id}")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response consultAgency (@PathParam("id") Integer id) {
@@ -89,6 +94,7 @@ public class AgencyEndpoint extends Application {
     @PUT
     @SecuredAdmin
     @Path("/activate/{id}")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response activateAgency (@PathParam("id") Integer id) {
@@ -117,6 +123,7 @@ public class AgencyEndpoint extends Application {
     @GET
     @SecuredAgency
     @Path("/vehicle/{id}")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response View_Vehicles (@PathParam("id") Integer id) {
@@ -131,6 +138,7 @@ public class AgencyEndpoint extends Application {
     @GET
     @SecuredAgency
     @Path("/list/{id}")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response View_Agency (@PathParam("id") Integer id) {

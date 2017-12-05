@@ -1,0 +1,24 @@
+<h1>Panier de {{user.login}}</h1>
+
+<div ng-repeat="item in cart">
+
+</div>
+
+<button class="btn btn-success btn-block">Valider le panier</button>
+
+<div>
+	<h2>Choisir la méthode de paiement</h2>
+	<div class="row">
+		<button class="btn btn-default btn-lg">Différé</button>
+		<button class="btn btn-default btn-lg" disabled>Paypal</button>
+		<button class="btn btn-default btn-lg" disabled>CB</button>
+	</div>
+</div>
+
+<div>
+	<h2>Choisir le billet</h2>
+	<div class="row">
+		<button class="btn btn-default btn-lg">Electronique</button>
+		<button class="btn btn-default btn-lg" disabled>Papier</button>
+	</div>
+</div>

@@ -13,6 +13,7 @@ import model.Characteristic;
 import model.CharacteristicType;
 import model.Rent;
 import model.Vehicle;
+import model.VehicleType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,6 +102,28 @@ public class VehicleController {
 		}
 		return characteristics;
 	}
+	
+	/**
+	 * Returns all characteristics of vehicle 
+	 *
+	 * @param idType the type chosen
+	 * @return List of characteristics or error
+	 */
+	public List<Characteristic> getCharacteristics (){
+		List<Characteristic> characteristicList = entityManager
+				.createQuery("FROM Characteristic ")
+				.getResultList();
+		return characteristicList;
+	}
+	
+	public List<VehicleType> getTypeVehicle(){
+		List<VehicleType> typeList = entityManager
+				.createQuery("FROM  VehicleType")
+				.getResultList();
+		return typeList;
+	}
+	
+	
 
 	/**
 	 * Returns the vehicle identified by id
