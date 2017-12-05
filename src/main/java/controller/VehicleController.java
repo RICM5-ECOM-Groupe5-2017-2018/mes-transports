@@ -58,6 +58,11 @@ public class VehicleController {
 		
 	}
 
+	public List<Rent> getRents(Integer idVehicle){
+		return entityManager.createQuery("Select r FROM Rent r WHERE r.idVehicle=:id")
+		.setParameter("id", idVehicle)
+		.getResultList();
+	}
 	
 	/**
 	 * Add the value valueCharac to the Characteristic defined by idCharac to the vehicle defined by idVehicule
