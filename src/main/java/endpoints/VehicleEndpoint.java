@@ -2,6 +2,7 @@ package endpoints;
 
 import controller.VehicleController;
 import io.swagger.annotations.Api;
+import model.AssignCharacteristic;
 import model.Vehicle;
 
 import javax.ejb.EJB;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 
 @ApplicationPath("/api")
 @Path("/vehicle")
@@ -33,6 +35,36 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/addCharac/{idVehicle}/{idCharacteristic}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addCharacteristic(AssignCharacteristic Assign_characteristic
+    								  ,@PathParam("idVehicle") Integer idVehicle
+    								  ,@PathParam("idCharacteristic") Integer idCharacteristic){
+    	try {
+    		return Response.status(200).entity(controller.addCharacteristic(idVehicle,idCharacteristic,Assign_characteristic.getValueCharacteristic())).build();
+    	} catch(Exception ex) {
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
+    }
+    
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/addCharac/{idVehicle}/{idCharacteristic}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editCharacteristic(AssignCharacteristic Assign_characteristic
+    								  ,@PathParam("idVehicle") Integer idVehicle
+    								  ,@PathParam("idCharacteristic") Integer idCharacteristic){
+    	try {
+    		return Response.status(200).entity(controller.editCharacteristic(idVehicle,idCharacteristic,Assign_characteristic.getValueCharacteristic())).build();
+    	} catch(Exception ex) {
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
+    }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -46,7 +78,9 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
-
+    
+    
+    
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list/{idType}")
@@ -99,6 +133,19 @@ public class VehicleEndpoint extends Application{
         }
     }
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/rents/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response rentVehicle(@PathParam("id") Integer id) {
+    	try {
+    		return Response.status(200).entity(controller.getRents(id)).build();
+    	} catch(Exception ex){
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
+    }
+    
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/delete/{id}")
@@ -116,8 +163,8 @@ public class VehicleEndpoint extends Application{
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/search/{startDate}/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response searchVehicle (@PathParam("startDate") Date startDate,
-                                        @PathParam("endDate") Date endDate) {
+    public Response searchVehicle (@PathParam("startDate") String startDate,
+                                        @PathParam("endDate") String endDate) {
         try {
             return Response.status(200).entity(controller.searchVehicle(startDate, endDate)).build();
         } catch (Exception ex) {

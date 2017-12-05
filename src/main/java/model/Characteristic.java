@@ -32,6 +32,7 @@ public class Characteristic implements java.io.Serializable {
 	private Integer id;
 	private String unit;
 	private String label;
+	private String form;
 	
 	@JsonIgnore
     private List<AssignCharacteristic> characteristicList = new ArrayList<AssignCharacteristic>();
@@ -44,10 +45,11 @@ public class Characteristic implements java.io.Serializable {
 	public Characteristic() {
 	}
 
-	public Characteristic(String unit, String label, boolean optional) {
+	public Characteristic(String unit, String label, boolean optional,String form) {
 		this.unit = unit;
 		this.label = label;
 		this.optional = optional;
+		this.form = form;
 	}
 
 	public Integer getRank() {
@@ -105,6 +107,15 @@ public class Characteristic implements java.io.Serializable {
 
 	public void setCharacteristicList(List<AssignCharacteristic> characteristicList) {
 		this.characteristicList = characteristicList;
+	}
+
+	@Column(name = "form")
+	public String getForm() {
+		return form;
+	}
+
+	public void setForm(String form) {
+		this.form = form;
 	}
 	
 	
