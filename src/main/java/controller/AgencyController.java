@@ -7,8 +7,11 @@ import javax.persistence.Query;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
+import model.Rent;
 import model.Vehicle;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Singleton
@@ -24,12 +27,41 @@ public class AgencyController {
 	 * @return agency the concrete agency obtained
 	 */
 	public Agency createAgency (Agency modelAgency) {
-		Agency newAgency = new Agency (modelAgency);
+		Agency newAgency = new Agency(modelAgency);
 		entityManager.persist(newAgency);
 		entityManager.flush();
 		return newAgency;
 	}
 
+	public List<Rent> getRents(Integer agencyId,String start_date, String end_date){
+		List<Vehicle> lv = entityManager.createQuery("Select v FROM Vehicle v WHERE v.idAgency=:id")
+		.setParameter("id", agencyId)
+		.getResultList();
+		
+		List<Rent> all_rents = new LinkedList<Rent>();		
+		for(int i=0;i<lv.size();i++) {
+			List<Rent> lr=entityManager.createQuery("SELECT r FROM Rent r WHERE r.idVehicle=:id")
+			.setParameter("id", lv.get(i).getId())
+			.getResultList();
+			for(int j=0;j<lr.size();j++) {
+				all_rents.add(lr.get(j));
+			}
+		}
+		
+		for(int i=0;i<all_rents.size();i++) {
+			
+			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN '"+start_date+ "' AND '"+end_date+"'")
+			.setParameter("idT", all_rents.get(i).getTransaction().getId())
+			.getResultList().size()<=0) {
+				all_rents.remove(i);
+				i--;
+			}
+		}
+		
+		return all_rents;
+	}
+	
+	
 	/**
 	 * Update the agency matching the modelAgency
 	 *

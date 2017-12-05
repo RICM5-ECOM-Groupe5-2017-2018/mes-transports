@@ -4,6 +4,7 @@ package model;
 import javax.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -31,6 +32,9 @@ public class Transaction implements java.io.Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+    
+    @Column(name="str_date", nullable=false)
+    private Date str_date;
 
     public Integer getId() {
         return id;
