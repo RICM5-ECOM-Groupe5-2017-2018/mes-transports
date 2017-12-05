@@ -19,6 +19,12 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	$scope.vehicleTypes = [];
 	$scope.vehicleCharas = [];
 	
+	$scope.getVehicleType = function(id) {
+		return $scope.vehicleTypes.find(function(type) {
+			return type.id == id;
+		})
+	}
+	
 	/* REST API call getting all the types of vehicles */
 	$http.get('api/vehicle/type')
 	.then(function successCallback(response) {
