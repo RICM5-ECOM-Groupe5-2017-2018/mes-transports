@@ -172,11 +172,15 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 			$http(req).then(
 
 				function(response){
+					$rootScope.availableFilredTypes = [];
 					response.data.forEach(function(child,index) {
 						if(!$rootScope.listTypes){$rootScope.listTypes={};}
 						$rootScope.listTypes[child.id] = child;
+						$rootScope.availableFilredTypes.push(child)
 					});
 
+					$rootScope.availableFilredTypes.push({id : 0, label : "Tous types"});
+					console.log($rootScope.availableFilredTypes);
 					if(loadVehiculesToo){$rootScope.loadVehicles();}
 
 			    },

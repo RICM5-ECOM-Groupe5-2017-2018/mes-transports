@@ -2,23 +2,42 @@
 
 	<div ng-controller="agencyVehicleManagement">
 		<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
-	
+
 		<div ng-controller="viewVehicules" style="margin-left: 25%;" >
 				<div name="myForm">
-					
-				    <select size="20" name="SelectVehicle" id="SelectVehicle"
-				      ng-options="vehicle.name for vehicle in listeVehicules track by vehicle.id"
+
+					<div class="form-group row" >
+						<label for="filterSelectedAgency" class="col-sm-2 col-form-label">Agence</label>
+						<div class="col-sm-10">
+							<select name="filterSelectedAgency" id="filterSelectedAgency" class="form-control" required
+						      ng-options="agency.name for agency in filteredCharacteristic.availableFiltredAgency track by agency.id"
+						      ng-model="filteredCharacteristic.filterSelectedAgency"></select>
+						</div>
+					</div>
+
+					<div class="form-group row" >
+						<label for="filtredSelectedType" class="col-sm-2 col-form-label">Type de véhicule</label>
+						<div class="col-sm-10">
+							<select name="filtredSelectedType" id="filtredSelectedType" class="form-control" required
+						      ng-options="typeselect.label for typeselect in availableFilredTypes track by typeselect.id"
+						      ng-model="filteredCharacteristic.filtredSelectedType"></select>
+						</div>
+					</div>
+
+
+				  <select size="20" name="SelectVehicle" id="SelectVehicle"
+				      ng-options="vehicle.name for vehicle in listeVehicules track by vehicle.id | shouldShow:filteredCharacteristic"
 				      ng-model="selectedVehicule"
 				      ng-change="onChange(vehicle.id)"></select>
 			  	</div>
-			  	
+
 			  	<div>
 				  {{selectedVehicule}}
 				  <input class="btn btn-primary col-md-10"  type="button" ng-click="changeUpdateVehicules()" name="Update" value="Modifier le vehicule" >
 				</div>
-			  	
-			  	
-			  	
+
+
+
 				<input class="btn btn-primary col-md-10"  type="button" ng-click="changeAddNewVehicules()" name="New" value="Ajouter un nouveau vehicule" >
 		</div>
 	</div>
