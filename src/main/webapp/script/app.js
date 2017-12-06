@@ -46,6 +46,18 @@ app.run(function($rootScope,$location,$route,$window) {
 app.controller('AppController', function($scope, $cookies) {
 
 	$scope.user = $cookies.getObject("user");
+	if((tmpCart = $cookies.getObject("cart")) != undefined) {
+		$scope.cart = tmpCart;
+	}
 	$scope.form = {};
+	
+	if($scope.cart == undefined) {		
+		$scope.cart = [];
+	}
+	
+	$scope.addToCart = function(item) {
+		console.log($scope.cart);
+		$scope.cart.push(item);
+	}
 
 });
