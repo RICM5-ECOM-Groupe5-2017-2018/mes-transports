@@ -126,7 +126,6 @@ account.controller('AccountController',
 		})
 		.then(function successCallback(response) {
 			$cookies.putObject("user", response.data);
-			console.log(response);
 		}, function errorCallback(response) {
 			console.log(response);
 		});
