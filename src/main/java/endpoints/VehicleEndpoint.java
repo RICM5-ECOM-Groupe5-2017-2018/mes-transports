@@ -6,6 +6,7 @@ import model.AssignCharacteristic;
 import model.Vehicle;
 
 import javax.ejb.EJB;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -46,6 +47,19 @@ public class VehicleEndpoint extends Application{
     	try {
     		return Response.status(200).entity(controller.addCharacteristic(idVehicle,idCharacteristic,Assign_characteristic.getValueCharacteristic())).build();
     	} catch(Exception ex) {
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
+    }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/dispo/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response dispoVehicle(@PathParam("id") Integer vehicleId) {
+    	try {
+    		return Response.status(200).entity(controller.dispoVehicle(vehicleId)).build();
+    	} catch (Exception ex) {
     		return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();
     	}

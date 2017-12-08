@@ -11,6 +11,7 @@ import model.AssignCharacteristic;
 import model.AssignCharacteristicId;
 import model.Characteristic;
 import model.CharacteristicType;
+import model.Disponibilitee;
 import model.Rent;
 import model.Vehicle;
 import model.VehicleType;
@@ -61,6 +62,58 @@ public class VehicleController {
 		entityManager.flush();
 		return vehicleRet;
 		
+	}
+	
+	public List<Disponibilitee> dispoVehicle(Integer vehicleId) {
+		List<Rent> lr = entityManager.createQuery("Select r FROM Rent r WHERE r.idVehicle=:id")
+		.setParameter("id", vehicleId)
+		.getResultList();
+		
+		
+		List<Disponibilitee> ld = new LinkedList<Disponibilitee>();
+		int i;
+		
+		for(i=0;i<ld.size() && ld.get(i).getEnd().before(new Date());i++);
+				
+		if(lr.size()>0 && !lr.get(i).getStartDate().before(new Date())) {
+			Disponibilitee dispo = new Disponibilitee();
+			dispo.setStart(new Date());
+			dispo.setEnd(lr.get(i).getStartDate());
+			System.out.println("ajoute dispo : now/"+dispo.getEnd());
+		}
+		
+		for(;i<lr.size();i++) {
+			if(i!=0) {
+				Rent actuel=lr.get(i);
+				Rent past= lr.get(i-1);
+				
+				if(!(past.getEndDate() == actuel.getStartDate())) {
+					Disponibilitee dispo = new Disponibilitee();
+					dispo.setEnd(actuel.getStartDate());
+					dispo.setStart(past.getEndDate());
+				
+					
+					ld.add(dispo);
+					System.out.println("ajoute dispo : "+dispo.getStart()+"("+past.getEndDate()+")/"+dispo.getEnd()+"("+actuel.getStartDate()+")");
+				}
+			}
+		}
+		
+		if(i>0 && ld.size()>0) {
+			Disponibilitee dispo = new Disponibilitee();
+			dispo.setEnd(new Date((long) 1000000000000000f));
+			dispo.setStart(lr.get(lr.size()-1).getEndDate());
+			ld.add(dispo);
+		}
+		
+		if(ld.size()==0) {
+			Disponibilitee dispo = new Disponibilitee();
+			dispo.setEnd(new Date((long) 1000000000000000f));
+			dispo.setStart(new Date());
+			ld.add(dispo);
+		}
+		
+		return ld;		
 	}
 
 	/**
