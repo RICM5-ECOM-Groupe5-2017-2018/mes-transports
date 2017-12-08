@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "transaction", catalog = "Mes_Transports")
@@ -24,11 +25,15 @@ public class Transaction implements java.io.Serializable {
     private String bankName;
     @Column(name = "rib", nullable = false)
     private String rib;
+    
     @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Rent> rentList = new ArrayList<Rent>();
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="agency_id")
     private Agency agency;
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
@@ -51,7 +56,7 @@ public class Transaction implements java.io.Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
+    
     public Agency getAgency() {
         return agency;
     }

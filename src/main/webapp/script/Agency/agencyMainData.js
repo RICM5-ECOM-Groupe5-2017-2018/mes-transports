@@ -104,6 +104,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	$rootScope.listTypes;
 	$rootScope.listeVehicules;
 	$rootScope.listCharacteristic;
+    $rootScope.filtredVehicules
 
 	$rootScope.loadVehicles=function()
 	{
@@ -126,6 +127,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 							details : child,
 							});
 					});
+                    $rootScope.filtredVehicules = $rootScope.listeVehicules;
 			    },
 			    function(response)
 			    {
@@ -180,7 +182,6 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 					});
 
 					$rootScope.availableFilredTypes.push({id : 0, label : "Tous types"});
-					console.log($rootScope.availableFilredTypes);
 					if(loadVehiculesToo){$rootScope.loadVehicles();}
 
 			    },
@@ -230,6 +231,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 		$rootScope.loadTypes(false);
 	}
 	else if($rootScope.listeVehicules==undefined){
+		console.log("load véhicules")
 		$rootScope.loadVehicles();
 	}
 	else if($rootScope.listCharacteristic==undefined){

@@ -74,6 +74,21 @@ public class AgencyEndpoint extends Application {
                     .entity("Aucune entité correspondant à cet Id").build();
     	}
     }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/transactions/{id}/{start_date}/{end_date}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response agencyTransaction(@PathParam("id") Integer id
+                               ,@PathParam("start_date") String start_date
+                               ,@PathParam("end_date") String end_date){
+        try {
+            return Response.status(200).entity(controller.getTransactions(id,start_date,end_date)).build();
+        } catch(Exception ex){
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        }
+    }
     
 
     @GET

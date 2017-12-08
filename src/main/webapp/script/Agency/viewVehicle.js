@@ -1,41 +1,49 @@
-agency.filter('shouldShow', function () {
+/*agency.filter('shouldShow', function () {
   return function (items, filteredCharacteristic) {
 		var filtered = [];
 
-		$.each(items, function(child){
+		console.log(items)
 
+		for (var i = 0; i < items.length; i++) {
+			var child = items[i];
 			if(filteredCharacteristic.filterSelectedAgency && filteredCharacteristic.filterSelectedAgency.id!=0)
 			{
 				if(filteredCharacteristic.filterSelectedAgency!=vehicle.idAgency){
-					return true;
+					continue;
 				}
 			}
 			if(filteredCharacteristic.filtredSelectedType && filteredCharacteristic.filtredSelectedType.id!=0)
 			{
 				if(filteredCharacteristic.filtredSelectedType!=vehicle.idType){
-					return true;
+					continue;
 				}
 			}
 			filtered.push(child);
-		});
+		}
 
     return filtered;
   };
 });
-
+*/
 
 agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
+	console.log("View");
+	console.log($rootScope.listeVehicules);
 
 	$scope.currentIdVehicules = $routeParams.idV
 	$scope.selectedVehicule;
 	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
 
+
 	$scope.filteredCharacteristic = {
 		availableFiltredAgency: listAgency(),
+        filterSelectedAgency : {"id" :0, "name": "Toutes",},
+        filtredSelectedType : {id : 0, label : "Tous"},
 	};
 
 
-	if($scope.currentIdVehicules){
+
+    if($scope.currentIdVehicules){
 		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
 			   return element.id == $scope.currentIdVehicules;
 		 });
@@ -58,19 +66,19 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
         $location.path('agency/view/vehicule/' + $scope.selectedVehicule.id);
     }
 
-		function listAgency(){
-			var listAgencyForVehicle = [];
+	function listAgency(){
+		var listAgencyForVehicle = [];
 
-			listAgencyForVehicle.push({"id" :0, "name": "Toutes",});
+		listAgencyForVehicle.push({"id" :0, "name": "Toutes",});
 
-			$.each($rootScope.listChildAgencies, function(key, child){
-				listAgencyForVehicle.push({"id" : child.id, "name": child.name!=""?(child.name+" "+child.city.toUpperCase()):child.address,});
-			});
+		$.each($rootScope.listChildAgencies, function(key, child){
+			listAgencyForVehicle.push({"id" : child.id, "name": child.name!=""?(child.name+" "+child.city.toUpperCase()):child.address,});
+		});
 
-			var mother = $rootScope.MotherAgency;
-			listAgencyForVehicle.push({"id" :mother.id, "name": mother.name!=""?(mother.name+" "+mother.city.toUpperCase()):mother.address,});
-			return listAgencyForVehicle;
-		}
+		var mother = $rootScope.MotherAgency;
+		listAgencyForVehicle.push({"id" :mother.id, "name": mother.name!=""?(mother.name+" "+mother.city.toUpperCase()):mother.address,});
+		return listAgencyForVehicle;
+	}
 
 
 	function loadVehicleRent(){
@@ -87,6 +95,29 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		    },
 		    function(response){}
 	    );
+	}
+
+	$scope.updateFilter=function(){
+        $rootScope.filtredVehicules = [];
+
+        $.each($rootScope.listeVehicules, function(key, v){
+
+            if($scope.filteredCharacteristic.filterSelectedAgency && $scope.filteredCharacteristic.filterSelectedAgency.id!=0)
+            {
+                if($scope.filteredCharacteristic.filterSelectedAgency.id!=v.details.idAgency){
+                    return;
+                }
+            }
+            if($scope.filteredCharacteristic.filtredSelectedType && $scope.filteredCharacteristic.filtredSelectedType.id!=0)
+            {
+                if($scope.filteredCharacteristic.filtredSelectedType.id!=v.details.type){
+                    return;
+                }
+            }
+            $rootScope.filtredVehicules.push(v);
+        });
+
+
 	}
 
 
