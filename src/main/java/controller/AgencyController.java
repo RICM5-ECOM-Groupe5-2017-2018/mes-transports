@@ -4,6 +4,7 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transaction;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
@@ -113,6 +114,12 @@ public class AgencyController {
 
 
 
+	
+	public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
+		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN '"+start_date+"' AND '" + end_date + "'")
+		.setParameter("id", agencyId)
+		.getResultList();
+	}
 	
 	
 	/**

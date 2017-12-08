@@ -31,7 +31,11 @@ routes.config(function($routeProvider) {
     	templateUrl : 'view/users/history.html',
     	controller : 'HistoryController'
     })
-		.when('/agency', {
+    .when('/vehicle/view/:id', {
+    	templateUrl : 'view/vehicle/details.html',
+    	controller : 'VehicleDetailsController'
+    })
+	.when('/agency', {
         templateUrl : 'view/agency/agencyView.html',
         activetab : 'main'
     })

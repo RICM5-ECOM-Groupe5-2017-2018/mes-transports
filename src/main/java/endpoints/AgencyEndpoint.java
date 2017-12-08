@@ -11,6 +11,7 @@ import security.SecuredAgency;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.transaction.Transaction;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -119,6 +120,21 @@ public class AgencyEndpoint extends Application {
             return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();
         }
+    }
+    
+    @GET
+    @Path("/transactions/{id}/{start_date}/{end_date}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTransactions(@PathParam("id") Integer id,
+    								@PathParam("start_date") String start,
+    								@PathParam("end_date") String end) {
+    	try {
+    		return Response.status(200).entity(controller.getTransactions(id, start, end)).build();
+    	}catch(Exception ex) {
+    		return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+    	}
     }
 
     @DELETE
