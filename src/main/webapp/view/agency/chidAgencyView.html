@@ -4,7 +4,19 @@
 	
 	<div ng-controller="childAgencyView" style="margin-left: 25%;" >
 			<h1>CHILD AGENCY</h1>
-			
+
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Dates</label>
+				<div class="col-md-7 inner-addon left-addon">
+					<i class="glyphicon glyphicon-calendar"></i>
+					<input type="text" name="daterange" class="form-control input-md" />
+				</div>
+			</div>
+
+			<div id="benefitGlobal"></div>
+
+
 			<input class="btn btn-primary col-md-10"  type="button" ng-click="changeLocationToUpdatePage()" name="Update" value="Modifier les données relative à l'agence" >
 			
 				

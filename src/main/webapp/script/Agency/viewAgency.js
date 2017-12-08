@@ -30,52 +30,11 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 
     function updateGaphBenefitByDate(){
 
-      var data = {
-          labels: ['1', '2', '3', '4', '5', '6'],
-          series: [
-              {
-                  data: [1, 2, 3, 5, 8, 13]
-              }
-          ]
-      };
-
-       var options = {
-          axisX: {
-              labelInterpolationFnc: function(value) {
-                  return 'Calendar Week ' + value;
-              }
-          }
-      };
-
-      var responsiveOptions = [
-          ['screen and (min-width: 641px) and (max-width: 1024px)', {
-              showPoint: false,
-              axisX: {
-                  labelInterpolationFnc: function(value) {
-                      return 'Week ' + value;
-                  }
-              }
-          }],
-          ['screen and (max-width: 640px)', {
-              showLine: false,
-              axisX: {
-                  labelInterpolationFnc: function(value) {
-                      return 'W' + value;
-                  }
-              }
-          }]
-      ];
-
-      new Chartist.Line('#benefitGlobal', data, options, responsiveOptions);
-    }
-
-    function updateGaphBenefitByAdgency(){
-
         var data = {
-            labels: ['1', '2', '3', '4', '5', '6'],
+            labels: Object.keys($scope.BenefitByDate),
             series: [
                 {
-                    data: [1, 2, 3, 5, 8, 13]
+                    data: Object.values($scope.BenefitByDate),
                 }
             ]
         };
@@ -83,7 +42,12 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         var options = {
             axisX: {
                 labelInterpolationFnc: function(value) {
-                    return 'Calendar Week ' + value;
+                    return 'Days ' + value;
+                }
+            },
+            axisY: {
+                labelInterpolationFnc: function(value) {
+                    return value+' euros';
                 }
             }
         };
@@ -93,7 +57,12 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
                 showPoint: false,
                 axisX: {
                     labelInterpolationFnc: function(value) {
-                        return 'Week ' + value;
+                        return 'Days ' + value;
+                    }
+                },
+                axisY: {
+                    labelInterpolationFnc: function(value) {
+                        return value+' euros';
                     }
                 }
             }],
@@ -101,13 +70,52 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
                 showLine: false,
                 axisX: {
                     labelInterpolationFnc: function(value) {
-                        return 'W' + value;
+                        return 'D ' + value;
+                    }
+                },
+                axisY: {
+                    labelInterpolationFnc: function(value) {
+                        return value+'E';
                     }
                 }
             }]
         ];
 
         new Chartist.Line('#benefitGlobal', data, options, responsiveOptions);
+    }
+
+    function updateGaphBenefitByAdgency(){
+
+        var data = {
+            labels: Object.keys($scope.BenefitByAdgency),
+            series: Object.values($scope.BenefitByAdgency),
+        };
+
+        var sum = function(a, b) { return a + b };
+
+        var options = {
+            labelInterpolationFnc: function(value) {
+                return value[0];
+            }
+        };
+
+        var responsiveOptions = [
+            ['screen and (min-width: 640px)', {
+                chartPadding: 30,
+                labelOffset: 100,
+                labelDirection: 'explode',
+                labelInterpolationFnc: function(value) {
+                    return value;
+                }
+            }],
+            ['screen and (min-width: 1024px)', {
+                labelOffset: 80,
+                chartPadding: 20
+            }]
+        ];
+
+        new Chartist.Pie('#benefitByAgency', data, options, responsiveOptions);
+
     }
 
     function loadAgenciesProfits(){
@@ -123,8 +131,11 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 
                 function(response)
                 {
-                   rents[$rootScope.MotherAgency.id] = response.data
-                   resolve("success");
+                    $.each(response.data, function(key, child){
+                        child.date = moment(child.date).format('YYYY-MM-DD hh:mm:ss');
+                    });
+                    rents[$rootScope.MotherAgency.id] = response.data
+                    resolve("success");
                 },
                 function(response){console.log("Mother failed");reject("failed");}
             );
@@ -137,9 +148,12 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
                 + moment($scope.end).format('YYYY-MM-DD hh:mm:ss'),config).then(
 
                     function(response){
-                     rents[child.id]=response.data;
+                        $.each(response.data, function(key, child){
+                            child.date = moment(child.date).format('YYYY-MM-DD hh:mm:ss');
+                        });
+                        rents[child.id]=response.data;
 
-                     resolve("success");
+                        resolve("success");
                     },
                     function(response){console.log("Child "+child.id+" failed");reject("failed");}
                 );
@@ -147,45 +161,92 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         });
 
         Promise.all(promises).then(values => {
-            console.log(rents);
-            //formatBenefitByDate(rents);
+            formatBenefitByDate(rents);
             formatBenefitByAdgency(rents);
         });
+
+    }
+
+    function dateDiff(date1, date2){
+        var diff = {}
+        var tmp = date2 - date1;
+
+        tmp = Math.floor(tmp/1000);
+        diff.sec = tmp % 60;
+
+        tmp = Math.floor((tmp-diff.sec)/60);
+        diff.min = tmp % 60;
+
+        tmp = Math.floor((tmp-diff.min)/60);
+        diff.hour = tmp % 24;
+
+        tmp = Math.floor((tmp-diff.hour)/24);
+        diff.day = tmp;
+
+        return diff;
+    }
+
+    function setRangeTimeArray(){
+
+        var s = new Date($scope.start);
+        var e = new Date($scope.end);
+        var nbDay = dateDiff(s, e);
+        console.log(nbDay)
+
+        if(nbDay.day==0){
+            $scope.BenefitByDate[moment(new Date(s)).format('hh:mm:ss')] = 0;
+
+            while( s.getHours() < e.getHours() ) {
+                s.setHours(s.getHours() + 1);
+                $scope.BenefitByDate[moment(new Date(s)).format('hh:mm:ss')] = 0;
+            }
+            return 'hour';
+        }
+        else{
+            $scope.BenefitByDate[moment(new Date(s)).format('YYYY-MM-DD')] = 0;
+            while( s < e ){
+                s.setDate(s.getDate() + 1);
+                $scope.BenefitByDate[moment(new Date(s)).format('YYYY-MM-DD')] = 0;
+            }
+            return 'day';
+        }
 
     }
 
 
     function formatBenefitByDate(transactions){
         $scope.BenefitByDate = {};
-
-            $.each(transactions, function(key, agency){
-                if(agency.length()!=0){
-
-                    $.each(transactions, function(key, transac) {
-
-                      //moment($scope.str_date).format('YYYY-MM-DD')
-                      var date = moment(transac.str_date).format('YYYY-MM-DD')
-                      if(!$scope.BenefitByDate[date]){$scope.BenefitByDate[date]=0}
-                        $scope.BenefitByDate[date]+=transac.amount;
-
-                    });
-
-                }
-
-            });
-
+        var delta = setRangeTimeArray();
         console.log($scope.BenefitByDate);
+        console.log(delta);
+        $.each(transactions, function(key, agency){
+
+            if(agency.length!=0){
+
+                $.each(agency, function(key, transac) {
+                    if(delta=='day'){
+                        var date = moment(transac.date).format('YYYY-MM-DD');
+                    }
+                    else{
+                        var date = moment(transac.date).format('hh:mm:ss');
+                    }
+                  console.log(date);
+                  $scope.BenefitByDate[date]+=transac.amount;
+
+                });
+
+            }
+
+        });
+
+        updateGaphBenefitByDate();
     }
 
     function formatBenefitByAdgency(transactions){
-        console.log("Array");
         $scope.BenefitByAdgency = {};
         $.each(transactions, function(key, agency){
 
             if(agency.length>0) {
-                console.log(agency);
-                
-
                 $.each(agency, function (idTransac, transac) {
 
                     if (!$scope.BenefitByAdgency[key]) {
@@ -196,7 +257,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
                 });
             }
         });
-      console.log($scope.BenefitByAdgency);
+        updateGaphBenefitByAdgency();
 
     }
 
