@@ -22,6 +22,8 @@ public class Transaction implements java.io.Serializable {
     private Float amount;
     @Column(name = "description", nullable = false)
     private String description;
+    @Column(name="str_date", nullable=false)
+    private Date str_date;
     @Column(name = "bankName", nullable = false)
     private String bankName;
     @Column(name = "rib", nullable = false)
@@ -38,8 +40,7 @@ public class Transaction implements java.io.Serializable {
     @JsonIgnore
     private User user;
     
-    @Column(name="str_date", nullable=false)
-    private Date str_date;
+
 
     public Integer getId() {
         return id;
@@ -51,6 +52,14 @@ public class Transaction implements java.io.Serializable {
 
     public User getUser() {
         return user;
+    }
+    
+    public void setDate(Date date) {
+    	str_date=date;
+    }
+    
+    public Date getDate() {
+    	return str_date;
     }
 
     public void setUser(User user) {
