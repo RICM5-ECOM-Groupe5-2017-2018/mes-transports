@@ -4,7 +4,7 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transaction;
+//import javax.transaction.Transaction;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
@@ -79,43 +79,7 @@ public class AgencyController {
      * @param end_date
      * @return
      */
-    public List<Transaction> getTransactions(Integer agencyId,String start_date, String end_date){        
-    	List<Vehicle> lv = entityManager.createQuery("Select v FROM Vehicle v WHERE v.idAgency=:id")
-    			.setParameter("id", agencyId)
-    			.getResultList();
-    			
-		List<Rent> all_rents = new LinkedList<Rent>();		
-		for(int i=0;i<lv.size();i++) {
-			List<Rent> lr=entityManager.createQuery("SELECT r FROM Rent r WHERE r.idVehicle=:id")
-			.setParameter("id", lv.get(i).getId())
-			.getResultList();
-			for(int j=0;j<lr.size();j++) {
-				all_rents.add(lr.get(j));
-			}
-		}
-		
-		List<Transaction> all_transaction = new LinkedList<Transaction>();	
-		for(int i=0;i<all_rents.size();i++) {
-			
-			List<Transaction> lt= entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN '"+start_date+ "' AND '"+end_date+"'")
-			.setParameter("idT", all_rents.get(i).getTransaction().getId())
-			.getResultList();
-			
-			for(int j=0;j<lt.size();j++) {
-				all_transaction.add(lt.get(j));
-			}
-			
-			
-		}
-		
-		return all_transaction;
-
-    }
-
-
-
-	
-	public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
+    public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
 		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN '"+start_date+"' AND '" + end_date + "'")
 		.setParameter("id", agencyId)
 		.getResultList();
