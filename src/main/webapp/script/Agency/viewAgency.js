@@ -20,7 +20,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         timePickerIncrement: 30,
         "showWeekNumbers": true,
         locale: {
-            format: 'DD/MM/YYYY h:mm'
+            format: 'DD/MM/YYYY HH:mm'
         }
     }, function(start, end, label) {
         $scope.start = start;
@@ -126,13 +126,13 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 
         promises.push(new Promise(function(resolve, reject){
             $http.get('api/agency/transactions/'+$rootScope.MotherAgency.id+'/'
-                + moment($scope.start).format('YYYY-MM-DD hh:mm:ss') + '/'
-                + moment($scope.end).format('YYYY-MM-DD hh:mm:ss'),config).then(
+                + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
+                + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
                 function(response)
                 {
                     $.each(response.data, function(key, child){
-                        child.date = moment(child.date).format('YYYY-MM-DD hh:mm:ss');
+                        child.date = moment(child.date).format('YYYY-MM-DD HH:mm:ss');
                     });
                     rents[$rootScope.MotherAgency.id] = response.data
                     resolve("success");
@@ -144,12 +144,12 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         $.each($rootScope.listChildAgencies, function(key, child){
             promises.push(new Promise(function(resolve, reject){
             $http.get('api/agency/transactions/'+child.id+'/'
-                + moment($scope.start).format('YYYY-MM-DD hh:mm:ss') + '/'
-                + moment($scope.end).format('YYYY-MM-DD hh:mm:ss'),config).then(
+                + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
+                + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
                     function(response){
                         $.each(response.data, function(key, child){
-                            child.date = moment(child.date).format('YYYY-MM-DD hh:mm:ss');
+                            child.date = moment(child.date).format('YYYY-MM-DD HH:mm:ss');
                         });
                         rents[child.id]=response.data;
 
@@ -194,11 +194,12 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         console.log(nbDay)
 
         if(nbDay.day==0){
-            $scope.BenefitByDate[moment(new Date(s)).format('hh:mm:ss')] = 0;
+            $scope.BenefitByDate[moment(new Date(s)).format('HH:mm:ss')] = 0;
 
             while( s.getHours() < e.getHours() ) {
                 s.setHours(s.getHours() + 1);
-                $scope.BenefitByDate[moment(new Date(s)).format('hh:mm:ss')] = 0;
+                console.log(s.getHours());
+                $scope.BenefitByDate[moment(new Date(s)).format('HH:mm:ss')] = 0;
             }
             return 'hour';
         }
