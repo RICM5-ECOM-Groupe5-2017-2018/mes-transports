@@ -3,6 +3,8 @@ package model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,12 +27,15 @@ public class Transaction implements java.io.Serializable {
     @Column(name = "rib", nullable = false)
     private String rib;
     @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Rent> rentList = new ArrayList<Rent>();
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="agency_id")
+    @JsonIgnore
     private Agency agency;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
+    @JsonIgnore
     private User user;
     
     @Column(name="str_date", nullable=false)
