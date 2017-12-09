@@ -1,46 +1,115 @@
-<div style="margin:0;" ng-controller="agencyMainCtrl">
+<div ng-controller="agencyMainCtrl">
 
-	<div ng-controller="agencyVehicleManagement">
-		<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
+	<div class="row" ng-controller="agencyVehicleManagement">
 
-		<div ng-controller="viewVehicules" style="margin-left: 25%;" >
-				<div name="myForm">
+        <ng-include	src="'view/menu/SideMenuAgency.html'"></ng-include>
 
-					<div class="form-group row" >
-						<label for="filterSelectedAgency" class="col-sm-2 col-form-label">Agence</label>
-						<div class="col-sm-10">
-							<select name="filterSelectedAgency" id="filterSelectedAgency" class="form-control" required
-						      		ng-options="agency.name for agency in filteredCharacteristic.availableFiltredAgency track by agency.id"
-									ng-change ="updateFilter()"
-						      		ng-model="filteredCharacteristic.filterSelectedAgency"></select>
-						</div>
-					</div>
+        <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+            <div ng-controller="viewVehicules" >
+                <div class="row">
+                    <h1 class="col-6 col-md-9">Parc de véhicule</h1>
+                    <input class="btn btn-success col-3 col-md-2 btn-sm"
+                           style="margin-top: 20px"
+                           type="button" ng-click="changeAddNewVehicules()" name="New"
+                           value="Ajouter un nouveau vehicule">
+                </div>
 
-					<div class="form-group row" >
-						<label for="filtredSelectedType" class="col-sm-2 col-form-label">Type de véhicule</label>
-						<div class="col-sm-10">
-							<select name="filtredSelectedType" id="filtredSelectedType" class="form-control" required
-						      		ng-options="typeselect.label for typeselect in availableFilredTypes track by typeselect.id"
-									ng-change ="updateFilter()"
-						      		ng-model="filteredCharacteristic.filtredSelectedType"></select>
-						</div>
-					</div>
+                <hr class="my-4 col-12">
+                <div class="row">
+                    <div class=" col-10 col-sm-5 col-md-4">
 
+                        <div class="row col-sm-10">
+                            <label for="filterSelectedAgency" class="col-sm-10 col-form-label">Agence</label>
+                        </div>
+                        <div class="row col-sm-10">
+                            <select name="filterSelectedAgency" id="filterSelectedAgency" class="form-control" required
+                                    ng-options="agency.name for agency in filteredCharacteristic.availableFiltredAgency track by agency.id"
+                                    ng-change ="updateFilter()"
+                                    ng-model="filteredCharacteristic.filterSelectedAgency"></select>
+                        </div>
 
-				  <select size="20" name="SelectVehicle" id="SelectVehicle"
-				      ng-options="vehicle.name for vehicle in filtredVehicules track by vehicle.id"
-				      ng-model="selectedVehicule"
-				      ng-change="onChange(vehicle.id)"></select>
-			  	</div>
+                        <div class="row col-sm-10">
+                            <label for="filtredSelectedType" class="col-sm-10 col-form-label">Type de véhicule</label>
+                        </div>
+                        <div class="row col-sm-10">
+                            <select name="filtredSelectedType" id="filtredSelectedType" class="form-control" required
+                                    ng-options="typeselect.label for typeselect in availableFilredTypes track by typeselect.id"
+                                    ng-change ="updateFilter()"
+                                    ng-model="filteredCharacteristic.filtredSelectedType"></select>
+                        </div>
 
-			  	<div>
-				  {{selectedVehicule}}
-				  <input class="btn btn-primary col-md-10"  type="button" ng-click="changeUpdateVehicules()" name="Update" value="Modifier le vehicule" >
-				</div>
+                        <div class="row col-sm-10">
+                            <div class="list-group" style="margin-top: 20px;max-height: 70vh; overflow-y:scroll;">
+                                <a class="list-group-item" ng-class="{active: vehicle.id==selectedVehicule.id }"
+                                   ng-repeat="vehicle in filtredVehicules" ng-click="onChange(vehicle.id)">
+                                    {{vehicle.name}}
+                                </a>
+                            </div>
+                        </div>
 
+                    </div>
 
+                    <div ng-if="selectedVehicule" class="col-sm-6 col-md-7 panel panel-default">
+                        <div class="panel-heading row">
+                            <h2 class="col-6 col-md-9">{{selectedVehicule.name}}</h2>
+                            <input class="btn btn-success col-2 col-md-2 btn-sm"
+                                   style="margin-top: 20px"
+                                   type="button" ng-click="changeUpdateVehicules()" name="New"
+                                   value="Modifier le vehicule">
+                        </div>
 
-				<input class="btn btn-primary col-md-10"  type="button" ng-click="changeAddNewVehicules()" name="New" value="Ajouter un nouveau vehicule" >
-		</div>
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <td>Agence</td>
+                                    <td>{{(MotherAgency.id == selectedVehicule.details.idAgency)?MotherAgency.name:listChildAgencies[selectedVehicule.details.idAgency].name}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Marque</td>
+                                    <td>{{selectedVehicule.details.brand}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Type</td>
+                                    <td>{{listTypes[selectedVehicule.details.type].label}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Assurance</td>
+                                    <td>{{selectedVehicule.details.insurance}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Prix à l'heure</td>
+                                    <td>{{selectedVehicule.details.price}}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="row">
+                            <div class="row col-md-5">
+                                <ul class="list-group">
+                                    <li class="list-group-item"
+                                        ng-repeat="char in selectedVehicule.details.characteristicList">
+                                        {{char.idCharacteristic.label}} : {{char.valueCharacteristic}}</li>
+                                </ul>
+                            </div>
+
+                            <div class="row col-md-5 col-sm-offset-1">
+
+                                <ul class="list-group">
+                                    <li class="list-group-item"
+                                        ng-repeat="rent in filtredRent">
+                                        {{rent.startDate}} - {{rent.endDate}} : {{rent.totalPrice}}</li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
 	</div>
 </div>

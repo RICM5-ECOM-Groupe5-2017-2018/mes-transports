@@ -31,10 +31,10 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
     function updateGaphBenefitByDate(){
 
         var data = {
-            labels: Object.keys($scope.BenefitByDate),
+            labels: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
             series: [
                 {
-                    data: Object.values($scope.BenefitByDate),
+                    data: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
                 }
             ]
         };
@@ -87,8 +87,8 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
     function updateGaphBenefitByAdgency(){
 
         var data = {
-            labels: Object.keys($scope.BenefitByAdgency),
-            series: Object.values($scope.BenefitByAdgency),
+            labels: Object.keys($scope.BenefitByAdgency)?Object.keys($scope.BenefitByAdgency):[],
+            series: Object.values($scope.BenefitByAdgency)?Object.values($scope.BenefitByAdgency):[],
         };
 
         var sum = function(a, b) { return a + b };
@@ -262,7 +262,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 
     }
 
-    //$scope.updateGaphs();
-    //loadAgenciesProfits();
+    updateGaphBenefitByDate();
+    updateGaphBenefitByAdgency()
 
 });

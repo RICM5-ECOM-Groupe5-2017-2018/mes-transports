@@ -2,6 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>MesTransports</title>
 
 	<!-- build:css css/third-party.css -->
@@ -9,9 +10,9 @@
     <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
     <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
     <link rel="stylesheet" href="lib/dependencies/css/daterangepicker.css" />
-    <link rel="stylesheet" type="text/css" href="css/menuStyle.css"/>
-		<link rel="stylesheet" type="text/css" href="css/style.css"/>
-		<link rel="stylesheet" type="text/css" href="lib/dependencies/dist/chartist.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/menuStyle.css"/>-->
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/dependencies/dist/chartist.min.css">
 
     <!-- build:js lib/third-party.js -->
     <!-- bower:js -->
@@ -25,14 +26,14 @@
     <script src="lib/dependencies/ng-grid.min.js"></script>
     <script src="lib/dependencies/moment.min.js"></script>
     <script src="lib/dependencies/daterangepicker.js"></script>
-		<script src="lib/dependencies/dist/chartist.min.js"></script>
+    <script src="lib/dependencies/dist/chartist.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js script/all.js -->
 
-		<script src="script/app.js"></script>
-		<script src="script/Both/routes.js"></script>
+    <script src="script/app.js"></script>
+    <script src="script/Both/routes.js"></script>
     <script src="script/Both/menu.js"></script>
     <script src="script/Both/account.js"></script>
     <script src="script/User/history.js"></script>
@@ -40,12 +41,12 @@
     <script src="script/User/cart.js"></script>
     <script src="script/User/search.js"></script>
     <script src="script/Agency/agencyMainData.js"></script>
-		<script src="script/Agency/graphicsAgency.js"></script>
-		<script src="script/Agency/viewAgency.js"></script>
-		<script src="script/Agency/viewChildAgency.js"></script>
-		<script src="script/Agency/addUpdateChildAgency.js"></script>
-		<script src="script/Agency/viewVehicle.js"></script>
-		<script src="script/Agency/addUpdateVehicle.js"></script>
+    <script src="script/Agency/graphicsAgency.js"></script>
+    <script src="script/Agency/viewAgency.js"></script>
+    <script src="script/Agency/viewChildAgency.js"></script>
+    <script src="script/Agency/addUpdateChildAgency.js"></script>
+    <script src="script/Agency/viewVehicle.js"></script>
+    <script src="script/Agency/addUpdateVehicle.js"></script>
     <!-- endbuild -->
 
 </head>
@@ -60,7 +61,6 @@
 	<div ng-include="getTopMenu()"></div>
 
 	<!-- <div class="row" ng-include="getSideMenu()"></div> -->
-
 </div>
 <div class="container-fluid">
 	<div ng-view></div>

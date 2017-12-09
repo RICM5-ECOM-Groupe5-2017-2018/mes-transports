@@ -1,6 +1,8 @@
 agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
 
 	$scope.currentIdAgency = $routeParams.idA
+    $scope.currentAgency = $rootScope.listChildAgencies[$scope.currentIdAgency];
+
 
 	$scope.changeLocationToUpdatePage=function(){
 		$location.path('/agency/update/'+$scope.currentIdAgency);
@@ -10,7 +12,6 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     $scope.end = new Date($scope.start.getFullYear(),$scope.start.getMonth(),$scope.start.getDate()+7);
 
     $scope.BenefitByDate={};
-    $scope.BenefitByAdgency = {};
 
     $scope.setIDParam=function(id){
         $routeParams.idA = id;
@@ -35,10 +36,10 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     function updateGaphBenefitByDate(){
 
         var data = {
-            labels: Object.keys($scope.BenefitByDate),
+            labels: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
             series: [
                 {
-                    data: Object.values($scope.BenefitByDate),
+                    data: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
                 }
             ]
         };
@@ -147,11 +148,12 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
         console.log(nbDay)
 
         if(nbDay.day==0){
-            $scope.BenefitByDate[moment(new Date(s)).format('hh:mm:ss')] = 0;
+            $scope.BenefitByDate[moment(new Date(s)).format('HH:mm:ss')] = 0;
 
             while( s.getHours() < e.getHours() ) {
                 s.setHours(s.getHours() + 1);
-                $scope.BenefitByDate[moment(new Date(s)).format('hh:mm:ss')] = 0;
+                console.log(s.getHours());
+                $scope.BenefitByDate[moment(new Date(s)).format('HH:mm:ss')] = 0;
             }
             return 'hour';
         }
@@ -197,8 +199,7 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
 
 
 
-    //$scope.updateGaphs();
-    //loadAgenciesProfits();
+    updateGaphBenefitByDate();
 
 
 });

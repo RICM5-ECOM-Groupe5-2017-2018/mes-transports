@@ -34,8 +34,8 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 						});
 
 						reloadSubAgencyMenu();
-			    },
-			    function(response){ }
+				},
+				function(response){ }
 		    );
 		}
 	};

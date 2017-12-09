@@ -1,100 +1,109 @@
-<div style="margin:0;" ng-controller="agencyMainCtrl">
+<div  class="row" ng-controller="agencyMainCtrl">
 
-	<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
-	
-	<div ng-controller="childRegistration" style="margin-left: 25%;" >
-	
-		<form class="form-horizontal" name="registerForm">
-		
-			<div class="form-group row">
-				<label for="AName" class="col-sm-2 col-form-label">Nom de l'agence</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" ng-maxlength=200 ng-model="agency.name" name="AName" value="">
-					<span class="text-danger" ng-show="registerForm.AName.$error.maxlength">
-		   				Le champ ne peux pas contenir plus de 200 caractères
-					</span> 
-				</div>
-			</div>
-		
-			<div class="form-group row">
-				<label for="street" class="col-sm-2 col-form-label">Rue de l'agence*</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" ng-maxlength=200 ng-model="data.addressp1" name="street" value="" required>
-					<span class="text-danger" ng-show="registerForm.street.$error.maxlength">
-		   				Le champ ne peux pas contenir plus de 200 caractères
-					</span>
-				</div>
-			</div>
-			
-			<div class="form-group row">
-					<label for="postal" class="col-sm-2 col-form-label">Code Postale*</label>
-					<div class="col-sm-4"> 
-						<input type="tel" class="form-control" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-minlength=5 ng-model="data.addressp2" name="postal" value="" required>
-						<span class="text-danger" ng-show="registerForm.postal.$error.maxlength">
+    <ng-include	src="'view/menu/SideMenuAgency.html'"></ng-include>
+
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+        <div ng-controller="childRegistration" >
+
+            <form class="form-horizontal col-10 col-md-10 col-md-offset-1" name="registerForm">
+
+                <h1> {{isUpdate?'Modifier une agence':'Inscrire une agence'}}  </h1>
+
+                <div class="form-group row">
+                    <label for="AName" class="col-sm-2 col-form-label">Nom de l'agence</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" ng-maxlength=200 ng-model="agency.name" name="AName" value="">
+                        <span class="text-danger" ng-show="registerForm.AName.$error.maxlength">
+		   				    Le champ ne peux pas contenir plus de 200 caractères
+					    </span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="street" class="col-sm-2 col-form-label">Rue de l'agence*</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" ng-maxlength=200 ng-model="data.addressp1" name="street" value="" required>
+                        <span class="text-danger" ng-show="registerForm.street.$error.maxlength">
+		   				    Le champ ne peux pas contenir plus de 200 caractères
+					    </span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="postal" class="col-sm-2 col-form-label">Code Postale*</label>
+                    <div class="col-sm-4">
+                        <input type="tel" class="form-control" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-minlength=5 ng-model="data.addressp2" name="postal" value="" required>
+                        <span class="text-danger" ng-show="registerForm.postal.$error.maxlength">
 			   				Le champ doit contenir 5 chiffres
 						</span>
-						<span class="text-danger" ng-show="registerForm.postal.$error.pattern">
+                        <span class="text-danger" ng-show="registerForm.postal.$error.pattern">
 			   				Le champ ne doit contenir que des chiffres
 						</span>
-						<span class="text-danger" ng-show="registerForm.postal.$error.minlength">
+                        <span class="text-danger" ng-show="registerForm.postal.$error.minlength">
 			   				Le champ doit contenir 5 chiffres
 						</span>
-					</div>
-			
-					<label for="city" class="col-sm-2 col-form-label">Ville de l'agence*</label>
-					<div class="col-sm-4"> 
-						<input type="text" class="form-control" ng-maxlength=50 ng-model="agency.city" name="city" value="" required>
-						<span class="text-danger" ng-show="registerForm.city.$error.maxlength">
+                    </div>
+
+                    <label for="city" class="col-sm-2 col-form-label">Ville de l'agence*</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" ng-maxlength=50 ng-model="agency.city" name="city" value="" required>
+                        <span class="text-danger" ng-show="registerForm.city.$error.maxlength">
 			   				Le champ ne peux pas contenir plus de 50 caractère
 						</span>
-					</div>
-				
-			</div>
-			
-			<div class="form-group row" >
-				<label for="SelectTypes" class="col-sm-2 col-form-label">Type de l'agence*</label>
-				<div class="col-sm-10"> 
-					<select name="SelectTypes" id="SelectTypes" class="form-control" required
-				      ng-options="typeSee.name for typeSee in data.availableTypes track by typeSee.id"
-				      ng-model="data.selectedType"></select> 
-				</div>
-			</div>
-			
-			<div class="form-group row">
-				<label for="phone" class="col-sm-2 col-form-label">Numéro de Téléphone*</label>
-				<div class="col-sm-10"> 
-					<input type="tel" class="form-control" ng-pattern= "/^[0-9]+[0-9]*$/" ng-maxlength=15 ng-model="agency.phoneNum" name="phone" value="" required>
-					<span class="text-danger" ng-show="registerForm.phone.$error.maxlength">
-		   				Le champ ne peux pas contenir plus de 15 nombres
-					</span>
-					<span class="text-danger" ng-show="registerForm.phone.$error.pattern">
-		   				Le champ ne doit contenir que des chiffres
-					</span>
-				</div>
-			</div>
-			
-			<div class="form-group row" >
-				<label for="Selectbank" class="col-sm-2 col-form-label">Banque*</label>
-				<div class="col-sm-10"> 
-					<select name="Selectbank" id="Selectbank" class="form-control" required
-				      ng-options="bank.name for bank in data.availableBanks track by bank.id"
-				      ng-model="data.selectedBank"></select>
-				</div>
-			</div>
-			
-			<div class="form-group row">
-				<label for="rib" class="col-sm-2 col-form-label">RIB*</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" ng-maxlength=200 ng-model="agency.rib" name="rib" value="">
-					<span class="text-danger" ng-show="registerForm.rib.$error.maxlength">
-		   				Le champ ne peux pas contenir plus de 200 caractères
-					</span> 
-				</div>
-			</div>
-			
-			<div class="form-group row">
-			<input class="btn btn-primary col-md-10" type="button" ng-disabled="registerForm.$invalid" value="Inscrire l'agence" ng-click="sendFormAgency()">
-			</div>	
-		</form>
-	</div>
+                    </div>
+
+                </div>
+
+                <div class="form-group row" >
+                    <label for="SelectTypes" class="col-sm-2 col-form-label">Type de l'agence*</label>
+                    <div class="col-sm-10">
+                        <select name="SelectTypes" id="SelectTypes" class="form-control" required
+                                ng-options="typeSee.name for typeSee in data.availableTypes track by typeSee.id"
+                                ng-model="data.selectedType">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="phone" class="col-sm-2 col-form-label">Numéro de Téléphone*</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control" ng-pattern= "/^[0-9]+[0-9]*$/" ng-maxlength=15 ng-model="agency.phoneNum" name="phone" value="" required>
+                        <span class="text-danger" ng-show="registerForm.phone.$error.maxlength">
+		   				    Le champ ne peux pas contenir plus de 15 nombres
+					    </span>
+                        <span class="text-danger" ng-show="registerForm.phone.$error.pattern">
+		   				    Le champ ne doit contenir que des chiffres
+					    </span>
+                    </div>
+                </div>
+
+                <div class="form-group row" >
+                    <label for="Selectbank" class="col-sm-2 col-form-label">Banque*</label>
+                    <div class="col-sm-10">
+                        <select name="Selectbank" id="Selectbank" class="form-control" required
+                                ng-options="bank.name for bank in data.availableBanks track by bank.id"
+                                ng-model="data.selectedBank">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="rib" class="col-sm-2 col-form-label">RIB*</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" ng-maxlength=200 ng-model="agency.rib" name="rib" value="">
+                        <span class="text-danger" ng-show="registerForm.rib.$error.maxlength">
+		   				    Le champ ne peux pas contenir plus de 200 caractères
+					    </span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <input class="btn btn-success  col-8 col-md-6 col-md-offset-3" type="button" ng-disabled="registerForm.$invalid"
+                           value="{{isUpdate?'Modifier l\'agence':'Inscrire l\'agence'}}" ng-click="sendFormAgency()">
+                </div>
+            </form>
+        </div>
+
+    </main>
+
 </div>

@@ -62,8 +62,11 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 			$location.path('/agency/update/vehicule/'+$scope.selectedVehicule.id);}
 	}
 
-	$scope.onChange = function() {
-        $location.path('agency/view/vehicule/' + $scope.selectedVehicule.id);
+	$scope.onChange = function(id) {
+        $scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
+            return element.id == id;
+        });
+        $location.path('agency/view/vehicule/' + id);
     }
 
 	function listAgency(){
@@ -82,7 +85,8 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 
 
 	function loadVehicleRent(){
-		$http.get('api/vehicle/rents/'+$scope.selectedVehicule.id).then(
+        var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
+		$http.get('api/vehicle/rents/'+$scope.selectedVehicule.id,config).then(
 		   function(response){
 
 				 	$scope.allRents = response.data;
@@ -91,7 +95,8 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 						rent.endDate = moment(rent.endDate).format("YYYY-MM-DD hh:mm:ss");
 						rent.startDate = moment(rent.startDate).format("YYYY-MM-DD hh:mm:ss");
 					});
-					$scope.filtredRent = $scope.data.beforTreatementCharacteristicsForType = $.extend(true, {}, $scope.allRents);
+					$scope.filtredRent = $.extend(true, {}, $scope.allRents);
+					console.log($scope.filtredRent);
 		    },
 		    function(response){}
 	    );

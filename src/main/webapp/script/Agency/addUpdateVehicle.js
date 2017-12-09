@@ -105,7 +105,8 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 	/*Load les charactéristics pour un type de véhicule*/
 	function parseCharacteristics(){
-		$http.get('api/vehicle/list/'+$scope.data.selectedTypeVehicule.id).then(
+        var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
+		$http.get('api/vehicle/list/'+$scope.data.selectedTypeVehicule.id,config).then(
 		   function(response){
 
 			   if($scope.selectedVehicule && $scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id){
