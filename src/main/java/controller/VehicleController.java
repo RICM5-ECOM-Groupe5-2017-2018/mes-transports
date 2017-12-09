@@ -64,6 +64,11 @@ public class VehicleController {
 		
 	}
 	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @return For a defined Vehicle return all the moment where this vehicle is available
+	 */
 	public List<Disponibilitee> dispoVehicle(Integer vehicleId) {
 		List<Rent> lr = entityManager.createQuery("Select r FROM Rent r WHERE r.idVehicle=:id")
 		.setParameter("id", vehicleId)
