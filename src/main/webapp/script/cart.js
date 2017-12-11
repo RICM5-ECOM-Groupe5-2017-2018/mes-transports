@@ -15,7 +15,17 @@ cart.factory('CartServices', function($cookies, $http) {
 	utils.addToCart = function(item, user, startDate, endDate) {
 		var add = true;
 		utils.cart.forEach(function(rent) {
-			if(item.id == rent.idVehicle && (new Date(startDate).getTime() <= new Date(rent.endDate).getTime() || new Date(endDate).getTime() >= new Date(rent.startDate).getTime())) {
+			if(item.id == rent.idVehicle
+					&&	((
+						startDate <= new Date(rent.endDate).getTime()
+						&&
+						startDate >= new Date(rent.startDate).getTime()
+					) || (
+						endDate >= new Date(rent.startDate).getTime()
+						&&
+						endDate <= new Date(rent.endDate).getTime()
+					))
+			) {
 				add = false;
 				return add;
 			}
@@ -30,14 +40,15 @@ cart.factory('CartServices', function($cookies, $http) {
 			}
 			newRent.startDate = startDate;
 			newRent.endDate = endDate;
-			newRent.totalPrice = item.price * Math.ceil((endDate.getTime() - startDate.getTime())/(1000*60*60*24));
+			newRent.totalPrice = item.price * Math.ceil((endDate- startDate)/(1000*60*60*24));
 			newRent.locationIn = "";
 			newRent.locationOut = "";
-			utils.cart.push(newRent);
 			if(user) {
 				$http.post('api/cart/add', newRent)
 				.then(function successCallback(response) {
 					console.log(response);
+					newRent.vehicle = item;
+					utils.cart.push(newRent);
 				}, function errorCallback(response) {
 					console.log(response);
 				});
@@ -52,12 +63,16 @@ cart.factory('CartServices', function($cookies, $http) {
 			utils.cart.forEach(function(rent) {
 				if(rent.idUser <= 0) {
 					rent.idUser = user.id;
+					vehicle = rent.vehicle;
+					rent.vehicle = undefined;
 					$http.post('api/cart/add', rent)
 					.then(function successCallback(response) {
 						console.log(response);
 					}, function errorCallback(response) {
 						console.log(response);
+						rend.idUser = -1;
 					});
+					rent.vehicle = vehicle;
 				}
 			});
 		}
