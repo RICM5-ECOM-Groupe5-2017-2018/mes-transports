@@ -47,15 +47,14 @@ cart.factory('CartServices', function($cookies, $http) {
 				$http.post('api/cart/add', newRent)
 				.then(function successCallback(response) {
 					console.log(response);
-					newRent.vehicle = item;
 					utils.cart.push(newRent);
+					console.log(utils.cart);
+					$cookies.putObject("cart", utils.cart);
 				}, function errorCallback(response) {
 					console.log(response);
 				});
 			}
 		}
-		console.log(utils.cart);
-		$cookies.putObject("cart", utils.cart);
 	}
 	
 	utils.updateCart = function(user) {
@@ -64,7 +63,6 @@ cart.factory('CartServices', function($cookies, $http) {
 				if(rent.idUser <= 0) {
 					rent.idUser = user.id;
 					vehicle = rent.vehicle;
-					rent.vehicle = undefined;
 					$http.post('api/cart/add', rent)
 					.then(function successCallback(response) {
 						console.log(response);
@@ -72,7 +70,6 @@ cart.factory('CartServices', function($cookies, $http) {
 						console.log(response);
 						rend.idUser = -1;
 					});
-					rent.vehicle = vehicle;
 				}
 			});
 		}

@@ -1,7 +1,9 @@
 <h1>Panier de {{user.login}}</h1>
 
 <div ng-repeat="item in cart">
-	<h2>{{item.vehicle.brand}}</h2>
+	<h2>{{item.vehicle.brand}} 
+		<small><a class="btn btn-default" href="#!/vehicle/view/{{item.idVehicle}}"><i class="glyphicon glyphicon-eye-open"></a></i></small>
+	</h2>
 </div>
 
 <button class="btn btn-success btn-block">Valider le panier</button>
