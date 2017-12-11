@@ -79,8 +79,14 @@ cart.factory('CartServices', function($cookies, $http) {
 	
 });
 
-cart.controller('CartController', function($scope, $http, CartServices) {
+cart.controller('CartController', function($scope, $http, $cookies, CartServices) {
 	
 	$scope.addToCart = CartServices.addToCart;
+	
+	$scope.removeItemFromCart = function(item) {
+		var index = $scope.cart.indexOf(item);
+		$scope.cart.splice(index, 1);
+		$cookies.putObject("cart", $scope.cart);
+	}
 	
 });
