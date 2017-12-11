@@ -4,10 +4,12 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transaction;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
 import model.Rent;
+import model.User;
 import model.Vehicle;
 
 import java.util.Date;
@@ -67,6 +69,12 @@ public class AgencyController {
 		}
 		
 		return all_rents;
+	}
+	
+	public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
+		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN '"+start_date+"' AND '" + end_date + "'")
+		.setParameter("id", agencyId)
+		.getResultList();
 	}
 	
 	
@@ -144,14 +152,23 @@ public class AgencyController {
 	}
 
 	/**
-	 * UNKNOWN
+	 * Return the list of the children Agencies for a mother Agency difined by idAgency
 	 *
 	 * @param idAgency the id of the agency
-	 * @return UNKNOWN
+	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
 		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
+	/**
+	 * 
+	 * @return All the Agencies present on the database
+	 */
+	public List<Agency> getAllAgencies(){
+		return entityManager.createQuery("SELECT a From Agency a")
+		.getResultList();
+	}
+	
 }

@@ -3,6 +3,8 @@ package model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,21 +22,25 @@ public class Transaction implements java.io.Serializable {
     private Float amount;
     @Column(name = "description", nullable = false)
     private String description;
+    @Column(name="str_date", nullable=false)
+    private Date str_date;
     @Column(name = "bankName", nullable = false)
     private String bankName;
     @Column(name = "rib", nullable = false)
     private String rib;
     @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Rent> rentList = new ArrayList<Rent>();
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="agency_id")
+    @JsonIgnore
     private Agency agency;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
+    @JsonIgnore
     private User user;
     
-    @Column(name="str_date", nullable=false)
-    private Date str_date;
+
 
     public Integer getId() {
         return id;
@@ -46,6 +52,14 @@ public class Transaction implements java.io.Serializable {
 
     public User getUser() {
         return user;
+    }
+    
+    public void setDate(Date date) {
+    	str_date=date;
+    }
+    
+    public Date getDate() {
+    	return str_date;
     }
 
     public void setUser(User user) {

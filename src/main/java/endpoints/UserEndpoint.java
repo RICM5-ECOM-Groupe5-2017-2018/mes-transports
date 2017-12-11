@@ -44,6 +44,20 @@ public class UserEndpoint extends Application{
     }
 
     @GET
+    @SecuredAdmin
+    @Path("/getAll")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAll() {
+        try {
+            return Response.status(200).entity(controller.getAllUsers()).build();
+        } catch (javax.persistence.NoResultException ex) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+    }
+    
+    @GET
     @Secured
     @Path("/view/{id}")
     @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
