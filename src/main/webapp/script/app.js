@@ -43,21 +43,14 @@ app.run(function($rootScope,$location,$route,$window) {
 
 });
 
-app.controller('AppController', function($scope, $cookies) {
+app.controller('AppController', function($scope, $cookies, CartServices) {
 
 	$scope.user = $cookies.getObject("user");
-	if((tmpCart = $cookies.getObject("cart")) != undefined) {
-		$scope.cart = tmpCart;
-	}
+	
 	$scope.form = {};
 	
-	if($scope.cart == undefined) {		
-		$scope.cart = [];
-	}
+	$scope.cart = CartServices.cart;
+	$scope.updateCart = CartServices.updateCart;
 	
-	$scope.addToCart = function(item) {
-		console.log($scope.cart);
-		$scope.cart.push(item);
-	}
 
 });
