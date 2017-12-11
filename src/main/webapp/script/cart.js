@@ -81,6 +81,19 @@ cart.factory('CartServices', function($cookies, $http) {
 
 cart.controller('CartController', function($scope, $http, $cookies, CartServices) {
 	
+	$scope.displayCart = $scope.cart;
+	
+	$scope.displayCart.forEach(function(item) {
+		$http.get('api/vehicle/view/' + item.idVehicle)
+		.then(function successCallback(response) {
+			item.vehicle = response.data;
+		}, function errorCallback(response) {
+			console.log(response);
+		});
+	});
+	
+	console.log($scope.displayCart);
+	
 	$scope.addToCart = CartServices.addToCart;
 	
 	$scope.removeItemFromCart = function(item) {

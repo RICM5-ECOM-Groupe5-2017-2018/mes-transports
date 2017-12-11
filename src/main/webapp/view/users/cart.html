@@ -9,28 +9,21 @@
     	<th>Prix</th>
     	<th>Action</th>
     </tr>
-    <tr ng-repeat="item in cart">
-    	<td>{{item.idVehicle}}</td>
-    	<td>Test</td>
+    <tr ng-repeat="item in displayCart">
+    	<td>{{item.vehicle.brand}}</td>
+    	<td>{{item.vehicle.type}}</td>
 		<td>{{item.startDate | date : 'dd/MM/yyyy HH:mm'}} - {{item.endDate | date : 'dd/MM/yyyy HH:mm'}}</td>
 		<td>{{item.totalPrice}}</td>
     	<td>
-    		<a href="#!/vehicle/view/{{item.idVehicle}}" class="btn btn-default btn-sm">
-    			<i class="glyphicon glyphicon-eye-open" label="Détails du véhicule"></i>
+    		<a href="#!/vehicle/view/{{item.idVehicle}}" title="Détails du véhicule" class="btn btn-default btn-sm">
+    			<i class="glyphicon glyphicon-eye-open"></i>
    			</a>
-   			<button class="btn btn-danger btn-sm" ng-click="removeItemFromCart(item)">
-    			<i class="glyphicon glyphicon-remove" label="Détails du véhicule"></i>
+   			<button class="btn btn-danger btn-sm" title="Supprimer du panier" ng-click="removeItemFromCart(item)">
+    			<i class="glyphicon glyphicon-remove"></i>
    			</button>
     	</td>
     </tr>
   </table>
-</div>
-
-
-<div>
-	<h2>{{item.vehicle.brand}} 
-		<small><a class="btn btn-default" href="#!/vehicle/view/{{item.idVehicle}}"><i class="glyphicon glyphicon-eye-open"></a></i></small>
-	</h2>
 </div>
 
 <button class="btn btn-success btn-block">Valider le panier</button>
