@@ -10,6 +10,9 @@ account.controller('AccountController',
 
 	$scope.user = $cookies.getObject("user");
 	$scope.form.update = $scope.user;
+	if($scope.cart) {
+		$scope.updateCart($scope.user);
+	}
 
 	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
@@ -35,7 +38,9 @@ account.controller('AccountController',
 			$scope.user = $cookies.getObject("user");
 			$rootScope.user = $scope.user;
 
-			console.log($scope.user);
+			if($scope.cart) {
+				$scope.updateCart($scope.user);
+			} 
 
 			$location.path('/');
 
@@ -126,7 +131,6 @@ account.controller('AccountController',
 		})
 		.then(function successCallback(response) {
 			$cookies.putObject("user", response.data);
-			console.log(response);
 		}, function errorCallback(response) {
 			console.log(response);
 		});

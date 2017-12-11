@@ -25,7 +25,7 @@
 		    </div>
 	      </form>
 	      <ul class="nav navbar-nav navbar-right" ng-controller="AccountController">
-	      	<li class="active"><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="badge">0</span></a>
+	      	<li class="active"><a href="#!/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="badge">{{cart.length}}</span></a>
 	        <li class="dropdown" >
 	          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.login}} <span class="caret"></span></a>
 	          <ul class="dropdown-menu">

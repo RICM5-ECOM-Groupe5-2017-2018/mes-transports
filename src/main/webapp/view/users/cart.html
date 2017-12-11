@@ -1,7 +1,29 @@
 <h1>Panier de {{user.login}}</h1>
 
-<div ng-repeat="item in cart">
-
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tr>
+    	<th>Véhicule</th>
+    	<th>Type</th>
+    	<th>Dates</th>
+    	<th>Prix</th>
+    	<th>Action</th>
+    </tr>
+    <tr ng-repeat="item in displayCart">
+    	<td>{{item.vehicle.brand}}</td>
+    	<td>{{item.vehicle.type}}</td>
+		<td>{{item.startDate | date : 'dd/MM/yyyy HH:mm'}} - {{item.endDate | date : 'dd/MM/yyyy HH:mm'}}</td>
+		<td>{{item.totalPrice}}</td>
+    	<td>
+    		<a href="#!/vehicle/view/{{item.idVehicle}}" title="Détails du véhicule" class="btn btn-default btn-sm">
+    			<i class="glyphicon glyphicon-eye-open"></i>
+   			</a>
+   			<button class="btn btn-danger btn-sm" title="Supprimer du panier" ng-click="removeItemFromCart(item)">
+    			<i class="glyphicon glyphicon-remove"></i>
+   			</button>
+    	</td>
+    </tr>
+  </table>
 </div>
 
 <button class="btn btn-success btn-block">Valider le panier</button>

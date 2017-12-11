@@ -8,7 +8,7 @@ import java.util.List;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "agency", catalog = "Mes_Transports")
+@Table(name = "agency")
 public class Agency implements java.io.Serializable {
 
 	private Integer id;

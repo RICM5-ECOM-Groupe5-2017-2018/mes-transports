@@ -4,6 +4,8 @@ package model;
 import java.util.Date;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
@@ -24,6 +26,7 @@ public class Rent implements java.io.Serializable {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="transactions")
+	@JsonIgnore
 	private Transaction transaction;
 
 	public Rent() {
