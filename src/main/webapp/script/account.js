@@ -122,7 +122,6 @@ account.controller('AccountController',
 	}
 
 	$scope.updateInfo = function UserUpdateInfo() {
-		console.log($scope.form.update);
 		var data = $scope.form.update;
 		data.isAgency = undefined;
 
@@ -130,7 +129,9 @@ account.controller('AccountController',
 			headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
 		})
 		.then(function successCallback(response) {
-			$cookies.putObject("user", response.data);
+			$scope.user = response.data;
+			console.log(response.data);
+			$cookies.putObject("user", $scope.user);
 		}, function errorCallback(response) {
 			console.log(response);
 		});
