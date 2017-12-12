@@ -25,6 +25,8 @@ account.controller('AccountController',
 
 	$scope.connect = function UserConnect() {
 
+		refreshAlerts();
+		
 		if($cookies.getObject("user")) {
 			return "Already connected";
 		}
@@ -46,8 +48,8 @@ account.controller('AccountController',
 
 
 		}, function errorCallback(response) {
+			$scope.form.error = response.data;
 			console.log(response);
-			//TODO message d'erreur
 		});
 	}
 
@@ -136,6 +138,11 @@ account.controller('AccountController',
 			console.log(response);
 		});
 
+	}
+	
+	function refreshAlerts() {
+		$scope.form.success = undefined;
+		$scope.form.error = undefined;
 	}
 
 }]);
