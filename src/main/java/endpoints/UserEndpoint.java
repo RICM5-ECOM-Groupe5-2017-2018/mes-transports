@@ -79,7 +79,7 @@ public class UserEndpoint extends Application{
         	User u = controller.authenticate(login, password);
         	if(u==null) {
                 return Response.status(400).type("text/plain")
-                        .entity("Informations non valide").build();
+                        .entity("Informations non valides").build();
         	}
             return Response.status(200).entity(u).build();
         }catch (Exception ex) {
