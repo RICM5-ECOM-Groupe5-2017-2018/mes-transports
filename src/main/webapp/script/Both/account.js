@@ -35,8 +35,8 @@ account.controller('AccountController',
 			$scope.user = $cookies.getObject("user");
 			$rootScope.user = $scope.user;
 
-			console.log($scope.user);
-
+            $scope.loadTopMenu();
+            $scope.loadSideMenu();
 			$location.path('/');
 
 
@@ -68,6 +68,8 @@ account.controller('AccountController',
 		$scope.user = undefined;
 		$rootScope.user = undefined;
 
+        $scope.loadTopMenu();
+        $scope.loadSideMenu();
 		$location.path('/');
 	}
 

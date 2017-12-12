@@ -41,12 +41,12 @@
     <script src="script/User/vehicle.js"></script>
     <script src="script/User/cart.js"></script>
     <script src="script/User/search.js"></script>
-    <script src="script/Agency/agencyMainData.js"></script>
-    <script src="script/Agency/graphicsAgency.js"></script>
+    <script src="script/Agency/loaderDataAgency.js"></script>
     <script src="script/Agency/viewAgency.js"></script>
     <script src="script/Agency/viewChildAgency.js"></script>
-    <script src="script/Agency/addUpdateChildAgency.js"></script>
     <script src="script/Agency/viewVehicle.js"></script>
+    <script src="script/Agency/graphicsAgency.js"></script>
+    <script src="script/Agency/addUpdateChildAgency.js"></script>
     <script src="script/Agency/addUpdateVehicle.js"></script>
     <!-- endbuild -->
 
@@ -55,13 +55,7 @@
 
 <div ng-controller="menuCtrl">
 
-	<!-- <ng-include src="getTopMenu()"></ng-include>
-
-	<ng-include src="getSideMenu()"></ng-include>-->
-
 	<div ng-include="getTopMenu()"></div>
-
-	<!-- <div class="row" ng-include="getSideMenu()"></div> -->
 
 <div class="container-fluid">
     <div ng-include="getSideMenu()"></div>

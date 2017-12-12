@@ -1,6 +1,6 @@
 <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded navbar sidebar " ng-controller="agencyMainCtrl">
 
-	<div class="navbar-header">
+	<div class="navbar-header navbar-default">
 		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#side-menu" aria-expanded="false">
 			<span class="sr-only">Toggle navigation</span>
 			<span class="icon-bar"></span>
@@ -17,7 +17,7 @@
 				<a href="#!/agency/view/vehicule"> Parc de Véhicules</a>
 			</li>
 
-			<li class="nav-item" id="agency">
+			<li class="nav-item" id="agency" ng-if="user.isAgency">
 				<a class="nav-link"  data-toggle="collapse" data-target="#ListeCity"> Agences <span class="caret"></span></a>
 				<ul class="nav nav-pills nav-stacked"
 					ng-class="{collapse: ($route.current.activetab != 'addchildAgency')||($route.current.activetab != 'childAgency')}"

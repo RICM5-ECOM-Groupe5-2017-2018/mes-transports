@@ -1,5 +1,7 @@
+//Controller use for adding or update an agency
 agency.controller("childRegistration",function($scope,$http,$cookies,$route, $routeParams,$location,$rootScope){
 
+	//Data binding with the form
 	$scope.data = {
 		    availableBanks: [
 				{id:'0',name:'CIC',value:'link',},
@@ -18,44 +20,15 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 			],
 		};
 
+	//Variable to know if it's an update or a adding
 	$scope.isUpdate = false;
 
+	//If it's an update complete the form with the value of the updated child agency
 	if(!$route.routes[$location.path()]){
-		$scope.isUpdate = true;
-		$scope.idUpdatedAgency = $routeParams.idupdate;
-
-
-		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
-
-		$http.get('api/agency/view/'+$scope.idUpdatedAgency,config).then(
-		   function(response){
-
-			   $scope.agency = response.data
-
-			   //Fill address input
-			   var adressWithoutCity = ($scope.agency.address.slice(0,$scope.agency.address.lastIndexOf($scope.agency.city))).trim();
-			   $scope.data.addressp1 = adressWithoutCity.slice(0, adressWithoutCity.length-6)
-			   $scope.data.addressp2 =  adressWithoutCity.slice(-5);
-
-			   //Fill bank input
-			   $scope.data.selectedBank = $scope.data.availableBanks.find(function(element) {
-									   return element.name == $scope.agency.bankName;
-									 });
-			   $scope.data.selectedType = $scope.data.availableTypes.find(function(element) {
-				   return element.id == $scope.agency.type;
-				 });
-
-
-		    },
-		    function(response)
-		    {
-
-		    }
-	    );
-
+        completeFormWhenUpdating();
 	}
 
-
+	/**Function call when the form is submit*/
     $scope.sendFormAgency = function(){
 
     	if($scope.isUpdate)
@@ -75,6 +48,39 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 
     }
 
+    /**Function call for completing the form when the agency is updated*/
+    function completeFormWhenUpdating(){
+        $scope.isUpdate = true;
+        $scope.idUpdatedAgency = $routeParams.idupdate;
+
+        var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
+        $http.get('api/agency/view/'+$scope.idUpdatedAgency,config).then(
+            function(response){
+
+                $scope.agency = response.data
+
+                //Fill address input
+                var adressWithoutCity = ($scope.agency.address.slice(0,$scope.agency.address.lastIndexOf($scope.agency.city))).trim();
+                $scope.data.addressp1 = adressWithoutCity.slice(0, adressWithoutCity.length-6)
+                $scope.data.addressp2 =  adressWithoutCity.slice(-5);
+
+                //Fill bank input
+                $scope.data.selectedBank = $scope.data.availableBanks.find(function(element) {
+                    return element.name == $scope.agency.bankName;
+                });
+
+                //Fill type input
+                $scope.data.selectedType = $scope.data.availableTypes.find(function(element) {
+                    return element.id == $scope.agency.type;
+                });
+
+
+            },
+            function(response){}
+        );
+	}
+
+	/**Function that send a new agency request*/
     function sendNew()
     {
     	if($rootScope.user && $rootScope.user.isAgency)
@@ -107,18 +113,17 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 	        	$scope.registerForm.$setPristine();
 	        	$rootScope.loadOneChildAgency(response.data.id);
 	        	alert("L'agence est créée");
-    		}, function errorCallback(data, status, headers) {
-
-    		});
+    		}, function errorCallback(data, status, headers) {});
 
     	}
     }
 
-    function sendUpdate(){
+    /**Function that send a update agency request*/
+    function sendUpdate()
+	{
     	if($rootScope.user && $rootScope.user.isAgency)
     	{
     		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
-
     		$http.put('api/agency/edit/', $scope.agency, config)
     		.then(function successCallback(response) {
     			$scope.agency={};
@@ -137,10 +142,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 	        		$location.path('/agency/view/chagency/'+$scope.idUpdatedAgency);
 	        	}
 
-    		}, function errorCallback(data, status, headers) {
-
-    		});
-
+    		}, function errorCallback(data, status, headers) {});
     	}
     }
 

@@ -1,67 +1,37 @@
-/*agency.filter('shouldShow', function () {
-  return function (items, filteredCharacteristic) {
-		var filtered = [];
-
-		console.log(items)
-
-		for (var i = 0; i < items.length; i++) {
-			var child = items[i];
-			if(filteredCharacteristic.filterSelectedAgency && filteredCharacteristic.filterSelectedAgency.id!=0)
-			{
-				if(filteredCharacteristic.filterSelectedAgency!=vehicle.idAgency){
-					continue;
-				}
-			}
-			if(filteredCharacteristic.filtredSelectedType && filteredCharacteristic.filtredSelectedType.id!=0)
-			{
-				if(filteredCharacteristic.filtredSelectedType!=vehicle.idType){
-					continue;
-				}
-			}
-			filtered.push(child);
-		}
-
-    return filtered;
-  };
-});
-*/
-
 agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
-	console.log("View");
-	console.log($rootScope.listeVehicules);
+
 
 	$scope.currentIdVehicules = $routeParams.idV
 	$scope.selectedVehicule;
 	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
 
-
+	//Data use for the filtred list
 	$scope.filteredCharacteristic = {
 		availableFiltredAgency: listAgency(),
         filterSelectedAgency : {"id" :0, "name": "Toutes",},
         filtredSelectedType : {id : 0, label : "Tous"},
 	};
 
-
-
+	//Get data from the selected vehicle
     if($scope.currentIdVehicules){
 		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
 			   return element.id == $scope.currentIdVehicules;
 		 });
 		 loadVehicleRent();
 	}
-	else{
 
-	}
-
+	//Change location to add vehicle view
 	$scope.changeAddNewVehicules=function(){
 		$location.path('/agency/add/vehicule');
 	};
 
+    //Change location to update vehicle view
 	$scope.changeUpdateVehicules=function(){
 		if($scope.selectedVehicule){
 			$location.path('/agency/update/vehicule/'+$scope.selectedVehicule.id);}
 	}
 
+    //Change location to vehicle view depending on the id
 	$scope.onChange = function(id) {
         $scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
             return element.id == id;
@@ -69,6 +39,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
         $location.path('agency/view/vehicule/' + id);
     }
 
+    /**Create an object containing all the agency(child and main)*/
 	function listAgency(){
 		var listAgencyForVehicle = [];
 
@@ -83,7 +54,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 		return listAgencyForVehicle;
 	}
 
-
+	/**Load rent of the slected vehicle*/
 	function loadVehicleRent(){
         var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 		$http.get('api/vehicle/rents/'+$scope.selectedVehicule.id,config).then(
@@ -102,6 +73,7 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 	    );
 	}
 
+	/**Filter the vehicle list*/
 	$scope.updateFilter=function(){
         $rootScope.filtredVehicules = [];
 

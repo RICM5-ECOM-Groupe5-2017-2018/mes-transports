@@ -1,5 +1,6 @@
 var menu = angular.module('menu', ['ngCookies','agency']);
 
+//Controler which send the menu to load
 menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl($scope,$rootScope,$cookies) {
 
 	$scope.currentSideMenu = 'view/menu/sideMenuEmpty.html'; 
@@ -12,7 +13,12 @@ menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl
 			$scope.currentTopMenu = 'view/menu/header.html'
 		}
 		else{
-		$scope.currentTopMenu = user.isAgency?'view/menu/headerAgency.html':'view/menu/headerUser.html';}	
+			if(user.isAgency){
+                $scope.currentTopMenu = user.isAgency?'view/menu/headerAgency.html':'view/menu/headerUser.html';
+			}
+			else{$scope.currentTopMenu = 'view/menu/headerUser.html';}
+		}
+
 	}
 	
 	$scope.loadSideMenu=function()
@@ -39,11 +45,7 @@ menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl
 	}
 }]);
 
-
-menu.controller("NavController", function ($scope) {
-
-});
-
+//Controller for the top menu
 menu.controller("topController", function ($scope,$rootScope) {
 	$scope.connect = $rootScope.user!=undefined;
 	$scope.logo = {

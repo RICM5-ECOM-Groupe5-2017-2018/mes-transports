@@ -4,6 +4,7 @@ var agency = angular.module("agency",['ngCookies']);
 //Permet de charger les données relative à l'agence
 agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$location,$route,$routeParams){
 
+
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
 	$rootScope.agencyByCity;
@@ -15,10 +16,7 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 	$rootScope.currentAgencyView = $routeParams.idA;
 	$rootScope.currentAgencyUpdate = $routeParams.idupdate;
 
-	$rootScope.getClass = function (path) {
-		  return ($location.path().substr(0, path.length) === path) ? 'active' : '';
-	}
-
+	/**Function which load the list of child agency*/
 	$rootScope.loadChildAgencies=function()
 	{
 		if($rootScope.user)
@@ -40,6 +38,7 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 		}
 	};
 
+	/**Function which load the main agency*/
 	$rootScope.loadMainAgency=function()
 	{
 
@@ -57,6 +56,7 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 		}
 	};
 
+	/**Function which load one agency depending of the id parameter*/
 	$rootScope.loadOneChildAgency=function(id)
 	{
 		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
@@ -73,22 +73,25 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 		    },
 		    function(response){}
 	    );
-
 	};
 
+	/**Create an array where agency are group by city*/
 	function reloadSubAgencyMenu()
 	{
 		if($rootScope.MotherAgency.idAgency==undefined){
 			$scope.isMother = true;
 			$rootScope.agencyByCity={};
-			$.each($rootScope.listChildAgencies, function(key, child){
-				var city = child.city.toUpperCase();
-				if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
-				$rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
-			});
+			if($rootScope.listChildAgencies){
+                $.each($rootScope.listChildAgencies, function(key, child){
+                    var city = child.city.toUpperCase();
+                    if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
+                    $rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
+                });
+			}
 		}
 	}
 
+	//Load data if they aren't
 	if(!$rootScope.MotherAgency || !$rootScope.listChildAgencies){
 		$rootScope.loadMainAgency();
 	}
@@ -106,6 +109,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	$rootScope.listCharacteristic;
     $rootScope.filtredVehicules
 
+	/**Function which load agency(main and child) vehicle*/
 	$rootScope.loadVehicles=function()
 	{
 		if($rootScope.user)
@@ -137,6 +141,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 		}
 	};
 
+	/**Load all available characteristics*/
 	$rootScope.loadCarateristics=function()
 	{
 		if($rootScope.user)
@@ -162,6 +167,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 		}
 	};
 
+	/**Load all available vehicle type and vehicle if there aren't load*/
 	$rootScope.loadTypes=function(loadVehiculesToo)
 	{
 		if($rootScope.user)
@@ -193,6 +199,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 		}
 	};
 
+	/**Load one vehicule depending on the id*/
 	$rootScope.loadUpdateOrCreateVehicle=function(id)
 	{
 		var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
@@ -223,6 +230,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 
 	};
 
+	//Load data if there aren't
 	if($rootScope.listTypes==undefined && $rootScope.listeVehicules==undefined)
 	{
 		$rootScope.loadTypes(true);
@@ -231,7 +239,6 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 		$rootScope.loadTypes(false);
 	}
 	else if($rootScope.listeVehicules==undefined){
-		console.log("load véhicules")
 		$rootScope.loadVehicles();
 	}
 	else if($rootScope.listCharacteristic==undefined){

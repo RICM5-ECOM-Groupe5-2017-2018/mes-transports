@@ -1,6 +1,6 @@
 agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location,$route){
 
-	//Les données nécéssaire aux formulaire
+	//Data bing with the form
 	$scope.data = {
 	    availableInsurance: [
 				{name:'MAIF',value:'link',},
@@ -15,14 +15,15 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		slectedCharacteristic : [],
 	};
 
+	//Varaible use to know if it's an update or an add
 	$scope.isUpdate = false;
 
+	//If it's an update complete the form with the existing values
 	if(!$route.routes[$location.path()]){
 		loadUpdateForm()
 	}
 
-	/**
-	*Permet de charger la liste des noms et id des sous-agences et de l'agence mere
+	/** Create a list of all the agencies(child and mother)
 	*/
 	function listAgency(){
 		var listAgencyForVehicle = [];
@@ -35,14 +36,14 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		return listAgencyForVehicle;
 	}
 
-	/**
-	*Fonction appelée quand le type de véhicule change dans le formulaire
+	/** Function call when vehicle type change in the form
 	*/
 	$scope.showCharacteristics=function(){
 		parseCharacteristics();
 	}
 
 
+	/**Function call when the form is submit*/
 	$scope.sendFormVehicules=function(){
 
 		if($scope.isUpdate)
@@ -73,7 +74,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		 else{sendNewVehicle();}
 	}
 
-	/*Fonction qui prér-empli le formulaire lors d'un update*/
+	/**Fonction which completing the form with existing values when it's an update*/
 	function loadUpdateForm(){
 		$scope.isUpdate = true;
 		$scope.currentIdVehicules = $routeParams.idVupdate;
@@ -103,7 +104,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 	}
 
-	/*Load les charactéristics pour un type de véhicule*/
+	/**Load characteristics for a vehicle type*/
 	function parseCharacteristics(){
         var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 		$http.get('api/vehicle/list/'+$scope.data.selectedTypeVehicule.id,config).then(
@@ -161,6 +162,8 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 	    );
 	}
 
+
+	/**Clear the form after the submit*/
 	function endUpdateAdd(text, url, id)
 	{
 		$scope.vehicle={};
@@ -170,6 +173,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		$location.path(url);
 	}
 
+    /**Function that create a vehicle*/
 	function sendNewVehicle()
 	{
 		if($rootScope.user && $rootScope.user.isAgency)
@@ -197,7 +201,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		}
 	}
 
-
+	/**Function that update vehicle. If the vehicle change type all the old characteristics are erased*/
 	function sendUpdateVehicle()
 	{
 		if($rootScope.user && $rootScope.user.isAgency)
@@ -244,14 +248,9 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 						}
 
+						Promise.all(promises).then(values => {endUpdateAdd("Le vehicule a été modifié", '/agency/view/vehicule/'+id, id);});
 
-						Promise.all(promises).then(values => {
-						  endUpdateAdd("Le vehicule a été modifié", '/agency/view/vehicule/'+id, id);
-						});
-
-			}, function errorCallback(data, status, headers) {
-
-			});
+			}, function errorCallback(data, status, headers) {});
 		}
 	}
 });

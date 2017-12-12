@@ -1,9 +1,8 @@
-<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-	<div ng-controller="agencyMainCtrl">
+<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3" ng-controller="agencyMainCtrl">
+	<div ng-controller="graphicsController">
 
 		<div class="row" ng-controller="childAgencyView">
 
-			<!--<ng-include	src="'view/menu/SideMenuAgency.html'"></ng-include>-->
 				<div class="row">
 					<h1 class="col-10 col-md-9 col-xs-8">{{currentAgency.name}}</h1>
 					<input class="btn btn-success col-1 col-xs-3 col-md-2 btn-sm"
