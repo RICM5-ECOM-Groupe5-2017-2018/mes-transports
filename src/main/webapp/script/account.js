@@ -10,6 +10,9 @@ account.controller('AccountController',
 
 	$scope.user = $cookies.getObject("user");
 	$scope.form.update = $scope.user;
+	if($scope.cart) {
+		$scope.updateCart($scope.user);
+	}
 
 	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
@@ -35,7 +38,9 @@ account.controller('AccountController',
 			$scope.user = $cookies.getObject("user");
 			$rootScope.user = $scope.user;
 
-			console.log($scope.user);
+			if($scope.cart) {
+				$scope.updateCart($scope.user);
+			} 
 
 			$location.path('/');
 
@@ -117,7 +122,6 @@ account.controller('AccountController',
 	}
 
 	$scope.updateInfo = function UserUpdateInfo() {
-		console.log($scope.form.update);
 		var data = $scope.form.update;
 		data.isAgency = undefined;
 
@@ -125,8 +129,9 @@ account.controller('AccountController',
 			headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
 		})
 		.then(function successCallback(response) {
-			$cookies.putObject("user", response.data);
-			console.log(response);
+			$scope.user = response.data;
+			console.log(response.data);
+			$cookies.putObject("user", $scope.user);
 		}, function errorCallback(response) {
 			console.log(response);
 		});

@@ -50,7 +50,6 @@ public class UserController extends Application {
 		String password = modelUser.getPassword();
 		if(PasswordEncryption.generateHash(password) == user.getPassword()) {
 			user.setMailAddress(modelUser.getMailAddress());
-			user.setPassword(PasswordEncryption.generateHash(password));
 			user.setPhoneNum(modelUser.getPhoneNum());
 			user.setUserFirstName(modelUser.getUserFirstName());
 			user.setUserName(modelUser.getUserName());

@@ -43,9 +43,14 @@ app.run(function($rootScope,$location,$route,$window) {
 
 });
 
-app.controller('AppController', function($scope, $cookies) {
+app.controller('AppController', function($scope, $cookies, CartServices) {
 
 	$scope.user = $cookies.getObject("user");
+	
 	$scope.form = {};
+	
+	$scope.cart = CartServices.cart;
+	$scope.updateCart = CartServices.updateCart;
+	
 
 });
