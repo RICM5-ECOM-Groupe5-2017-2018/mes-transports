@@ -27,7 +27,7 @@ public class CharacteristicType implements java.io.Serializable {
 	@EmbeddedId
 
 	@AttributeOverrides({ @AttributeOverride(name = "idType", column = @Column(name = "idType", nullable = false)),
-			@AttributeOverride(name = "idCharacteristic", column = @Column(name = "idCharacteristic", nullable = false)) })
+	@AttributeOverride(name = "idCharacteristic", column = @Column(name = "idCharacteristic", nullable = false)) })
 	public CharacteristicTypeId getId() {
 		return this.id;
 	}

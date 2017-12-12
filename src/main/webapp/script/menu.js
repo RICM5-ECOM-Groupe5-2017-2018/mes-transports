@@ -1,4 +1,4 @@
-var menu = angular.module('menu', ['ngCookies']);
+var menu = angular.module('menu', ['ngCookies','agency']);
 
 menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl($scope,$rootScope,$cookies) {
 
@@ -47,15 +47,14 @@ menu.controller("NavController", function ($scope) {
 	    $('#menu-side').toggleClass('slide-in');
 	});
 	
-	$scope.collapse = function(){
-		$('#'+ $scope.agencyCity).toggleClass('collapse');
+	$scope.collapseL1 = function(){
+		$('#listAgence').toggleClass('collapse');
+	};
+	
+	$scope.collapseL2 = function(city){
+		$('#'+city).toggleClass('collapse');
 	};
 
-
-	$('.side-menu-container li').click(function (event) {
-		$(this).siblings('li').removeClass('active');
-	    $(this).addClass('active');
-	});
 });
 
 menu.controller("topController", function ($scope,$rootScope) {

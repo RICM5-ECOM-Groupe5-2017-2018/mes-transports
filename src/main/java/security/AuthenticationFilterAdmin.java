@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-@SecuredAgency
+@SecuredAdmin
 public class AuthenticationFilterAdmin implements ContainerRequestFilter {
 
 	@PersistenceContext(unitName="myPU")
@@ -78,7 +78,7 @@ public class AuthenticationFilterAdmin implements ContainerRequestFilter {
 				.setParameter("token", token)
 				.getSingleResult();
 		if (! user.getRole().contains("admin")) {
-			throw new Exception("no agency");
+			throw new Exception("not an admin");
 		}
     }
 }

@@ -2,6 +2,7 @@ package controller;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.mail.Address;
 import javax.mail.Message;
@@ -19,6 +20,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 
+import JsonEncoders.JsonMessage;
 import io.swagger.annotations.Api;
 import model.Characteristic;
 import model.CharacteristicType;
@@ -32,27 +34,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-@Stateless
-@ApplicationPath("/api")
-@Path("/mailer")
-@Api("mailer")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-
-public class MailerController extends ApiController {
+@Singleton
+public class MailerController{
 
 	private static final String SMTP_HOST1 = "smtp.gmail.com";
 	private static final String LOGIN_SMTP1 = "mestransports.ecom@gmail.com";
 	private static final String IMAP_ACCOUNT1 = "mestransports.ecom@gmail.com";
 	private static final String PASSWORD_SMTP1 = "Ecom2017";
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/send")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void send(@QueryParam("mailAddress") String address,
-			@QueryParam("subject") String subject,
-			@QueryParam("content") String content) {
+	public JsonMessage send(String address,String subject,String content) {
 		Properties properties = new Properties();
 		properties.setProperty("mail.transport.protocol", "smtp");
 		properties.setProperty("mail.smtp.starttls.enable", "true");
@@ -89,17 +79,10 @@ public class MailerController extends ApiController {
 				e.printStackTrace();
 			}
 		}
-		return;
+		return new JsonMessage("Mail sent successfully");
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/attached")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void send_attached(@QueryParam("mailAddress") String address,
-			@QueryParam("subject") String subject,
-			@QueryParam("content") String content,
-			@QueryParam("path_to_attachement") String path) {
+	public JsonMessage send_attached(String address,String subject,String content,String path) {
 		// 1 -> Création de la session
 		Properties properties = new Properties();
 		properties.setProperty("mail.transport.protocol", "smtp");
@@ -160,5 +143,6 @@ public class MailerController extends ApiController {
 				e.printStackTrace();
 			}
 		}
+		return new JsonMessage("Mail sent successfully");
 	}
 }

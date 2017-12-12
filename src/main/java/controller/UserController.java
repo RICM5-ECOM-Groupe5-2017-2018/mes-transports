@@ -1,231 +1,188 @@
 package controller;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
-
+import java.util.List;
 import java.util.UUID;
 
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 
-//this is just a comment to test autodeploy
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ResponseHeader;
+import JsonEncoders.JsonMessage;
 import model.User;
-import security.Secured;
-import security.SecuredAdmin;
+import security.PasswordEncryption;
 
+@Singleton
+public class UserController extends Application {
 
-@Stateless
-@ApplicationPath("/api")
-@Path("/user")
-@Api("user")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public class UserController extends ApiController {
-	
 	@PersistenceContext(unitName="myPU")
-    private EntityManager entityManager;
-	
+	private EntityManager entityManager;
+
 	@Context private HttpServletRequest request;
-	
-	public static final String SALT = "MTsalt";
-	
-	@GET
-	@Secured
-	@Path("/logout")
-	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "User token", required = true, dataType = "string", paramType = "header")})
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response logout (@Context HttpHeaders httpHeaders) {
-		try {
-			String token = httpHeaders.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-			User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
-					.setParameter("token", token)
-					.getSingleResult();
-			user.setToken(null);
-			user.setTokenExpiration(null);
-			entityManager.merge(user);
+
+	/**
+	 * Create the user based on modelAgency
+	 *
+	 * @param modelUser The model of the user you want to create
+	 * @return user the concrete user obtained
+	 */
+	public User createUser (User modelUser) {
+		User newUser = new User(modelUser);
+		newUser.setPassword(PasswordEncryption.generateHash(newUser.getPassword()));
+		entityManager.persist(newUser);
+		entityManager.flush();
+		return newUser;
+	}
+
+	/**
+	 * Update the user matching the modelUser
+	 *
+	 * @param modelUser The model of the user you want to update
+	 * @return user the concrete user obtained
+	 */
+	public User updateUser (User modelUser) {
+
+		User user = entityManager.find(User.class, modelUser.getId());
+
+		String password = modelUser.getPassword();
+		if(PasswordEncryption.generateHash(password) == user.getPassword()) {
+			user.setMailAddress(modelUser.getMailAddress());
+			user.setPassword(PasswordEncryption.generateHash(password));
+			user.setPhoneNum(modelUser.getPhoneNum());
+			user.setUserFirstName(modelUser.getUserFirstName());
+			user.setUserName(modelUser.getUserName());
+		}
+		entityManager.merge(user);
+		entityManager.flush();
+		return user;
+	}
+
+	/**
+	 * Update user identified by id. Verify current password and updates password if ok
+	 * @param id
+	 * @param oldPass
+	 * @param newPass
+	 * @return
+	 */
+	public User updateUserPass (int id, String oldPass, String newPass) {
+		User u = entityManager.find(User.class, id);
+
+		String password = oldPass;
+		if(PasswordEncryption.generateHash(oldPass) == u.getPassword() ) {
+			String password2 = newPass;
+			String hashedPassword2 = PasswordEncryption.generateHash(password2);
+			u.setPassword(hashedPassword2);
+			entityManager.merge(u);
 			entityManager.flush();
-			request.getSession(false);
-			String json = "logout successfull";
-			return Response.ok(json, MediaType.APPLICATION_JSON).build();	
-		} catch (javax.persistence.NoResultException ex) {
-			return Response.status(Response.Status.FORBIDDEN).build();
-		} catch (Exception ex) {
-			return Response.status(Response.Status.FORBIDDEN).build(); 
 		}
+		return u;
+	}
+
+	/**
+	 * Disable the user define by userId
+	 *
+	 * @param userId The id of the user you want to disable
+	 * @return String A confirmation String
+	 */
+	public JsonMessage disableUser(Integer userId) {
+		User u = entityManager.find(User.class, userId);
+		u.setStatus(false);
+		entityManager.merge(u);
+		entityManager.flush();
+		return new JsonMessage("User successfully disabled");
+
+	}
+
+	/**
+	 * Enable the user define by userId
+	 *
+	 * @param userId The id of the user you want to enable
+	 * @return String A confirmation String
+	 */
+	public JsonMessage enableUser(Integer userId) {
+		User u = entityManager.find(User.class, userId);
+		u.setStatus(true);
+		entityManager.merge(u);
+		entityManager.flush();
+		return (new JsonMessage("User successfully enabled"));
+	}
+
+	/**
+	 * send user informations
+	 *
+	 * @param userId The id of the user you want to see
+	 * @return user The user you want to get information about
+	 */
+	public User viewUser(Integer userId) {
+		return entityManager.find(User.class, userId);
+	}
+
+
+	/**
+	 * Destroy user session
+	 *
+	 * @param httpHeaders the header to retrieve token
+	 * @return Message or error
+	 */
+	public JsonMessage logout(HttpHeaders httpHeaders) {
+		String token = httpHeaders.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
+		User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
+				.setParameter("token", token)
+				.getSingleResult();
+		user.setToken(null);
+		user.setTokenExpiration(null);
+		entityManager.merge(user);
+		entityManager.flush();
+		request.getSession(false);
+		return new JsonMessage("Déconnexion réussie");
+	}
+
+	/**
+	 * Authenticate a user matching login + password
+	 *
+	 * @param login the login to test
+	 * @param password the password to test
+	 * @return the User identified or error
+	 */
+	public User authenticate(String login, String password) {
+		String hashedPassword = PasswordEncryption.generateHash(password);
+		User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
+				.setParameter("user", login)
+				.setParameter("pass", hashedPassword)
+				.getSingleResult();
+		request.getSession(true);
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, 2);
+		date = calendar.getTime();
+		user.setTokenExpiration(date);
+		String token = null;
+
+		if (user.getToken() == null) {
+			token = UUID.randomUUID().toString();
+			user.setToken(token);
+		} else {
+			token = user.getToken();
+		}
+		request.getSession().setAttribute("token", token);
+		NewCookie cookie = new NewCookie("Bearer", token);
+		entityManager.merge(user);
+		entityManager.flush();
+		return user;
 	}
 	
-	@GET
-	@Path("/authenticate/{login}/{password}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response authenticate (@PathParam("login") String login,
-			@PathParam("password") String password) {
-		
-		try {
-			String saltedPassword = SALT + password;
-			String hashedPassword = generateHash(saltedPassword);
-			User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
-					.setParameter("user", login)
-					.setParameter("pass", hashedPassword)
-					.getSingleResult();
-			request.getSession(true);
-			Date date = new Date();
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			calendar.add(Calendar.DATE, 2);
-			date = calendar.getTime();
-			user.setTokenExpiration(date);
-			String token = null;
-			if (user.getToken() == null) {
-				token = UUID.randomUUID().toString();
-				user.setToken(token);
-			} else {
-				token = user.getToken();
-			}
-			request.getSession().setAttribute("token", token);
-			NewCookie cookie = new NewCookie("Bearer", token);
-			entityManager.merge(user);
-			entityManager.flush();
-			return Response.ok(user, MediaType.APPLICATION_JSON).build();
-		}catch (javax.persistence.NoResultException ex) {
-			return Response.status(401).build();
-		}
-		
+	/**
+	 * 
+	 * @return All the users on the database
+	 */
+
+	public List<User> getAllUsers(){
+		return entityManager.createQuery("SELECT u From User u")
+		.getResultList();
 	}
 	
-	private String generateHash(String input) {
-		StringBuilder hash = new StringBuilder();
-
-		try {
-			MessageDigest sha = MessageDigest.getInstance("SHA-1");
-			byte[] hashedBytes = sha.digest(input.getBytes());
-			char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-					'a', 'b', 'c', 'd', 'e', 'f' };
-			for (int idx = 0; idx < hashedBytes.length; ++idx) {
-				byte b = hashedBytes[idx];
-				hash.append(digits[(b & 0xf0) >> 4]);
-				hash.append(digits[b & 0x0f]);
-			}
-		} catch (NoSuchAlgorithmException e) {
-			// handle error here.
-		}
-
-		return hash.toString();
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/create")
-	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser (@QueryParam("login") String login,
-			@QueryParam("userName") String username,
-			@QueryParam("password") String password,
-			@QueryParam("mailAddress") String mail,
-			@QueryParam("phoneNum") String phone,
-			@QueryParam("role") String role,
-			@QueryParam("userFirstName") String firstname,
-			@QueryParam("lastname") String lastname,
-			@QueryParam("idAgency") Integer idAgency){
-		User userRet = new User();
-		String saltedPassword = SALT + password;
-		String hashedPassword = generateHash(saltedPassword);
-		userRet.setUserName(username);
-		userRet.setLogin(login);
-		userRet.setMailAddress(mail);
-		userRet.setPassword(hashedPassword);
-		userRet.setPhoneNum(phone);
-		userRet.setRole(role);
-		userRet.setUserFirstName(firstname);
-		userRet.setUserName(lastname);
-		userRet.setStatus(true);
-		userRet.setIdAgency(idAgency);
-		entityManager.persist(userRet);
-		entityManager.flush();
-		return userRet;
-		
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/edit")
-	@Produces(MediaType.APPLICATION_JSON)
-	public User editUser (@QueryParam("id") Integer id,
-			@QueryParam("login") String login,
-			@QueryParam("userName") String username,
-			@QueryParam("password") String password,
-			@QueryParam("mailAddress") String mail,
-			@QueryParam("phoneNum") String phone,
-			@QueryParam("role") String role,
-			@QueryParam("userFirstName") String firstname,
-			@QueryParam("lastname") String lastname,
-			@QueryParam("idAgency") Integer idAgency){
-		User userRet = entityManager.find(User.class, id);
-		userRet.setUserName(username);
-		userRet.setLogin(login);
-		userRet.setMailAddress(mail);
-		String saltedPassword = SALT + password;
-		String hashedPassword = generateHash(saltedPassword);
-		userRet.setPassword(hashedPassword);
-		userRet.setPhoneNum(phone);
-		userRet.setRole(role);
-		userRet.setUserFirstName(firstname);
-		userRet.setUserName(lastname);
-		userRet.setStatus(true);
-		userRet.setIdAgency(idAgency);
-		entityManager.merge(userRet);
-		entityManager.flush();
-		return userRet;
-		
-	}
-
-	@POST
-	@Secured
-	@Path("/view")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public User consultUser (@QueryParam("id") Integer id) {
-		User userRet = entityManager.find(User.class, id);
-		return userRet;
-	}
-	
-	@POST
-	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/disable")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String disableUser (@QueryParam("id") Integer id) {
-		User userRet = entityManager.find(User.class, id);
-		userRet.setStatus(false);
-		entityManager.merge(userRet);
-		entityManager.flush();
-		return ("User successfully disabled");
-	}
-
-	@POST
-	@SecuredAdmin
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/reactivate")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String enableUser (@QueryParam("id") Integer id) {
-		User userRet = entityManager.find(User.class, id);
-		userRet.setStatus(true);
-		entityManager.merge(userRet);
-		entityManager.flush();
-		return ("User successfully enabled");
-	}
-
 }
