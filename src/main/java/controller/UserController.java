@@ -48,9 +48,8 @@ public class UserController extends Application {
 		User user = entityManager.find(User.class, modelUser.getId());
 
 		String password = modelUser.getPassword();
-		if(PasswordEncryption.generateHash(password) == user.getPassword()) {
+		if(PasswordEncryption.generateHash(password).equalsIgnoreCase(user.getPassword())) {
 			user.setMailAddress(modelUser.getMailAddress());
-			user.setPassword(PasswordEncryption.generateHash(password));
 			user.setPhoneNum(modelUser.getPhoneNum());
 			user.setUserFirstName(modelUser.getUserFirstName());
 			user.setUserName(modelUser.getUserName());
@@ -71,7 +70,7 @@ public class UserController extends Application {
 		User u = entityManager.find(User.class, id);
 
 		String password = oldPass;
-		if(PasswordEncryption.generateHash(oldPass) == u.getPassword() ) {
+		if(PasswordEncryption.generateHash(oldPass).equalsIgnoreCase(u.getPassword())) {
 			String password2 = newPass;
 			String hashedPassword2 = PasswordEncryption.generateHash(password2);
 			u.setPassword(hashedPassword2);
@@ -149,10 +148,15 @@ public class UserController extends Application {
 	 */
 	public User authenticate(String login, String password) {
 		String hashedPassword = PasswordEncryption.generateHash(password);
-		User user = (User) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
+		List<User> ul = (List<User>) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
 				.setParameter("user", login)
 				.setParameter("pass", hashedPassword)
-				.getSingleResult();
+				.getResultList();
+		
+		if(ul.size()==0) {
+			return null;
+		}
+		User user=ul.get(0);
 		request.getSession(true);
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
