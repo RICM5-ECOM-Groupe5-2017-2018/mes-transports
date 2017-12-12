@@ -76,7 +76,12 @@ public class UserEndpoint extends Application{
     public Response authenticate (@PathParam("login") String login,
                                   @PathParam("password") String password) {
         try {
-            return Response.status(200).entity(controller.authenticate(login, password)).build();
+        	User u = controller.authenticate(login, password);
+        	if(u==null) {
+                return Response.status(400).type("text/plain")
+                        .entity("Informations non valides").build();
+        	}
+            return Response.status(200).entity(u).build();
         }catch (Exception ex) {
             return Response.status(401).build();
         }
