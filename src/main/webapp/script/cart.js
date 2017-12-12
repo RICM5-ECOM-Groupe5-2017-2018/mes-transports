@@ -3,6 +3,9 @@ var cart = angular.module('cart', ['account']);
 cart.factory('CartServices', function($cookies, $http) { 
 	
 	var utils = {};
+	utils.form = {};
+	utils.form.error = undefined;
+	utils.form.success = undefined;
 	
 	if((tmpCart = $cookies.getObject("cart")) != undefined) {
 		utils.cart = tmpCart;
@@ -16,17 +19,18 @@ cart.factory('CartServices', function($cookies, $http) {
 		var add = true;
 		utils.cart.forEach(function(rent) {
 			if(item.id == rent.idVehicle
-					&&	((
-						startDate <= new Date(rent.endDate).getTime()
-						&&
-						startDate >= new Date(rent.startDate).getTime()
-					) || (
-						endDate >= new Date(rent.startDate).getTime()
-						&&
-						endDate <= new Date(rent.endDate).getTime()
-					))
+				&&	((
+					startDate <= new Date(rent.endDate).getTime()
+					&&
+					startDate >= new Date(rent.startDate).getTime()
+				) || (
+					endDate >= new Date(rent.startDate).getTime()
+					&&
+					endDate <= new Date(rent.endDate).getTime()
+				))
 			) {
 				add = false;
+				utils.form.error = "La date est déjà prise.";
 				return add;
 			}
 		});
@@ -43,17 +47,9 @@ cart.factory('CartServices', function($cookies, $http) {
 			newRent.totalPrice = item.price * Math.ceil((endDate- startDate)/(1000*60*60*24));
 			newRent.locationIn = "";
 			newRent.locationOut = "";
-			if(user) {
-				$http.post('api/cart/add', newRent)
-				.then(function successCallback(response) {
-					console.log(response);
-					utils.cart.push(newRent);
-					console.log(utils.cart);
-					$cookies.putObject("cart", utils.cart);
-				}, function errorCallback(response) {
-					console.log(response);
-				});
-			}
+			utils.cart.push(newRent);
+			$cookies.putObject("cart", utils.cart);
+			utils.form.success = "Véhicule ajouté au panier !"
 		}
 	}
 	
@@ -62,14 +58,6 @@ cart.factory('CartServices', function($cookies, $http) {
 			utils.cart.forEach(function(rent) {
 				if(rent.idUser <= 0) {
 					rent.idUser = user.id;
-					vehicle = rent.vehicle;
-					$http.post('api/cart/add', rent)
-					.then(function successCallback(response) {
-						console.log(response);
-					}, function errorCallback(response) {
-						console.log(response);
-						rend.idUser = -1;
-					});
 				}
 			});
 		}
@@ -101,5 +89,8 @@ cart.controller('CartController', function($scope, $http, $cookies, CartServices
 		$scope.cart.splice(index, 1);
 		$cookies.putObject("cart", $scope.cart);
 	}
+	
+	$scope.form.error = CartServices.form.error;
+	$scope.form.success = CartServices.form.success;
 	
 });
