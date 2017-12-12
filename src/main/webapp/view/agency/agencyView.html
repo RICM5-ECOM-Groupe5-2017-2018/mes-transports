@@ -1,38 +1,38 @@
-<div ng-controller="agencyMainCtrl">
+<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+	<div ng-controller="agencyMainCtrl">
 
-	<div class="row" ng-controller="agencyMainPageCtrl">
+		<div class="row" ng-controller="agencyMainPageCtrl">
 
-		<ng-include	src="'view/menu/SideMenuAgency.html'"></ng-include>
+			<!--<ng-include	src="'view/menu/SideMenuAgency.html'"></ng-include>-->
 
-		<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-
-			<div class="row">
-				<h1 class="col-10 col-md-9">{{MotherAgency.name}}</h1>
-				<input class="btn btn-success col-1 col-md-2 btn-sm"
-					   style="margin-top: 20px"
-					   type="button" ng-click="changeLocationToUpdatePage()" name="Update"
-					   value="Modifier Agence">
-			</div>
-
-			<hr class="my-4 col-12">
-
-			<div class="row">
-				<div class="col-4 col-md-4 col-sm-4 col-lg-4 col-md-offset-4 col-lg-offset-4 inner-addon left-addon">
-					<i class="glyphicon glyphicon-calendar"></i>
-					<input type="text" name="daterange" class="form-control input-md" />
+				<div class="row">
+					<h1 class="col-5 col-md-9 col-xs-8">{{MotherAgency.name}}</h1>
+					<input class="btn btn-success col-5 col-xs-3 col-md-2 btn-sm"
+						   style="margin-top: 20px"
+						   type="button" ng-click="changeLocationToUpdatePage()" name="Update"
+						   value="Modifier Agence">
 				</div>
-			</div>
 
-			<div class="col-10 col-md-10 col-md-offset-1 row jumbotron">
-				<div id="benefitGlobal"></div>
-			</div>
+				<hr class="my-4 col-12">
 
-			<div class="row col-10 col-md-10 col-md-offset-1 jumbotron">
-				<div id="benefitByAgency"></div>
-			</div>
+				<div class="row">
+					<div class="col-4 col-md-4 col-sm-4 col-lg-4 col-md-offset-4 col-lg-offset-4 inner-addon left-addon">
+						<i class="glyphicon glyphicon-calendar"></i>
+						<input type="text" name="daterange" class="form-control input-md" />
+					</div>
+				</div>
 
-		</main>
+				<div class="col-10 col-md-10 col-md-offset-1 row jumbotron">
+					<div id="benefitGlobal"></div>
+				</div>
+
+				<div class="row col-10 col-md-10 col-md-offset-1 jumbotron">
+					<div id="benefitByAgency"></div>
+				</div>
+
+
+
+		</div>
 
 	</div>
-
-</div>
+</main>

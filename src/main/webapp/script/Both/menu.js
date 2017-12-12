@@ -41,19 +41,6 @@ menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl
 
 
 menu.controller("NavController", function ($scope) {
-	$scope.agencyCity = "parcLv1"
-
-	$('#nav-side').click(function () {
-	    $('#menu-side').toggleClass('slide-in');
-	});
-	
-	$scope.collapseL1 = function(){
-		$('#listAgence').toggleClass('collapse');
-	};
-	
-	$scope.collapseL2 = function(city){
-		$('#'+city).toggleClass('collapse');
-	};
 
 });
 
@@ -64,14 +51,5 @@ menu.controller("topController", function ($scope,$rootScope) {
 			alt : "logo-MesTransports",
 			src : "Images/mt.png"
 	};
-	
-	$scope.expand = function(){
-		console.log("click");
-		 $('#menu-top').collapse() 
-	};
-	
-	$('#nav-top').click(function () {
-		console.log("click");
-        
-    });
+
 });

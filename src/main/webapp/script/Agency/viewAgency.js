@@ -17,10 +17,11 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         "startDate": $scope.start,
         "endDate": $scope.end,
         timePicker: true,
+        timePicker24Hour: true,
         timePickerIncrement: 30,
         "showWeekNumbers": true,
         locale: {
-            format: 'DD/MM/YYYY HH:mm'
+            format: 'DD/MM/YYYY H:mm'
         }
     }, function(start, end, label) {
         $scope.start = start;
@@ -30,91 +31,74 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 
     function updateGaphBenefitByDate(){
 
-        var data = {
-            labels: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
-            series: [
-                {
-                    data: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
-                }
-            ]
-        };
+        var graph = document.getElementById('benefitGlobal');
 
-        var options = {
-            axisX: {
-                labelInterpolationFnc: function(value) {
-                    return 'Days ' + value;
-                }
-            },
-            axisY: {
-                labelInterpolationFnc: function(value) {
-                    return value+' euros';
+
+        var data = [
+            {
+                x: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
+                y: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
+                type: 'scatter',
+                line: {
+                    color: 'rgb(183, 221, 110)',
                 }
             }
-        };
-
-        var responsiveOptions = [
-            ['screen and (min-width: 641px) and (max-width: 1024px)', {
-                showPoint: false,
-                axisX: {
-                    labelInterpolationFnc: function(value) {
-                        return 'Days ' + value;
-                    }
-                },
-                axisY: {
-                    labelInterpolationFnc: function(value) {
-                        return value+' euros';
-                    }
-                }
-            }],
-            ['screen and (max-width: 640px)', {
-                showLine: false,
-                axisX: {
-                    labelInterpolationFnc: function(value) {
-                        return 'D ' + value;
-                    }
-                },
-                axisY: {
-                    labelInterpolationFnc: function(value) {
-                        return value+'E';
-                    }
-                }
-            }]
         ];
 
-        new Chartist.Line('#benefitGlobal', data, options, responsiveOptions);
+        var layout = {
+            title: 'Bénéfice en fonction du jour',
+            xaxis: {
+                title: 'Date',
+            },
+            yaxis: {
+                title: 'Bénéfice en euros',
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+        };
+
+        Plotly.newPlot(graph, data, layout);
+
+        //hide useless button
+        hideSomeFunctionInPloty(['a[data-title="Save and edit plot in cloud"]',
+            'a[data-title="Produced with Plotly"]',
+            'a[data-title="Toggle Spike Lines"]',
+            'a[data-title="Download plot as a png"]',
+            'a[data-title="Box Select"]',
+            'a[data-title="Lasso Select"]']);
+    }
+
+    function hideSomeFunctionInPloty(eltmToHide){
+        for(var i = 0 ; i<eltmToHide.length; i++ ){$(eltmToHide[i]).addClass("hidden");}
     }
 
     function updateGaphBenefitByAdgency(){
 
-        var data = {
+        var graph = document.getElementById('benefitByAgency');
+
+        var data = [{
+            values: Object.values($scope.BenefitByAdgency)?Object.values($scope.BenefitByAdgency):[],
             labels: Object.keys($scope.BenefitByAdgency)?Object.keys($scope.BenefitByAdgency):[],
-            series: Object.values($scope.BenefitByAdgency)?Object.values($scope.BenefitByAdgency):[],
+            type: 'pie',
+            marker: {
+                colors: ['rgb(183, 221, 110)','rgb(240, 101, 67)','rgb(142, 188, 86)'],
+            },
+        }];
+
+        var layout = {
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
         };
 
-        var sum = function(a, b) { return a + b };
+        Plotly.newPlot(graph, data, layout);
 
-        var options = {
-            labelInterpolationFnc: function(value) {
-                return value[0];
-            }
-        };
-
-        var responsiveOptions = [
-            ['screen and (min-width: 640px)', {
-                chartPadding: 30,
-                labelOffset: 100,
-                labelDirection: 'explode',
-                labelInterpolationFnc: function(value) {
-                    return value;
-                }
-            }],
-            ['screen and (min-width: 1024px)', {
-                labelOffset: 80,
-                chartPadding: 20
-            }]
-        ];
-
-        new Chartist.Pie('#benefitByAgency', data, options, responsiveOptions);
+        //hide useless button
+        hideSomeFunctionInPloty(['a[data-title="Save and edit plot in cloud"]',
+            'a[data-title="Produced with Plotly"]',
+            'a[data-title="Toggle Spike Lines"]',
+            'a[data-title="Download plot as a png"]',
+            'a[data-title="Box Select"]',
+            'a[data-title="Lasso Select"]']);
 
     }
 
@@ -191,7 +175,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         var s = new Date($scope.start);
         var e = new Date($scope.end);
         var nbDay = dateDiff(s, e);
-        console.log(nbDay)
+        console.log(nbDay);
 
         if(nbDay.day==0){
             $scope.BenefitByDate[moment(new Date(s)).format('HH:mm:ss')] = 0;
@@ -249,11 +233,19 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 
             if(agency.length>0) {
                 $.each(agency, function (idTransac, transac) {
-
-                    if (!$scope.BenefitByAdgency[key]) {
-                        $scope.BenefitByAdgency[key] = 0
+                    if($rootScope.listChildAgencies[key])
+                    {
+                        var name = $rootScope.listChildAgencies[key].name;
                     }
-                    $scope.BenefitByAdgency[key] += transac.amount;
+                    else{
+                        var name = $rootScope.MotherAgency.name;
+
+                    }
+
+                    if (!$scope.BenefitByAdgency[name]) {
+                        $scope.BenefitByAdgency[name] = 0
+                    }
+                    $scope.BenefitByAdgency[name] += transac.amount;
 
                 });
             }
@@ -263,6 +255,20 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
     }
 
     updateGaphBenefitByDate();
-    updateGaphBenefitByAdgency()
+    updateGaphBenefitByAdgency();
+
+    window.onresize = function()
+    {
+        var d3 = Plotly.d3;
+
+        var gd3 = d3.select('#benefitGlobal');
+        var gd = gd3.node();
+        Plotly.Plots.resize(gd);
+
+        gd3 = d3.select('#benefitByAgency');
+        gd = gd3.node();
+        Plotly.Plots.resize(gd);
+    };
+
 
 });

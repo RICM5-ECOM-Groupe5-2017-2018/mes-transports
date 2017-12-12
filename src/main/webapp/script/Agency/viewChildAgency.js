@@ -22,10 +22,11 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
         "startDate": $scope.start,
         "endDate": $scope.end,
         timePicker: true,
+        timePicker24Hour: true,
         timePickerIncrement: 30,
         "showWeekNumbers": true,
         locale: {
-            format: 'DD/MM/YYYY h:mm'
+            format: 'DD/MM/YYYY H:mm'
         }
     }, function(start, end, label) {
         $scope.start = start;
@@ -35,60 +36,43 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
 
     function updateGaphBenefitByDate(){
 
-        var data = {
-            labels: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
-            series: [
-                {
-                    data: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
-                }
-            ]
-        };
+        var graph = document.getElementById('benefitGlobal');
 
-        var options = {
-            axisX: {
-                labelInterpolationFnc: function(value) {
-                    return 'Days ' + value;
-                }
-            },
-            axisY: {
-                labelInterpolationFnc: function(value) {
-                    return value+' euros';
+
+        var data = [
+            {
+                x: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
+                y: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
+                type: 'scatter',
+                line: {
+                    color: 'rgb(183, 221, 110)',
                 }
             }
-        };
-
-        var responsiveOptions = [
-            ['screen and (min-width: 641px) and (max-width: 1024px)', {
-                showPoint: false,
-                axisX: {
-                    labelInterpolationFnc: function(value) {
-                        return 'Days ' + value;
-                    }
-                },
-                axisY: {
-                    labelInterpolationFnc: function(value) {
-                        return value+' euros';
-                    }
-                }
-            }],
-            ['screen and (max-width: 640px)', {
-                showLine: false,
-                axisX: {
-                    labelInterpolationFnc: function(value) {
-                        return 'D ' + value;
-                    }
-                },
-                axisY: {
-                    labelInterpolationFnc: function(value) {
-                        return value+'E';
-                    }
-                }
-            }]
         ];
 
-        new Chartist.Line('#benefitGlobal', data, options, responsiveOptions);
-    }
+        var layout = {
+            title: 'Bénéfice en fonction du jour',
+            xaxis: {
+                title: 'Date',
+            },
+            yaxis: {
+                title: 'Bénéfice en euros',
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+        };
 
+        Plotly.newPlot(graph, data, layout);
+        resizePlots();
+
+        //hide useless button
+        hideSomeFunctionInPloty(['a[data-title="Save and edit plot in cloud"]',
+            'a[data-title="Produced with Plotly"]',
+            'a[data-title="Toggle Spike Lines"]',
+            'a[data-title="Download plot as a png"]',
+            'a[data-title="Box Select"]',
+            'a[data-title="Lasso Select"]']);
+    }
 
     function loadAgenciesProfits(){
         console.log("update");
@@ -195,6 +179,19 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
         });
 
         updateGaphBenefitByDate();
+    }
+
+    function hideSomeFunctionInPloty(eltmToHide){
+        for(var i = 0 ; i<eltmToHide.length; i++ ){$(eltmToHide[i]).addClass("hidden");}
+    }
+
+    function resizePlots(){
+        //responsive graph
+        window.onresize = function()
+        {
+            Plotly.Plots.resize('#benefitGlobal');
+            Plotly.Plots.resize('#benefitByAgency');
+        };
     }
 
 
