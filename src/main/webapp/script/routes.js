@@ -68,6 +68,10 @@ routes.config(function($routeProvider) {
     	templateUrl : 'view/agency/addNewVehicule.html',
         activetab : 'seeVehicules'
     })
+    .when('/admin/update/user/',{
+    	templateUrl : 'view/admin/ModifyUserInformation.html',
+    	controller : 'AdminController'
+    })
     .otherwise({
     	redirectTo : '/'
     });
