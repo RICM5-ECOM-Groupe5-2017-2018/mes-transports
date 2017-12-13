@@ -48,7 +48,7 @@ account.controller('AccountController',
 
 
 		}, function errorCallback(response) {
-			$scope.form.error = response.data;
+			$scope.error = response.data;
 			console.log(response);
 		});
 	}
@@ -89,10 +89,12 @@ account.controller('AccountController',
 
 		if($scope.form.signin.mailAddress != $scope.form.signin.mailAddress2) {
 			$scope.form.error.mail = "Mails should be the same";
+			$scope.error = "Les deux mails ne correspondent pas";
 		}
 
 		if($scope.form.signin.password != $scope.form.signin.password2) {
 			$scope.form.error.password = "Passwords should be the same";
+			$scope.error = "Les deux mots de passe ne correspondent pas";
 		}
 
 		if($scope.form.error.mail || $scope.form.error.password) {
@@ -141,8 +143,8 @@ account.controller('AccountController',
 	}
 	
 	function refreshAlerts() {
-		$scope.form.success = undefined;
-		$scope.form.error = undefined;
+		$scope.success = undefined;
+		$scope.error = undefined;
 	}
 
 }]);

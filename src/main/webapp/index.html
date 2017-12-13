@@ -55,6 +55,8 @@
 
 </div>
 <div class="container-fluid">
+	<div class="alert alert-success" ng-show="form.success" role="alert">{{form.success}}</div>
+	<div class="alert alert-danger" ng-show="form.error" role="alert">{{form.error}}</div>
 	<div ng-view></div>
 </div>
 

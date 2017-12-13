@@ -48,8 +48,8 @@ app.controller('AppController', function($scope, $cookies, CartServices) {
 	$scope.user = $cookies.getObject("user");
 	
 	$scope.form = {};
-	$scope.form.success = undefined;
-	$scope.form.error = undefined;
+	$scope.success = undefined;
+	$scope.error = undefined;
 	
 	$scope.cart = CartServices.cart;
 	$scope.updateCart = CartServices.updateCart;
