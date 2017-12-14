@@ -31,11 +31,11 @@ account.controller('AccountController',
 	 */
 	$scope.connect = function UserConnect() {
 
-		$scope.refreshAlerts();
+		//$scope.refreshAlerts();
 
 		// if user is already connected, reject him
 		if($cookies.getObject("user")) {
-			$scope.error = "Already connected";
+			$scope.setError("Déjà connecté");
 			$location.path('/');
 		}
 
@@ -58,9 +58,9 @@ account.controller('AccountController',
 			$location.path('/');
 
 		}, function errorCallback(response) {
-			$scope.error = "Connexion impossible : informations invalides.";
 			//console.log(response);
 			//console.log($scope.error);
+			$scope.setError("Connexion impossible : informations invalides.");
 		});
 	}
 
@@ -112,13 +112,13 @@ account.controller('AccountController',
 		// check mail confirmation
 		if($scope.form.signup.mailAddress != $scope.form.signup.mailAddress2) {
 			$scope.form.error.mail = "Mails should be the same";
-			$scope.error = "Les deux mails ne correspondent pas";
+			$scope.setError("Les deux mails ne correspondent pas");
 		}
 
 		// check password confirmation
 		if($scope.form.signup.password != $scope.form.signup.password2) {
 			$scope.form.error.password = "Passwords should be the same";
-			$scope.error = "Les deux mots de passe ne correspondent pas";
+			$scope.setError("Les deux mots de passe ne correspondent pas");
 		}
 
 		if($scope.form.error.mail || $scope.form.error.password) {
@@ -135,11 +135,11 @@ account.controller('AccountController',
 		$http.post('api/user/create/', data)
 		.then(function successCallback(response) {
 			//console.log("user created");
-			$scope.success = "Utilisateur enregistré correctement. Connectez-vous.";
+			$scope.setSuccess("Utilisateur enregistré correctement. Connectez-vous.");
 		}, function errorCallback(data, status, headers) {
+			$scope.setError("Impossible de créer l'utilisateur. (erreur)");
 			//console.log("user can't be created");
 			//console.log(data);
-			$scope.error = "Impossible de créer l'utilisateur. (erreur)";
 		});
 
 	}
@@ -160,11 +160,11 @@ account.controller('AccountController',
 		.then(function successCallback(response) {
 			$scope.user = response.data;
 			//console.log(response.data);
-			$scope.success = "Les informations ont bien été modifiées.";
+			$scope.setSuccess("Les informations ont bien été modifiées.");
 			$cookies.putObject("user", $scope.user);
 		}, function errorCallback(response) {
 			//console.log(response);
-			$scope.error = "Erreur durant la mise à jour des informations";
+			$scope.setError("Erreur durant la mise à jour des informations");
 		});
 
 	}
