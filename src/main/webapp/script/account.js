@@ -31,7 +31,7 @@ account.controller('AccountController',
 	 */
 	$scope.connect = function UserConnect() {
 
-		//$scope.refreshAlerts();
+		$scope.refreshAlerts();
 
 		// if user is already connected, reject him
 		if($cookies.getObject("user")) {
