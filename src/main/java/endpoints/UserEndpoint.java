@@ -134,7 +134,7 @@ public class UserEndpoint extends Application{
     }
 
     @DELETE
-    @SecuredAdmin
+    @Secured
     @Path("/disable/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

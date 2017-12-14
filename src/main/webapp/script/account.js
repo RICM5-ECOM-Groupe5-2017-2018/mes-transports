@@ -193,10 +193,24 @@ account.controller('AccountController',
 				console.log(response);
 			});
 			
-		}
-		
-		
+		}	
 		
 	}
-
+	
+	/**
+	 * User account deletion
+	 */
+	$scope.deleteAccount = function() {
+		$http.delete('api/user/disable/' + $scope.user.id, {}, {
+			headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
+		})
+		.then(function successCallback(response) {
+			$scope.logout();
+			$scope.setSuccess("Compte supprimé avec succès.");
+		}, function errorCallback(response) {
+			console.log(response);
+			$scope.setError("Erreur dans la suppression du compte.");
+		});
+	}
+	
 }]);
