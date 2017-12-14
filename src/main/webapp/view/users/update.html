@@ -69,3 +69,47 @@
 
 </fieldset>
 </form>
+
+<form ng-show="user" class="form-horizontal" ng-submit="updatePwd()">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Changer de mot de passe</legend>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="old_password">Ancien mot de passe</label>
+  <div class="col-md-5">
+    <input id="old_password" ng-model="form.update.old_password" name="old_password" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="new_password">Nouveau mot de passe</label>
+  <div class="col-md-5">
+    <input id="new_password" ng-model="form.update.new_password" name="new_password" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="new_password2">Vérification mot de passe</label>
+  <div class="col-md-5">
+    <input id="new_password2" ng-model="form.update.new_password2" name="new_password2" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_button"></label>
+  <div class="col-md-4">
+    <button id="update_pwd_button" name="update_pwd_button" class="btn btn-success btn-block">Sauvegarder les informations</button>
+  </div>
+</div>
+
+</fieldset>
+</form>

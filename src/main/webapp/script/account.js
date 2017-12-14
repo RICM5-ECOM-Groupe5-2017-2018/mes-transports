@@ -168,5 +168,35 @@ account.controller('AccountController',
 		});
 
 	}
+	
+	/**
+	 * User password update
+	 */
+	$scope.updatePwd = function() {
+		
+		$scope.refreshAlerts();
+		
+		if($scope.form.update.new_password != $scope.form.update.new_password2) {
+			$scope.update.error.password = "Les mot de passe ne correspondent pas.";
+		} else {
+			var data = {};
+			data.idUser = $scope.user.id;
+			data.oldPass = $scope.form.update.old_password;
+			data.newPass = $scope.form.update.new_password;
+			
+			$http.put('api/user/editpassword', data, {
+				headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
+			})
+			.then(function successCallback(response) {
+				console.log(response);
+			}, function errorCallback(response) {
+				console.log(response);
+			});
+			
+		}
+		
+		
+		
+	}
 
 }]);
