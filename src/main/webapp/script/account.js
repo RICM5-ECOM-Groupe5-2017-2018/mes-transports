@@ -50,6 +50,7 @@ account.controller('AccountController',
 		}, function errorCallback(response) {
 			$scope.error = response.data;
 			console.log(response);
+			console.log($scope.error);
 		});
 	}
 
