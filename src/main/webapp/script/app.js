@@ -46,12 +46,17 @@ app.run(function($rootScope,$location,$route,$window) {
 app.controller('AppController', function($scope, $cookies, CartServices) {
 
 	$scope.user = $cookies.getObject("user");
-	
+
 	$scope.form = {};
 	$scope.success = undefined;
 	$scope.error = undefined;
-	
+
 	$scope.cart = CartServices.cart;
 	$scope.updateCart = CartServices.updateCart;
+
+	$scope.refreshAlerts = function() {
+		$scope.success = undefined;
+		$scope.error = undefined;
+	}
 
 });

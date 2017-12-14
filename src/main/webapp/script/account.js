@@ -1,19 +1,22 @@
-/**
- *
- */
-
 var account = angular.module('account', ['ngCookies','menu']);
 
+/**
+ * Account controller :
+ * - signup / login / logout
+ * - update user infos
+ */
 account.controller('AccountController',
 	['$scope', '$http', '$cookies','$location','$rootScope',
 	function AccountController($scope, $http, $cookies,$location,$rootScope) {
 
+	/* load a logged in user infos from it's related cookie */
 	$scope.user = $cookies.getObject("user");
 	$scope.form.update = $scope.user;
 	if($scope.cart) {
 		$scope.updateCart($scope.user);
 	}
 
+	// checks if user token is still valid
 	if($scope.user) {
 		if(Date.now() > $scope.user.tokenExpiration) {
 			/* Disconnect the user when the token has expired */
@@ -23,14 +26,20 @@ account.controller('AccountController',
 		}
 	}
 
+	/**
+	 * Login function
+	 */
 	$scope.connect = function UserConnect() {
 
-		refreshAlerts();
+		$scope.refreshAlerts();
 
+		// if user is already connected, reject him
 		if($cookies.getObject("user")) {
-			return "Already connected";
+			$scope.error = "Already connected";
+			$location.path('/');
 		}
 
+		// Call to the API to verify user's ids and requests it's informations
 		$http.get(
 			'api/user/authenticate/' + $scope.form.connect.login + '/' + $scope.form.connect.password
 		).then(function successCallback(response) {
@@ -40,26 +49,31 @@ account.controller('AccountController',
 			$scope.user = $cookies.getObject("user");
 			$rootScope.user = $scope.user;
 
+			// update cart status by setting user as owner of the cart items
 			if($scope.cart) {
 				$scope.updateCart($scope.user);
 			}
 
+			// redirect user to the main page
 			$location.path('/');
 
-
 		}, function errorCallback(response) {
-			$scope.error = response.data;
-			console.log(response);
-			console.log($scope.error);
+			$scope.error = "Connexion impossible : informations invalides.";
+			//console.log(response);
+			//console.log($scope.error);
 		});
 	}
 
+	/**
+	 * Logout function
+	 */
 	$scope.logout = function UserLogout() {
 
 		if(!$cookies.get("token")) {
 			return "Not connected";
 		}
 
+		// Call the API to consider the user as disconnected and update it's token status
 		$http.get(
 			'api/user/logout',
 			{
@@ -71,28 +85,37 @@ account.controller('AccountController',
 			//TODO have a callback, but delete anthentication cookies anyway
 		});
 
+		// Updates the cookies informations to disconnect the user definitely
 		$cookies.remove("user");
 		$cookies.remove("token");
 		$scope.user = undefined;
 		$rootScope.user = undefined;
 
+		// redirects the user to the main page
 		$location.path('/');
 	}
 
+	/**
+	 * Signup function
+	 */
 	$scope.signup = function UserSignup() {
 
+		$scope.refreshAlerts();
 		$scope.form.error = {};
 
+		// verifies if user is not already logged in
 		if($cookies.getObject("user")) {
 			console.log("connected");
 			return "Already connected";
 		}
 
+		// check mail confirmation
 		if($scope.form.signup.mailAddress != $scope.form.signup.mailAddress2) {
 			$scope.form.error.mail = "Mails should be the same";
 			$scope.error = "Les deux mails ne correspondent pas";
 		}
 
+		// check password confirmation
 		if($scope.form.signup.password != $scope.form.signup.password2) {
 			$scope.form.error.password = "Passwords should be the same";
 			$scope.error = "Les deux mots de passe ne correspondent pas";
@@ -102,50 +125,48 @@ account.controller('AccountController',
 			return null;
 		}
 
+		// prepares the user object used for the http request
 		var data = $scope.form.signup;
 		data.role = "user";
 		data.mailAddress2 = undefined;
 		data.password2 = undefined;
 
-		console.log(data);
-
+		// call to the API, creates the user in the database
 		$http.post('api/user/create/', data)
 		.then(function successCallback(response) {
-			console.log("user created");
+			//console.log("user created");
+			$scope.success = "Utilisateur enregistré correctement. Connectez-vous.";
 		}, function errorCallback(data, status, headers) {
-			console.log("user can't be created");
-			console.log(data);
-			$scope.form.error.global = data;
-			/*
-			$scope.ResponseDetails = "Data : " + data +
-			"<hr/>Status " + status +
-			"<hr/>Headers " + headers +
-			"<hr/>Config : " + config;
-			*/
+			//console.log("user can't be created");
+			//console.log(data);
+			$scope.error = "Impossible de créer l'utilisateur. (erreur)";
 		});
 
 	}
 
+	/**
+	 * User informations update function
+	 */
 	$scope.updateInfo = function UserUpdateInfo() {
+
+		$scope.refreshAlerts();
 		var data = $scope.form.update;
 		data.isAgency = undefined;
 
+		/* sending new user informations to the API */
 		$http.put('api/user/edit', data, {
 			headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
 		})
 		.then(function successCallback(response) {
 			$scope.user = response.data;
-			console.log(response.data);
+			//console.log(response.data);
+			$scope.success = "Les informations ont bien été modifiées.";
 			$cookies.putObject("user", $scope.user);
 		}, function errorCallback(response) {
-			console.log(response);
+			//console.log(response);
+			$scope.error = "Erreur durant la mise à jour des informations";
 		});
 
-	}
-
-	function refreshAlerts() {
-		$scope.success = undefined;
-		$scope.error = undefined;
 	}
 
 }]);
