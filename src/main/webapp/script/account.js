@@ -26,7 +26,7 @@ account.controller('AccountController',
 	$scope.connect = function UserConnect() {
 
 		refreshAlerts();
-		
+
 		if($cookies.getObject("user")) {
 			return "Already connected";
 		}
@@ -42,7 +42,7 @@ account.controller('AccountController',
 
 			if($scope.cart) {
 				$scope.updateCart($scope.user);
-			} 
+			}
 
 			$location.path('/');
 
@@ -79,7 +79,7 @@ account.controller('AccountController',
 		$location.path('/');
 	}
 
-	$scope.signin = function UserSignin() {
+	$scope.signup = function UserSignup() {
 
 		$scope.form.error = {};
 
@@ -88,12 +88,12 @@ account.controller('AccountController',
 			return "Already connected";
 		}
 
-		if($scope.form.signin.mailAddress != $scope.form.signin.mailAddress2) {
+		if($scope.form.signup.mailAddress != $scope.form.signup.mailAddress2) {
 			$scope.form.error.mail = "Mails should be the same";
 			$scope.error = "Les deux mails ne correspondent pas";
 		}
 
-		if($scope.form.signin.password != $scope.form.signin.password2) {
+		if($scope.form.signup.password != $scope.form.signup.password2) {
 			$scope.form.error.password = "Passwords should be the same";
 			$scope.error = "Les deux mots de passe ne correspondent pas";
 		}
@@ -102,7 +102,7 @@ account.controller('AccountController',
 			return null;
 		}
 
-		var data = $scope.form.signin;
+		var data = $scope.form.signup;
 		data.role = "user";
 		data.mailAddress2 = undefined;
 		data.password2 = undefined;
@@ -142,7 +142,7 @@ account.controller('AccountController',
 		});
 
 	}
-	
+
 	function refreshAlerts() {
 		$scope.success = undefined;
 		$scope.error = undefined;
