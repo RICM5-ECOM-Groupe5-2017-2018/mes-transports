@@ -68,8 +68,9 @@ cart.factory('CartServices', function($cookies, $http) {
 	
 });
 
-cart.controller('CartController', function($scope, $http, $location, $cookies, CartServices) {
+cart.controller('CartController', function($scope, $rootScope, $http, $location, $cookies, CartServices) {
 	
+	$scope.cart = CartServices.cart;
 	$scope.displayCart = $scope.cart;
 	
 	$scope.displayCart.forEach(function(item) {
@@ -81,8 +82,6 @@ cart.controller('CartController', function($scope, $http, $location, $cookies, C
 		});
 	});
 	
-	console.log($scope.displayCart);
-	
 	$scope.addToCart = CartServices.addToCart;
 	
 	$scope.removeItemFromCart = function(item) {
@@ -90,12 +89,14 @@ cart.controller('CartController', function($scope, $http, $location, $cookies, C
 		$scope.cart.splice(index, 1);
 		$cookies.putObject("cart", $scope.cart);
 	}
-
+	
 	$scope.totalCart = function() {
 		total = 0;
-		$scope.cart.forEach(function(item) {
-			total += item.totalPrice;
-		});
+		if($scope.cart) {
+			$scope.cart.forEach(function(item) {
+				total += item.totalPrice;
+			});
+		}
 		return total;
 	}
 	
@@ -103,23 +104,26 @@ cart.controller('CartController', function($scope, $http, $location, $cookies, C
 		pay_method = $(".btn-pay.active input")[0].id;
 		bill_type = $(".btn-bill.active input")[0].id;
 		
-		var cart_to_proceed = $scope.cart;
-		
-		cart_to_proceed.forEach(function(item) {
-			item.vehicle = undefined;
-		});
-		
-		$http.post('api/cart/validate', $scope.cart)
-		.then(function successCallback(response) {
-			$('#myModal').modal('hide');
-			$scope.cart = [];
-			$scope.displayCart = [];
-			$cookies.putObject("cart", $scope.cart);
-			$scope.setSuccess("Panier validé !");
-		}, function errorCallback(response) {
-			console.log(response);
-		});
-		
+		if($scope.cart.length == 0) {
+			$scope.setError("La panier est vide.");
+		} else {			
+			var cart_to_proceed = $scope.cart;
+			
+			cart_to_proceed.forEach(function(item) {
+				item.vehicle = undefined;
+			});
+
+			$http.post('api/cart/validate', $scope.cart)
+			.then(function successCallback(response) {
+				$('#myModal').modal('hide');
+				$cookies.remove("cart");
+				$scope.cart = [];
+				$scope.displayCart = [];
+				$scope.setSuccess("Panier validé !");
+			}, function errorCallback(response) {
+				console.log(response);
+			});			
+		}
 		
 	}
 	
