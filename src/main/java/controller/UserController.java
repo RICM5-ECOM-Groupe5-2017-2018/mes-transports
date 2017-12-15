@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.*;
 
 import JsonEncoders.JsonMessage;
+import model.Transaction;
 import model.User;
 import security.PasswordEncryption;
 
@@ -186,6 +187,12 @@ public class UserController extends Application {
 
 	public List<User> getAllUsers(){
 		return entityManager.createQuery("SELECT u From User u")
+		.getResultList();
+	}
+	
+	public List<Transaction> getTransactions(Integer userId){
+		return entityManager.createQuery("SELECT t FROM Transaction t WHERE t.user.id=:id ")
+		.setParameter("id", userId)
 		.getResultList();
 	}
 	
