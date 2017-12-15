@@ -14,8 +14,9 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse">
 	      <ul class="nav navbar-nav" >
-	        <li class="active"><a href="#">Locations <span class="sr-only">(current)</span></a></li>
+	        <li><a href="#">Recherche</a></li>
 	      </ul>
+	      <!--
 	      <form class="navbar-form navbar-left" >
 	        <div class="input-group">
 		      <input type="text" class="form-control" placeholder="Rechercher">
@@ -24,14 +25,14 @@
 		      </span>
 		    </div>
 	      </form>
+	      -->
 	      <ul class="nav navbar-nav navbar-right" ng-controller="AccountController">
-	      	<li class="active"><a href="#!/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="badge">{{cart.length}}</span></a>
+	      	<li><a href="#!/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="badge">{{cart.length}}</span></a>
 	        <li class="dropdown" >
 	          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.login}} <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
 	            <li><a href="#!/account">Compte</a></li>
-	            <li><a href="#">Action</a></li>
-	            <li><a href="#">Action</a></li>
+	            <li><a href="#!/history">Historique d'achats</a></li>
 	            <li role="separator" class="divider"></li>
 	          	<li>
 	        		<a href="#!/logout" ng-click="logout()">Déconnexion</a>

@@ -184,8 +184,11 @@ account.controller('AccountController',
 			data.oldPass = $scope.form.update.old_password;
 			data.newPass = $scope.form.update.new_password;
 			
-			$http.put('api/user/editpassword', data, {
-				headers: {'Authorization': 'Bearer ' + $cookies.get("token")}
+			$http.put('api/user/editpassword', {data}, {
+				headers: {
+					'Authorization': 'Bearer ' + $cookies.get("token"),
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
 			})
 			.then(function successCallback(response) {
 				console.log(response);

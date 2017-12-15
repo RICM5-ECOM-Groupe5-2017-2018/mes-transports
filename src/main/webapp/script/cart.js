@@ -103,16 +103,23 @@ cart.controller('CartController', function($scope, $http, $location, $cookies, C
 		pay_method = $(".btn-pay.active input")[0].id;
 		bill_type = $(".btn-bill.active input")[0].id;
 		
-		$scope.cart.forEach(function(item) {
-			$http.post('api/rent/add')
-			.then(function successCallback(response) {
-				//TODO > enregistrer dans la base
-			}, function errorCallback(response) {
-				
-			});
+		var cart_to_proceed = $scope.cart;
+		
+		cart_to_proceed.forEach(function(item) {
+			item.vehicle = undefined;
 		});
 		
-		$('#myModal').modal('hide');
+		$http.post('api/cart/validate', $scope.cart)
+		.then(function successCallback(response) {
+			$('#myModal').modal('hide');
+			$scope.cart = [];
+			$scope.displayCart = [];
+			$cookies.putObject("cart", $scope.cart);
+			$scope.setSuccess("Panier validé !");
+		}, function errorCallback(response) {
+			console.log(response);
+		});
+		
 		
 	}
 	
