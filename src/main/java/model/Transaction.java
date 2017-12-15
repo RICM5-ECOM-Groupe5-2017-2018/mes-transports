@@ -20,13 +20,13 @@ public class Transaction implements java.io.Serializable {
     private Integer id;
     @Column(name = "amount", nullable = false)
     private Float amount;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
     @Column(name="str_date", nullable=false)
     private Date str_date;
-    @Column(name = "bankName", nullable = false)
+    @Column(name = "bankName")
     private String bankName;
-    @Column(name = "rib", nullable = false)
+    @Column(name = "rib")
     private String rib;
     @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
     @JsonIgnore
