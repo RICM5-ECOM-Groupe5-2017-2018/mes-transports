@@ -162,6 +162,20 @@ public class UserEndpoint extends Application{
                     .entity("Aucun utilisateur ne correspond a cette id").build();
         }
     }
+    
+    @GET
+    @Path("/transactions/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userTransactions(@PathParam("id") Integer userId) {
+    	try {
+            return Response.status(200).entity(controller.getTransactions(userId)).build();
+        }
+        catch(Exception e) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucun utilisateur ne correspond a cette id").build();
+        }
+    }
 
 
 }
