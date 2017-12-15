@@ -41,6 +41,7 @@ public class CartController extends Application{
 		return q.getResultList();
 	}
 	
+
 	public JsonMessage addToCart(CartItem modelItem) {
 		CartItem c = new CartItem(modelItem);
 		entityManager.merge(c);
@@ -107,6 +108,7 @@ public class CartController extends Application{
 			t.setRib("empty");
 			t.setAmount(sommeList.get(i));
 			t.setDate(new Date());
+			t.generateToken();
 			tl.add(t);
 		}
 		
