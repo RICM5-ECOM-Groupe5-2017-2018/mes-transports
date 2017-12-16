@@ -44,11 +44,27 @@ app.run(function($rootScope,$location,$route,$window) {
 app.controller('AppController', function($scope, $cookies, CartServices) {
 
 	$scope.user = $cookies.getObject("user");
-	
+
 	$scope.form = {};
+	if(!$scope.success) {
+		$scope.success = undefined;
+		$scope.error = undefined;
+	}
 	
+	$scope.setError = function(msg) {
+		$scope.error = msg;
+	}
+	
+	$scope.setSuccess = function(msg) {
+		$scope.success = msg;
+	}
+
 	$scope.cart = CartServices.cart;
 	$scope.updateCart = CartServices.updateCart;
-	
+
+	$scope.refreshAlerts = function() {
+		$scope.success = undefined;
+		$scope.error = undefined;
+	}
 
 });

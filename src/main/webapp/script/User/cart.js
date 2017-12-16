@@ -3,6 +3,9 @@ var cart = angular.module('cart', ['account']);
 cart.factory('CartServices', function($cookies, $http) { 
 	
 	var utils = {};
+	utils.form = {};
+	utils.form.error = undefined;
+	utils.form.success = undefined;
 	
 	if((tmpCart = $cookies.getObject("cart")) != undefined) {
 		utils.cart = tmpCart;
@@ -16,17 +19,18 @@ cart.factory('CartServices', function($cookies, $http) {
 		var add = true;
 		utils.cart.forEach(function(rent) {
 			if(item.id == rent.idVehicle
-					&&	((
-						startDate <= new Date(rent.endDate).getTime()
-						&&
-						startDate >= new Date(rent.startDate).getTime()
-					) || (
-						endDate >= new Date(rent.startDate).getTime()
-						&&
-						endDate <= new Date(rent.endDate).getTime()
-					))
+				&&	((
+					startDate <= new Date(rent.endDate).getTime()
+					&&
+					startDate >= new Date(rent.startDate).getTime()
+				) || (
+					endDate >= new Date(rent.startDate).getTime()
+					&&
+					endDate <= new Date(rent.endDate).getTime()
+				))
 			) {
 				add = false;
+				utils.form.error = "La date est déjà prise.";
 				return add;
 			}
 		});
@@ -43,17 +47,10 @@ cart.factory('CartServices', function($cookies, $http) {
 			newRent.totalPrice = item.price * Math.ceil((endDate- startDate)/(1000*60*60*24));
 			newRent.locationIn = "";
 			newRent.locationOut = "";
-			if(user) {
-				$http.post('api/cart/add', newRent)
-				.then(function successCallback(response) {
-					console.log(response);
-					utils.cart.push(newRent);
-					console.log(utils.cart);
-					$cookies.putObject("cart", utils.cart);
-				}, function errorCallback(response) {
-					console.log(response);
-				});
-			}
+			utils.cart.push(newRent);
+			$cookies.putObject("cart", utils.cart);
+			utils.form.success = "Véhicule ajouté au panier !"
+			$('#myModal').modal('hide');
 		}
 	}
 	
@@ -62,14 +59,6 @@ cart.factory('CartServices', function($cookies, $http) {
 			utils.cart.forEach(function(rent) {
 				if(rent.idUser <= 0) {
 					rent.idUser = user.id;
-					vehicle = rent.vehicle;
-					$http.post('api/cart/add', rent)
-					.then(function successCallback(response) {
-						console.log(response);
-					}, function errorCallback(response) {
-						console.log(response);
-						rend.idUser = -1;
-					});
 				}
 			});
 		}
@@ -79,8 +68,9 @@ cart.factory('CartServices', function($cookies, $http) {
 	
 });
 
-cart.controller('CartController', function($scope, $http, $cookies, CartServices) {
+cart.controller('CartController', function($scope, $rootScope, $http, $location, $cookies, CartServices) {
 	
+	$scope.cart = CartServices.cart;
 	$scope.displayCart = $scope.cart;
 	
 	$scope.displayCart.forEach(function(item) {
@@ -92,8 +82,6 @@ cart.controller('CartController', function($scope, $http, $cookies, CartServices
 		});
 	});
 	
-	console.log($scope.displayCart);
-	
 	$scope.addToCart = CartServices.addToCart;
 	
 	$scope.removeItemFromCart = function(item) {
@@ -102,4 +90,44 @@ cart.controller('CartController', function($scope, $http, $cookies, CartServices
 		$cookies.putObject("cart", $scope.cart);
 	}
 	
+	$scope.totalCart = function() {
+		total = 0;
+		if($scope.cart) {
+			$scope.cart.forEach(function(item) {
+				total += item.totalPrice;
+			});
+		}
+		return total;
+	}
+	
+	$scope.payCart = function() {
+		pay_method = $(".btn-pay.active input")[0].id;
+		bill_type = $(".btn-bill.active input")[0].id;
+		
+		if($scope.cart.length == 0) {
+			$scope.setError("La panier est vide.");
+		} else {			
+			var cart_to_proceed = $scope.cart;
+			
+			cart_to_proceed.forEach(function(item) {
+				item.vehicle = undefined;
+			});
+
+			$http.post('api/cart/validate', $scope.cart)
+			.then(function successCallback(response) {
+				$('#myModal').modal('hide');
+				$cookies.remove("cart");
+				$scope.cart = [];
+				$scope.displayCart = [];
+				$scope.setSuccess("Panier validé !");
+			}, function errorCallback(response) {
+				console.log(response);
+			});			
+		}
+		
+	}
+	
+	$scope.form.error = CartServices.form.error;
+	$scope.form.success = CartServices.form.success;
+
 });

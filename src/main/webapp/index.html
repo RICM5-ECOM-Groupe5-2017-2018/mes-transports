@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="lib/dependencies/css/bootstrap.min.css" />
     <link rel="stylesheet" href="lib/dependencies/css/ng-grid.min.css" />
     <link rel="stylesheet" href="lib/dependencies/css/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="css/menuStyle.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<link rel="icon" href="ressources/logo.png" />
     <!--<link rel="stylesheet" type="text/css" href="css/menuStyle.css"/>-->
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" type="text/css" href="lib/dependencies/dist/chartist.min.css">
@@ -27,13 +30,13 @@
     <script src="lib/dependencies/ng-grid.min.js"></script>
     <script src="lib/dependencies/moment.min.js"></script>
     <script src="lib/dependencies/daterangepicker.js"></script>
+    <script src="lib/dependencies/qrcode.min.js"></script>
     <script src="lib/dependencies/dist/chartist.min.js"></script>
     <script src="lib/dependencies/plotly-latest.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js script/all.js -->
-
     <script src="script/app.js"></script>
     <script src="script/Both/routes.js"></script>
     <script src="script/Both/menu.js"></script>
@@ -49,6 +52,7 @@
     <script src="script/Agency/graphicsAgency.js"></script>
     <script src="script/Agency/addUpdateChildAgency.js"></script>
     <script src="script/Agency/addUpdateVehicle.js"></script>
+    <script src="script/Admin/admin.js"></script>
     <!-- endbuild -->
 
 </head>
@@ -60,6 +64,11 @@
 
 <div class="container-fluid">
     <div ng-include="getSideMenu()"></div>
+	<!-- Displays potential errors or success -->
+	<div class="alert alert-success" ng-show="success" role="alert">{{success}}</div>
+	<div class="alert alert-danger" ng-show="error" role="alert">{{error}}</div>
+
+	<!-- Zone of html insertion depending on the defined templateUrl -->
 	<div ng-view></div>
 </div>
 

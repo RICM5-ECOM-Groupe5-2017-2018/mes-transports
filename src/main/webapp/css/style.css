@@ -1,8 +1,9 @@
 @charset "UTF-8";
 
 .navbar .navbar-header .navbar-brand img#header-logo {
-	height: 25px;
+	height: 28px;
 	margin-top: -5px;
+	display: inline-block;
 }
 
 #header-logo {

@@ -4,7 +4,7 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     //get selected agency data
 	$scope.currentIdAgency = $routeParams.idA
 
-    
+
     $scope.currentAgency = $rootScope.listChildAgencies[$scope.currentIdAgency];
 
 
