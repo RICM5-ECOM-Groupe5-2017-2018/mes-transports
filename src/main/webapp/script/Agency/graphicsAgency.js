@@ -145,7 +145,7 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
             }));
         });
 
-        Promise.all(promises).then(values => {
+        Promise.all(promises).then(function(){
             formatBenefitByDate(rents);
             if(!isChild){formatBenefitByAgency(rents);}
         });

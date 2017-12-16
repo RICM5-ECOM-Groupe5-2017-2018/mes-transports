@@ -24,7 +24,7 @@
                             </div>
                             <div class="row col-sm-10">
                                 <select name="filterSelectedAgency" id="filterSelectedAgency" class="form-control" required
-                                        ng-options="agency.name for agency in filteredCharacteristic.availableFiltredAgency track by agency.id"
+                                        ng-options="agency.name for agency in availableAgency track by agency.id"
                                         ng-change ="updateFilter()"
                                         ng-model="filteredCharacteristic.filterSelectedAgency"></select>
                             </div>

@@ -11,7 +11,6 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 		selectedInsurance: {name:'MAIF',value:'link',},
 		availableTypes : $rootScope.listTypes,
-		availableAgency : listAgency(),
 		slectedCharacteristic : [],
 	};
 
@@ -23,18 +22,6 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		loadUpdateForm()
 	}
 
-	/** Create a list of all the agencies(child and mother)
-	*/
-	function listAgency(){
-		var listAgencyForVehicle = [];
-		$.each($rootScope.listChildAgencies, function(key, child){
-			listAgencyForVehicle.push({"id" : child.id, "name": child.name!=""?(child.name+" "+child.city.toUpperCase()):child.address,});
-		});
-
-		var mother = $rootScope.MotherAgency;
-		listAgencyForVehicle.push({"id" :mother.id, "name": mother.name!=""?(mother.name+" "+mother.city.toUpperCase()):mother.address,});
-		return listAgencyForVehicle;
-	}
 
 	/** Function call when vehicle type change in the form
 	*/
@@ -177,8 +164,6 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
         $scope.data.characteristicsForType=[];
         $scope.data.selectedTypeVehicule={};
         $scope.data.selectedAgency={}
-
-
 	}
 
     /**Function which redirect the user on the new vehicle page*/

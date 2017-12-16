@@ -8,13 +8,15 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$l
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
 	$rootScope.agencyByCity;
-	$rootScope.isMother = $rootScope.MotherAgency?$rootScope.MotherAgency.idMotherAgency==null:false;
+    $rootScope.isChild = true;
+	$rootScope.isMother = $rootScope.MotherAgency?$rootScope.MotherAgency.idMotherAgency==null:true;
 	$rootScope.user = $cookies.getObject("user");
 	$rootScope.token = $cookies.get("token");
 
 	$rootScope.$route = $route;
 	$rootScope.currentAgencyView = $routeParams.idA;
 	$rootScope.currentAgencyUpdate = $routeParams.idupdate;
+	$rootScope.availableAgency;
 
     $scope.isMotherAgency = false;
 
@@ -34,8 +36,7 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$l
                 });
             }
         }
-
-    }
+    };
 
 	/**Function which load the list of child agency*/
 	$rootScope.loadChildAgencies=function()
@@ -53,11 +54,11 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$l
 						});
 
                    		$rootScope.reloadSubAgencyMenu();
+                   		listAgency();
 				},
 				function(response){ }
 		    );
 		}
-
 	};
 
 	/**Function which load the main agency*/
@@ -94,10 +95,28 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$l
 				   $rootScope.listChildAgencies[response.data.id] = response.data;
                    $rootScope.reloadSubAgencyMenu();
 			   }
+               listAgency();
 		    },
 		    function(response){}
 	    );
 	};
+
+    /**Create an object containing all the agency(child and main)*/
+    function listAgency(){
+        $rootScope.availableAgency = [];
+
+        $rootScope.availableAgency.push({"id" :0, "name": "Toutes",});
+
+        if($rootScope.listChildAgencies && $rootScope.MotherAgency){
+            $.each($rootScope.listChildAgencies, function(key, child){
+                $rootScope.availableAgency.push({"id" : child.id, "name": child.name!=""?(child.name+" "+child.city.toUpperCase()):child.address,});
+            });
+
+            var mother = $rootScope.MotherAgency;
+            $rootScope.availableAgency.push({"id" :mother.id, "name": mother.name!=""?(mother.name+" "+mother.city.toUpperCase()):mother.address,});
+        }
+        return $rootScope.availableAgency;
+    }
 
 	//Load data if they aren't
 	if(!$rootScope.MotherAgency || !$rootScope.listChildAgencies){
