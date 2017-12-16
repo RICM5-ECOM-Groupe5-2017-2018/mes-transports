@@ -1,9 +1,12 @@
 <nav class="navbar navbar-inverse" ng-controller="topController">
 	<div class="container-fluid">
 
+		<div class="navbar-header">
+			<a class="navbar-brand"><img id="header-logo" alt="logo mes-transports" src="ressources/logo.png"/> MesTransports</a>
+		</div>
+
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="" id="bs-example-navbar-collapse">
-			<a class="navbar-brand" href="#"><img id="{{logo.id}}" alt="{{logo.alt}}" ng-src="{{logo.src}}" style="max-height: 100%;max-width: 100%;"/> MesTransports</a>
 			<ul class="nav navbar-nav navbar-right" ng-controller="AccountController">
 				<li class="dropdown" >
 					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.login}} <span class="caret"></span></a>

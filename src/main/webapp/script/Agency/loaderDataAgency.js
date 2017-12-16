@@ -156,7 +156,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 						var agencyName = ($rootScope.MotherAgency.id == child.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[child.idAgency].name
 						$rootScope.listeVehicules.push({
 							id : child.id,
-							name: agencyName +"-"+child.brand+"-"+$rootScope.listTypes[child.type].label,
+							name: child.brand,
 							details : child,
 							});
 					});

@@ -1,7 +1,7 @@
 agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
 
 
-	$scope.currentIdVehicules = $routeParams.idV
+	$scope.currentIdVehicules = $routeParams.idV;
 	$scope.selectedVehicule;
 	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
 
@@ -45,8 +45,8 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 				 	$scope.allRents = response.data;
 
 					$.each($scope.allRents, function(key, rent){
-						rent.endDate = moment(rent.endDate).format("YYYY-MM-DD hh:mm:ss");
-						rent.startDate = moment(rent.startDate).format("YYYY-MM-DD hh:mm:ss");
+						rent.endDate = moment(rent.endDate).format("YYYY-MM-DD HH:mm");
+						rent.startDate = moment(rent.startDate).format("YYYY-MM-DD HH:mm");
 					});
 					$scope.filtredRent = $.extend(true, {}, $scope.allRents);
 					console.log($scope.filtredRent);

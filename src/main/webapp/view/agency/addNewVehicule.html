@@ -9,7 +9,7 @@
 					<form class="form-horizontal col-10 col-md-10 col-md-offset-1" name="registerForm">
 						<h1> {{isUpdate?'Modifier un véhicule':'Ajouter un nouveau véhicule'}}  </h1>
 						<div class="form-group row">
-							<label for="brand" class="col-sm-2 col-form-label">Marque du véhicule*</label>
+							<label for="brand" class="col-sm-2 col-form-label">Nom du véhicule*</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" ng-maxlength=50 ng-model="vehicle.brand" name="brand" value="" required>
 								<span class="text-danger" ng-show="registerForm.brand.$error.maxlength">
