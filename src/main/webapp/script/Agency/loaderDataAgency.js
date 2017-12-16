@@ -2,19 +2,40 @@ var agency = angular.module("agency",['ngCookies']);
 
 
 //Permet de charger les données relative à l'agence
-agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$location,$route,$routeParams){
+agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$location,$route,$routeParams){
 
 
 	$rootScope.listChildAgencies;
 	$rootScope.MotherAgency;
 	$rootScope.agencyByCity;
-	$rootScope.isMother = false;
+	$rootScope.isMother = $rootScope.MotherAgency?$rootScope.MotherAgency.idMotherAgency==null:false;
 	$rootScope.user = $cookies.getObject("user");
 	$rootScope.token = $cookies.get("token");
 
 	$rootScope.$route = $route;
 	$rootScope.currentAgencyView = $routeParams.idA;
 	$rootScope.currentAgencyUpdate = $routeParams.idupdate;
+
+    $scope.isMotherAgency = false;
+
+
+    /**Create an array where agency are group by city*/
+    $rootScope.reloadSubAgencyMenu=function()
+    {
+        if($rootScope.isMother){
+            $rootScope.agencyByCity={};
+            if($rootScope.listChildAgencies){
+                $.each($rootScope.listChildAgencies, function(key, child){
+                	if(child){
+                        var city = child.city.toUpperCase();
+                        if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
+                        $rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
+					}
+                });
+            }
+        }
+
+    }
 
 	/**Function which load the list of child agency*/
 	$rootScope.loadChildAgencies=function()
@@ -31,11 +52,12 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 							$rootScope.listChildAgencies[child.id] = child;
 						});
 
-						reloadSubAgencyMenu();
+                   		$rootScope.reloadSubAgencyMenu();
 				},
 				function(response){ }
 		    );
 		}
+
 	};
 
 	/**Function which load the main agency*/
@@ -44,12 +66,14 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 
 		if($rootScope.user)
 		{
+
 			var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 
 			$http.get('api/agency/view/'+$rootScope.user.idAgency,config).then(
 			   function(response){
 						$rootScope.MotherAgency = response.data;
 						$rootScope.loadChildAgencies();
+						$rootScope.isMother = $rootScope.MotherAgency.idMotherAgency==null;
 			    },
 			    function(response){}
 		  );
@@ -68,36 +92,22 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope,$scope,$lo
 			   }
 			   else{
 				   $rootScope.listChildAgencies[response.data.id] = response.data;
-				   reloadSubAgencyMenu();
+                   $rootScope.reloadSubAgencyMenu();
 			   }
 		    },
 		    function(response){}
 	    );
 	};
 
-	/**Create an array where agency are group by city*/
-	function reloadSubAgencyMenu()
-	{
-		if($rootScope.MotherAgency.idAgency==undefined){
-			$scope.isMother = true;
-			$rootScope.agencyByCity={};
-			if($rootScope.listChildAgencies){
-                $.each($rootScope.listChildAgencies, function(key, child){
-                    var city = child.city.toUpperCase();
-                    if(!$rootScope.agencyByCity[city]){$rootScope.agencyByCity[city]=[];}
-                    $rootScope.agencyByCity[city].push({"id" : child.id, "name": child.name!=""?child.name:child.address});
-                });
-			}
-		}
-	}
-
 	//Load data if they aren't
 	if(!$rootScope.MotherAgency || !$rootScope.listChildAgencies){
 		$rootScope.loadMainAgency();
 	}
 	else if(!$rootScope.agencyByCity){
-		reloadSubAgencyMenu();
+        $rootScope.reloadSubAgencyMenu();
+
 	}
+    console.log($rootScope.isMother);
 });
 
 

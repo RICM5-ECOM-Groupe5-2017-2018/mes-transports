@@ -42,8 +42,8 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
         var data = [
             {
-                x: Object.keys($scope.BenefitByDate)?Object.keys($scope.BenefitByDate):[],
-                y: Object.values($scope.BenefitByDate)?Object.values($scope.BenefitByDate):[],
+                x: Object.keys($scope.BenefitByDate).length!=0?Object.keys($scope.BenefitByDate):[],
+                y: Object.values($scope.BenefitByDate).length!=0?Object.values($scope.BenefitByDate):[],
                 type: 'scatter',
                 line: { color: 'rgb(183, 221, 110)',}
             }
@@ -78,8 +78,8 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
         var graph = document.getElementById('benefitByAgency');
 
         var data = [{
-            values: Object.values($scope.BenefitByAdgency)?Object.values($scope.BenefitByAdgency):[],
-            labels: Object.keys($scope.BenefitByAdgency)?Object.keys($scope.BenefitByAdgency):[],
+            values: Object.values($scope.BenefitByAdgency).length!=0?Object.values($scope.BenefitByAdgency):[],
+            labels: Object.keys($scope.BenefitByAdgency).length!=0?Object.keys($scope.BenefitByAdgency):[],
             type: 'pie',
             marker: {
                 colors: ['rgb(183, 221, 110)','rgb(240, 101, 67)','rgb(142, 188, 86)'],

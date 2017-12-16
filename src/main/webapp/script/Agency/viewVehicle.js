@@ -97,6 +97,23 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 
 	}
 
+    /**Function which erased the selected vehicle*/
+	$scope.eraseVehicle = function(){
+
+        $http.delete('api/vehicle/delete/'+$scope.selectedVehicule.id).then(
+            function(response){
+                console.log("blop");
+                $rootScope.listeVehicules = $rootScope.listeVehicules.filter(function(vehicle) {
+                    return vehicle.id != $scope.selectedVehicule.id;
+                });
+                $scope.selectedVehicule = {};
+                $scope.updateFilter();
+                $location.path('/agency/view/vehicule/');
+            },
+            function(response){}
+        );
+
+	}
 
 
 

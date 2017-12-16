@@ -53,10 +53,17 @@
                         <div ng-if="selectedVehicule" class="col-sm-6 col-md-7 panel panel-default">
                             <div class="panel-heading row">
                                 <h2 class="col-6 col-md-9 col-xs-8">{{selectedVehicule.name}}</h2>
-                                <input class="btn btn-success col-2 col-md-2 col-xs-4 btn-sm"
-                                       style="margin-top: 20px"
-                                       type="button" ng-click="changeUpdateVehicules()" name="New"
-                                       value="Modifier le vehicule">
+                                <div class="row col-2 col-md-2 col-xs-4">
+                                    <input class="btn btn-success btn-sm"
+                                           style="margin-top: 20px"
+                                           type="button" ng-click="changeUpdateVehicules()" name="New"
+                                           value="Modifier">
+                                    <input class="btn btn-danger btn-sm"
+                                           style="margin-top: 20px"
+                                           type="button"
+                                           data-toggle="modal" data-target="#modalErase" name="New"
+                                           value="Supprimer">
+                                </div>
                             </div>
                             <div class="row">
                                 <span class="label label-success col-xs-2 col-sm-2"> Agence </span>
@@ -101,6 +108,24 @@
                             </div>
 
                         </div>
+
+                        <div class="modal fade" id="modalErase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Supprimer le véhicule</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous supprimer ce véhicule?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn" data-dismiss="modal" ng-click="eraseVehicle()"> Oui </button>
+                                        <button type="button" class="btn" data-dismiss="modal" > Non </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

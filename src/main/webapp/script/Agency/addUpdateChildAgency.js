@@ -15,9 +15,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 				{id:'8',name:'La banque postale',value:'link',},
 			],
 
-			availableTypes: [
-				{id:'AgenceN',name:'Agence de Location'},
-			],
+			availableTypes: {id:'location',name:'Agence de Location'},
 		};
 
 	//Variable to know if it's an update or a adding
@@ -38,7 +36,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
 
     		$scope.agency.address = $scope.data.addressp1+" "+$scope.data.addressp2+" "+$scope.agency.city.toUpperCase();
     		$scope.agency.city = $scope.agency.city.toUpperCase()
-    		$scope.agency.type = $scope.data.selectedType.id;
+    		$scope.agency.type = $scope.data.availableTypes.id;
 
     		sendUpdate();
     	}
@@ -68,14 +66,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
                 $scope.data.selectedBank = $scope.data.availableBanks.find(function(element) {
                     return element.name == $scope.agency.bankName;
                 });
-
-                //Fill type input
-                $scope.data.selectedType = $scope.data.availableTypes.find(function(element) {
-                    return element.id == $scope.agency.type;
-                });
-
-
-            },
+			},
             function(response){}
         );
 	}
@@ -87,7 +78,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     	{
     		var dataToSend = {
     				"id":null,
-    				"type":$scope.data.selectedType.id,
+    				"type":$scope.data.availableTypes.id,
     				"address":$scope.data.addressp1+" "+$scope.data.addressp2+" "+$scope.agency.city.toUpperCase(),
     				"idMotherAgency":$rootScope.user.idAgency,
     				"phoneNum":$scope.agency.phoneNum,
@@ -112,7 +103,9 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     			$scope.agency={};
 	        	$scope.registerForm.$setPristine();
 	        	$rootScope.loadOneChildAgency(response.data.id);
-	        	alert("L'agence est créée");
+	        	$scope.reponse = response.data;
+                $('#modalEndAdd').modal('show');
+
     		}, function errorCallback(data, status, headers) {});
 
     	}
@@ -128,22 +121,27 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     		.then(function successCallback(response) {
     			$scope.agency={};
 	        	$scope.registerForm.$setPristine();
-
-	        	alert("L'agence est modifier");
-
-	        	if($scope.idUpdatedAgency==$rootScope.user.idAgency)
-	        	{
-	        		$location.path('/agency');
-	        		$rootScope.loadOneChildAgency($scope.idUpdatedAgency);
-	        	}
-	        	else
-	        	{
-	        		$rootScope.loadOneChildAgency($scope.idUpdatedAgency);
-	        		$location.path('/agency/view/chagency/'+$scope.idUpdatedAgency);
-	        	}
+                $rootScope.loadOneChildAgency($scope.idUpdatedAgency);
+                $scope.reponse = response.data;
+                $('#modalEndUpdate').modal('show');
 
     		}, function errorCallback(data, status, headers) {});
     	}
+    }
+
+    /**Function which redirect the user on the new agency page*/
+    $scope.changeLocationWhenEnding=function(){
+    	if($scope.reponse.id==$rootScope.user.idAgency){
+            $location.path('/agency');
+		}
+		else{
+            $location.path('/agency/view/chagency/'+$scope.reponse.id);
+		}
+	}
+
+	/**Function which redirect the user on the previous page*/
+	$scope.goback=function () {
+		$location.path('/agency/view/chagency/'+$scope.idUpdatedAgency);
     }
 
 });

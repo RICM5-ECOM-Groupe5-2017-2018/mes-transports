@@ -5,10 +5,18 @@
 
 				<div class="row">
 					<h1 class="col-10 col-md-9 col-xs-8">{{currentAgency.name}}</h1>
-					<input class="btn btn-success col-1 col-xs-3 col-md-2 btn-sm"
-						   style="margin-top: 20px"
-						   type="button" ng-click="changeLocationToUpdatePage()" name="Update"
-						   value="Modifier Agence">
+					<div class="row col-1 col-xs-3 col-md-2">
+						<input class="btn btn-success  btn-sm"
+							   style="margin-top: 20px"
+							   type="button" ng-click="changeLocationToUpdatePage()" name="Update"
+							   value="Modifier Agence">
+						<input class="btn btn-danger btn-sm"
+							   style="margin-top: 20px"
+							   type="button"
+							   data-toggle="modal" data-target="#modalErase" name="New"
+							   value="Supprimer">
+					</div>
+
 				</div>
 
 				<hr class="my-4 col-12">
@@ -23,6 +31,23 @@
 				<div class="col-10 col-md-10 col-md-offset-1 row jumbotron">
 					<div id="benefitGlobal"></div>
 				</div>
+
+			<div class="modal fade" id="modalErase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Supprimer l'agence</h4>
+						</div>
+						<div class="modal-body">
+							Voulez-vous supprimer cette agence?
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn" data-dismiss="modal" ng-click="eraseAgency()"> Oui </button>
+							<button type="button" class="btn" data-dismiss="modal" > Non </button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </main>

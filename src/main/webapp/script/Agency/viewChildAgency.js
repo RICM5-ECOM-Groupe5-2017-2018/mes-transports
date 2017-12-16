@@ -38,6 +38,32 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
         $rootScope.loadAgenciesProfits(true,$scope.currentIdAgency  );
     });
 
+    /**Function which erased the selected agency*/
+    $scope.eraseAgency = function(){
+
+        console.log("blop");
+        var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
+        $http.delete('api/agency/delete/'+$scope.currentIdAgency,config).then(
+            function(response){
+
+                if($rootScope.listeVehicules){
+                    $rootScope.listeVehicules = $rootScope.listeVehicules.filter(function(vehicle) {
+                        return vehicle.idAgency != $scope.currentIdAgency;
+                    });
+                }
+                $rootScope.listChildAgencies[$scope.currentIdAgency]=undefined;
+
+                $rootScope.reloadSubAgencyMenu();
+                $location.path('/agency');
+            },
+            function(response){}
+        );
+
+        //agencyByCity
+        //listChildAgencies
+
+    }
+
 
     //init graph
     $rootScope.updateGaphBenefitByDate();

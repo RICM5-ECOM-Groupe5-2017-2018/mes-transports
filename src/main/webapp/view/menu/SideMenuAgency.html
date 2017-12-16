@@ -17,7 +17,7 @@
 				<a href="#!/agency/view/vehicule"> Parc de Véhicules</a>
 			</li>
 
-			<li class="nav-item" id="agency" ng-if="user.isAgency">
+			<li class="nav-item" id="agency" ng-if="isMother">
 				<a class="nav-link"  data-toggle="collapse" data-target="#ListeCity"> Agences <span class="caret"></span></a>
 				<ul class="nav nav-pills nav-stacked"
 					ng-class="{collapse: ($route.current.activetab != 'addchildAgency')||($route.current.activetab != 'childAgency')}"

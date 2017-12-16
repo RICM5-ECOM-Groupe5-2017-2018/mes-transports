@@ -1,7 +1,6 @@
 //Controller for mother agency view
 agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope,$routeParams,$location){
 
-
     //Change location to the update view
 	$scope.changeLocationToUpdatePage=function(){
 		$location.path('/agency/update/'+$rootScope.MotherAgency.id);
@@ -41,4 +40,6 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         $rootScope.end = end;
         $rootScope.loadAgenciesProfits(false,$rootScope.MotherAgency.id);
     });
+
+
 });

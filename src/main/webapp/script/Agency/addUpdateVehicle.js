@@ -120,6 +120,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 			   $scope.data.beforTreatementCharacteristicsForType = $.extend(true, {}, response.data.sort(function (a, b) {return a.rank - b.rank;}));
 
+			   console.log(response.data);
 			   $.each(response.data, function(key , characteristic){
 
 				   //required or not
@@ -131,7 +132,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 				   }
 
 				   //type+patern
-				   switch (characteristic.unit) {
+				   switch (characteristic.typeData) {
 				   		case "str":
 				   			characteristic.type ="text";
 				   			characteristic.typeWait ="Texte";
@@ -164,14 +165,31 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 
 	/**Clear the form after the submit*/
-	function endUpdateAdd(text, url, id)
+	function endUpdateAdd(id)
 	{
+		console.log(id);
+        $rootScope.loadUpdateOrCreateVehicle(id);
+
 		$scope.vehicle={};
 		$scope.registerForm.$setPristine();
-		$rootScope.loadUpdateOrCreateVehicle(id);
-		alert(text);
-		$location.path(url);
+        $scope.data.selectedInsurance={};
+        $scope.data.characteristicList=[];
+        $scope.data.characteristicsForType=[];
+        $scope.data.selectedTypeVehicule={};
+        $scope.data.selectedAgency={}
+
+
 	}
+
+    /**Function which redirect the user on the new vehicle page*/
+    $scope.changeLocationWhenEnding=function(){
+        $location.path('/agency/view/vehicule/'+$scope.currentIdVehicules);
+    }
+
+    /**Function which redirect the user on the previous page*/
+    $scope.goback=function () {
+        $location.path('/agency/view/vehicule/'+$scope.currentIdVehicules);
+    }
 
     /**Function that create a vehicle*/
 	function sendNewVehicle()
@@ -183,20 +201,24 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 			$http.post('api/vehicle/create/', $scope.vehicle, config).then(function successCallback(response){
 
-					var id = response.data.id
+                	$scope.currentIdVehicules = response.data.id;
 					$.each( $scope.vehicle.characteristicList, function(key , value){
 							promises.push(new Promise(function(resolve, reject)
 							{
 								if($rootScope.user && $rootScope.user.isAgency)
 								{
 									var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,} };
-									$http.post('api/vehicle/addCharac/'+id+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
+									$http.post('api/vehicle/addCharac/'+$scope.currentIdVehicules+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
 									.then(function successCallback(response) {resolve("success");},
 											function errorCallback(data, status, headers) {reject("failed");});
 								}
 							}));
 					});
-					Promise.all(promises).then(values => {endUpdateAdd("Le vehicule a été créé", '/agency/view/vehicule', id);});
+					Promise.all(promises).then(function(values)
+					{
+						endUpdateAdd($scope.currentIdVehicules);
+                        $('#modalEndAdd').modal('show');
+					});
 				}, function errorCallback(data, status, headers) {});
 		}
 	}
@@ -211,7 +233,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 			$http.put('api/vehicle/edit/', $scope.vehicle, config)
 			.then(function successCallback(response) {
-						var id = response.data.id;
+                		$scope.currentIdVehicules = response.data.id;
 
 						if($scope.selectedVehicule.details.type==$scope.data.selectedTypeVehicule.id){
 
@@ -219,7 +241,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 									promises.push(new Promise(function(resolve, reject){
 										if($rootScope.user && $rootScope.user.isAgency){
 											var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
-											$http.put('api/vehicle/editCharac/'+id+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
+											$http.put('api/vehicle/editCharac/'+$scope.currentIdVehicules+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
 											.then(function successCallback(response) {
 												resolve('success');
 											}, function errorCallback(data, status, headers) {
@@ -236,7 +258,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 									promises.push(new Promise(function(resolve, reject){
 										if($rootScope.user && $rootScope.user.isAgency){
 											var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
-											$http.post('api/vehicle/addCharac/'+id+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
+											$http.post('api/vehicle/addCharac/'+$scope.currentIdVehicules+'/'+value.idCharacteristic.id, {valueCharacteristic : value.valueCharacteristic}, config)
 											.then(function successCallback(response) {
 												resolve('success');
 											}, function errorCallback(data, status, headers) {
@@ -248,7 +270,11 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 						}
 
-						Promise.all(promises).then(values => {endUpdateAdd("Le vehicule a été modifié", '/agency/view/vehicule/'+id, id);});
+						Promise.all(promises).then(function(values)
+						{
+							endUpdateAdd($scope.currentIdVehicules);
+                            $('#modalEndUpdate').modal('show');
+						});
 
 			}, function errorCallback(data, status, headers) {});
 		}
