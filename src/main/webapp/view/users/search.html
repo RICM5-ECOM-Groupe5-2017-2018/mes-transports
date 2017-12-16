@@ -5,7 +5,7 @@
 	<fieldset>
 	
 	<!-- Form Name -->
-	<legend>Search</legend>
+	<legend>Recherche</legend>
 	
 	<!-- Text input-->
 	<div class="form-group">
@@ -62,7 +62,7 @@
    <div class="thumbnail">
      <img src="" alt="" width=200 height=200>
      <div class="caption">
-       <h3>{{vehicle.brand}}</h3>
+       <h3>{{vehicle.brand}}<small> {{getVehicleType(vehicle.type).label}}</small></h3>
        <p>{{vehicle.price}}</p>
 	</div>
        <p>

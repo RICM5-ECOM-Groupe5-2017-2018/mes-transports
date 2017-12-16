@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import JsonEncoders.JsonMessage;
 import model.Agency;
 import model.Rent;
+import model.User;
 import model.Vehicle;
 import model.Transaction;
 
@@ -160,14 +161,23 @@ public class AgencyController {
 	}
 
 	/**
-	 * UNKNOWN
+	 * Return the list of the children Agencies for a mother Agency difined by idAgency
 	 *
 	 * @param idAgency the id of the agency
-	 * @return UNKNOWN
+	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
 		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
+	/**
+	 * 
+	 * @return All the Agencies present on the database
+	 */
+	public List<Agency> getAllAgencies(){
+		return entityManager.createQuery("SELECT a From Agency a")
+		.getResultList();
+	}
+	
 }

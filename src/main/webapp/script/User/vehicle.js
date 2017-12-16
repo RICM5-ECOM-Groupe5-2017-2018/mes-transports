@@ -3,17 +3,19 @@
  */
 var module = angular.module('vehicle', ['ngRoute']);
 
-module.controller('VehicleDetailsController', function($scope, $http, $routeParams) {
+module.controller('VehicleDetailsController', function($scope, $http, $routeParams, CartServices) {
 	
 	$scope.vehicle = {};	
 	
 	$http.get(
-		'api/vehicle/view?id=' + $routeParams.id
+		'api/vehicle/view/' + $routeParams.id
 	).then(function successCallback(response){
 		$scope.vehicle = response.data;
 	}, function errorCallback(response) {
-		console.log(reponse);
+		console.log(response);
 	});
+	
+	$scope.addToCart = CartServices.addToCart;
 	
 	
 });

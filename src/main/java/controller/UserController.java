@@ -2,7 +2,7 @@ package controller;
 
 import java.util.Calendar;
 import java.util.Date;
-
+import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.Singleton;
@@ -174,5 +174,15 @@ public class UserController extends Application {
 		entityManager.flush();
 		return user;
 	}
+	
+	/**
+	 * 
+	 * @return All the users on the database
+	 */
 
+	public List<User> getAllUsers(){
+		return entityManager.createQuery("SELECT u From User u")
+		.getResultList();
+	}
+	
 }
