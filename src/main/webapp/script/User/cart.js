@@ -70,8 +70,10 @@ cart.factory('CartServices', function($cookies, $http) {
 
 cart.controller('CartController', function($scope, $rootScope, $http, $location, $cookies, CartServices) {
 	
-	$scope.cart = CartServices.cart;
+	$rootScope.cart = CartServices.cart;
 	$scope.displayCart = $scope.cart;
+	$scope.canPay = ($rootScope.cart.length > 0) && $rootScope.user;
+	$scope.cantPay = ($rootScope.cart.length > 0) && !$rootScope.user;
 	
 	$scope.displayCart.forEach(function(item) {
 		$http.get('api/vehicle/view/' + item.idVehicle)
@@ -90,7 +92,7 @@ cart.controller('CartController', function($scope, $rootScope, $http, $location,
 		$cookies.putObject("cart", $scope.cart);
 	}
 	
-	$scope.totalCart = function() {
+	function computeTotalCart() {
 		total = 0;
 		if($scope.cart) {
 			$scope.cart.forEach(function(item) {
@@ -99,6 +101,9 @@ cart.controller('CartController', function($scope, $rootScope, $http, $location,
 		}
 		return total;
 	}
+	
+	
+	$scope.totalCart = computeTotalCart();
 	
 	$scope.payCart = function() {
 		pay_method = $(".btn-pay.active input")[0].id;
@@ -117,8 +122,10 @@ cart.controller('CartController', function($scope, $rootScope, $http, $location,
 			.then(function successCallback(response) {
 				$('#myModal').modal('hide');
 				$cookies.remove("cart");
-				$scope.cart = [];
+				$rootScope.cart = [];
 				$scope.displayCart = [];
+				$scope.totalCart = 0;
+				$scope.canPay = false;
 				$scope.setSuccess("Panier validé !");
 			}, function errorCallback(response) {
 				console.log(response);

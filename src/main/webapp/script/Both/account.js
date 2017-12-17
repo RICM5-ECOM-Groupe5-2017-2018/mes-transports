@@ -1,5 +1,21 @@
 var account = angular.module('account', ['ngCookies','menu']);
 
+account.run( function($rootScope, $location) {
+
+    // register listener to watch route changes
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+      
+    	console.log($rootScope.user);
+    	if ( $rootScope.user ) {
+        if ( next.templateUrl == "view/users/login.html" || next.templateUrl == "view/users/signup.html") {
+        	$location.path( "/search" );
+        } else {
+          
+        }
+      }         
+    });
+ });
+
 /**
  * Account controller :
  * - signup / login / logout
@@ -10,7 +26,7 @@ account.controller('AccountController',
         function AccountController($scope, $http, $cookies,$location,$rootScope) {
 
             /* load a logged in user infos from it's related cookie */
-            $scope.user = $cookies.getObject("user");
+            $rootScope.user = $cookies.getObject("user");
             $scope.form.update = $scope.user;
             if($scope.cart) {
                 $scope.updateCart($scope.user);
@@ -46,7 +62,6 @@ account.controller('AccountController',
                     response.data.isAgency = response.data.idAgency!=null;
                     $cookies.putObject("user", response.data);
                     $cookies.put("token", response.data.token);
-                    $scope.user = $cookies.getObject("user");
                     $rootScope.user = $scope.user;
 
                     // update cart status by setting user as owner of the cart items
@@ -57,7 +72,6 @@ account.controller('AccountController',
                     // redirect user to the main page
                     $scope.loadTopMenu();
                     $scope.loadSideMenu();
-                    $location.path('/');
                     $location.path('/');
 
                 }, function errorCallback(response) {

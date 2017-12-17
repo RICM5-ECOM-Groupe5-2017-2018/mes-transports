@@ -28,16 +28,16 @@
     	<td>Total</td>
     	<td></td>
     	<td></td>
-    	<td>{{totalCart()}}€</td>
+    	<td>{{totalCart}}€</td>
     	<td></td>
     </tr>
   </table>
 </div>
 
-<button ng-show="user && (cart.length > 0)" class="btn btn-success btn-block" data-toggle="modal"
+<button ng-show="canPay" class="btn btn-success btn-block" data-toggle="modal"
 	data-target="#myModal">Valider et payer le panier</button>
 	
-<a ng-show="!user && (cart.length > 0)" href="#!/login" class="btn btn-success btn-block" >Se connecter pour procéder au paiement</a>
+<a ng-show="cantPay" href="#!/login" class="btn btn-success btn-block" >Se connecter pour procéder au paiement</a>
 
 <!-- Modal showing the payment process -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
