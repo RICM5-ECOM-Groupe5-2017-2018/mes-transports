@@ -58,7 +58,18 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
                         return vehicle.idAgency != $scope.currentIdAgency;
                     });
                 }
-                $rootScope.listChildAgencies[$scope.currentIdAgency]=undefined;
+                $rootScope.filtredVehicules = $rootScope.listeVehicules
+
+
+
+                var newListAgency={};
+                for (var i=0;i<Object.keys($rootScope.listChildAgencies).length;i++){
+                    var key = Object.keys($rootScope.listChildAgencies)[i];
+                    if(key!=$scope.currentIdAgency){
+                        newListAgency[key] = $rootScope.listChildAgencies[key];
+                    }
+                }
+                $rootScope.listChildAgencies=newListAgency;
 
                 $rootScope.reloadSubAgencyMenu();
                 $location.path('/agency');

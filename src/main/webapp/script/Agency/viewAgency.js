@@ -7,14 +7,9 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 	};
 
     //init graph*
-
-    if($rootScope.MotherAgency){
-        $rootScope.loadRendAndProfits(false,$rootScope.MotherAgency.id);
-    }else{
-        $rootScope.updateGaphBenefitByDate();
-        $rootScope.updateGaphBenefitByAdgency();
-    }
-
+    console.log("Load");
+    $rootScope.updateGaphBenefitByDate();
+    $rootScope.updateGaphBenefitByAdgency();
 
 
     //responsive graph
