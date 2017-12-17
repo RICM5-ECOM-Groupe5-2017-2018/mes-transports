@@ -1,34 +1,36 @@
+<!-- Login form -->
 <form  ng-show="!user" class="form-horizontal" ng-submit="connect()">
 	<fieldset>
-	
+
 	<!-- Form Name -->
 	<legend>Connexion</legend>
-	
+
 	<!-- Text input-->
 	<div class="form-group">
-	  <label class="col-md-4 control-label" for="login">Login</label>  
+	  <label class="col-md-4 control-label" for="login">Login</label>
 	  <div class="col-md-5">
 	  <input id="login" ng-model="form.connect.login" name="login" type="text" placeholder="" class="form-control input-md" required="">
-	    
+
 	  </div>
 	</div>
-	
+
 	<!-- Password input-->
 	<div class="form-group">
 	  <label class="col-md-4 control-label" for="password">Mot de passe</label>
 	  <div class="col-md-5">
 	    <input id="password" ng-model="form.connect.password" name="password" type="password" placeholder="" class="form-control input-md" required="">
-	    
+
 	  </div>
 	</div>
-	
+
 	<!-- Button -->
 	<div class="form-group">
 	  <label class="col-md-4 control-label" for="connect_button"></label>
-	  <div class="col-md-4">
+	  <div class="col-md-5">
 	    <button id="connect_button" name="connect_button" class="btn btn-success btn-block">Connexion</button>
+	  	<a href="#!/signup" class="btn btn-block btn-default">S'inscrire</a>
 	  </div>
 	</div>
-	
+
 	</fieldset>
 </form>

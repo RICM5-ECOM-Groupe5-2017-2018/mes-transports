@@ -197,7 +197,13 @@ public class VehicleController {
 				.getResultList();
 		return characteristicList;
 	}
-	
+
+	/**
+     * Returns all vehicle type from the data base
+     *
+     * @param idType the type chosen
+     * @return List of characteristics or error
+     */
 	public List<VehicleType> getTypeVehicle(){
 		List<VehicleType> typeList = entityManager
 				.createQuery("FROM  VehicleType")
@@ -215,7 +221,11 @@ public class VehicleController {
 	 */
 	public Vehicle consultVehicle (Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
-		return vehicleRet;
+		if(vehicleRet.isStatus()) {
+			return vehicleRet;
+		}
+		else return null;
+		
 	}
 
 	/**

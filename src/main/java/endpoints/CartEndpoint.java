@@ -83,5 +83,18 @@ public class CartEndpoint extends Application {
 	 		}
 	 		
 	 	}
+	 	
+	 	@POST
+	 	@Path("/validate")
+	 	@Consumes(MediaType.APPLICATION_JSON)
+	 	@Produces(MediaType.APPLICATION_JSON)
+	 	public Response validateCart(List<CartItem> cart) {
+	 		try {
+	 			return Response.status(200).entity(controller.declareDone(cart)).build();
+	 		}
+	 		catch (Exception ex) {
+	 			return Response.status(400).entity("Probléme dans les données").build();
+	 		}
+	 	}
 
 }

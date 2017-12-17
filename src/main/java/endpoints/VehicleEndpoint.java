@@ -36,7 +36,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/addCharac/{idVehicle}/{idCharacteristic}")
@@ -92,9 +92,9 @@ public class VehicleEndpoint extends Application{
                     .entity("Format de l'entité invalide").build();
         }
     }
-    
-    
-    
+
+
+
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list/{idType}")
@@ -107,7 +107,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
         }
     }
-    
+
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/list")
@@ -120,7 +120,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondante").build();
         }
     }
-    
+
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/type")
@@ -140,7 +140,10 @@ public class VehicleEndpoint extends Application{
     @Produces(MediaType.APPLICATION_JSON)
     public Response consultVehicle (@PathParam("id") Integer id) {
         try {
-            return Response.status(200).entity(controller.consultVehicle(id)).build();
+        	Vehicle v = controller.consultVehicle(id);
+        	if(v==null) return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        	else  return Response.status(200).entity(v).build();
         } catch (Exception ex) {
             return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();
@@ -159,7 +162,7 @@ public class VehicleEndpoint extends Application{
                     .entity("Aucune entité correspondant à cet Id").build();
     	}
     }
-    
+
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/delete/{id}")

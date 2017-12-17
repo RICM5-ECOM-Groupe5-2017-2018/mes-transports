@@ -1,5 +1,6 @@
 var menu = angular.module('menu', ['ngCookies','agency']);
 
+//Controler which send the menu to load
 menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl($scope,$rootScope,$cookies) {
 
 	$scope.currentSideMenu = 'view/menu/sideMenuEmpty.html'; 
@@ -12,7 +13,12 @@ menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl
 			$scope.currentTopMenu = 'view/menu/header.html'
 		}
 		else{
-		$scope.currentTopMenu = user.isAgency?'view/menu/headerAgency.html':'view/menu/headerUser.html';}	
+			if(user.isAgency){
+                $scope.currentTopMenu = user.isAgency?'view/menu/headerAgency.html':'view/menu/headerUser.html';
+			}
+			else{$scope.currentTopMenu = 'view/menu/headerUser.html';}
+		}
+
 	}
 	
 	$scope.loadSideMenu=function()
@@ -39,24 +45,7 @@ menu.controller("menuCtrl", ['$scope','$rootScope','$cookies', function menuCtrl
 	}
 }]);
 
-
-menu.controller("NavController", function ($scope) {
-	$scope.agencyCity = "parcLv1"
-
-	$('#nav-side').click(function () {
-	    $('#menu-side').toggleClass('slide-in');
-	});
-	
-	$scope.collapseL1 = function(){
-		$('#listAgence').toggleClass('collapse');
-	};
-	
-	$scope.collapseL2 = function(city){
-		$('#'+city).toggleClass('collapse');
-	};
-
-});
-
+//Controller for the top menu
 menu.controller("topController", function ($scope,$rootScope) {
 	$scope.connect = $rootScope.user!=undefined;
 	$scope.logo = {
@@ -64,14 +53,5 @@ menu.controller("topController", function ($scope,$rootScope) {
 			alt : "logo-MesTransports",
 			src : "Images/mt.png"
 	};
-	
-	$scope.expand = function(){
-		console.log("click");
-		 $('#menu-top').collapse() 
-	};
-	
-	$('#nav-top').click(function () {
-		console.log("click");
-        
-    });
+
 });

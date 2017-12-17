@@ -1,97 +1,126 @@
-<div style="margin:0;" ng-controller="agencyMainCtrl">
 
-	<div ng-controller="agencyVehicleManagement">
-		<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
-			
-		<div  ng-controller="addVehiculeCtrl" style="margin-left: 25%;" >
-			
-			<h1> Inscription d'un nouveau véhicule </h1>
-			<form class="form-horizontal" name="registerForm">
-				
-				<div class="form-group row">
-					<label for="brand" class="col-sm-2 col-form-label">Marque du véhicule*</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" ng-maxlength=50 ng-model="vehicle.brand" name="brand" value="" required>
-						<span class="text-danger" ng-show="registerForm.brand.$error.maxlength">
-			   				Le champ ne peux pas contenir plus de 50 caractères
-						</span>
-					</div>
-				</div>
-				
-				<div class="form-group row"">
-					<label for="price" class="col-sm-2 col-form-label">Prix à l'heure du véhicule*</label>
-					<div class="col-sm-10">
-						<input type="number" class="form-control" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" 
-						step="0.01" ng-model="vehicle.price" name="price" value="" required>
-						<span class="text-danger" ng-show="registerForm.price.$error.step">
-			   				Il ne peux pas y avoir plus de 2 chiffre après la virgule
-						</span>
-						<span class="text-danger" ng-show="registerForm.price.$error.pattern">
-			   				Vous devez entrer un nombre décimal
-						</span>
-					</div>
-				</div>
-				
-				<div class="form-group row" >
-					<label for="SelectAgency" class="col-sm-2 col-form-label">Agence où enregistrer le véhicule*</label>
-					<div class="col-sm-10"> 
-						<select name="SelectAgency" id="SelectAgency" class="form-control" required
-					      ng-options="agency.name for agency in data.availableAgency track by agency.id"
-					      ng-model="data.selectedAgency"></select> 
-					</div>
-				</div>
-				
-				<div class="form-group row" >
-					<label for="SelectInsurance" class="col-sm-2 col-form-label">Assurance*</label>
-					<div class="col-sm-10"> 
-						<select name="SelectInsurance" id="SelectInsurance" class="form-control" required
-					      ng-options="insurance.name for insurance in data.availableInsurance track by insurance.name"
-					      ng-model="data.selectedInsurance"></select> 
-					</div>
-				</div>
-				
-				<div class="form-group row" >
-					<label for="SelectTypes" class="col-sm-2 col-form-label">Type de véhicule*</label>
-					<div class="col-sm-10"> 
-						<select name="SelectTypes" id="SelectTypes" class="form-control" required
-					      ng-options="typeV.label for typeV in data.availableTypes track by typeV.id"
-					      ng-model="data.selectedTypeVehicule"
-					      ng-change="showCharacteristics()"></select> 
-					</div>
-				</div>
-				
-				<div ng-repeat="(index,characteristic) in data.characteristicsForType">
-					<div class="form-group row"">
-						<label for="{{characteristic.label}}" class="col-sm-2 col-form-label">{{characteristic.labelSee}}</label>
-						<div class="col-sm-10">
-							<input type="{{characteristic.type}}" class="form-control" ng-pattern="{{characteristic.pattern}}" ng-maxlength={{characteristic.max}} 
-									ng-model="data.slectedCharacteristic[characteristic.label]" 
-									name="{{characteristic.label}}"
-									ng-required="{{!characteristic.optional}}">
-							<span class="text-danger" ng-show="registerForm.{{characteristic.label}}.$error.maxlength">
-				   				Il ne peux pas y avoir plus de {{characteristic.max}} charactères
-							</span>
-							<span class="text-danger" ng-show="registerForm.{{characteristic.label}}.$error.pattern">
-				   				Le champs contient le mauvais format de données, format attendu : {{characteristic.typeWait}}
-							</span>
-							<span class="text-danger" ng-show="registerForm.{{characteristic.label}}.$error.type">
-				   				Le champs contient le mauvais format de données, format attendu : {{characteristic.typeWait}}
-							</span>
+<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+	<div ng-controller="agencyMainCtrl">
+		<div  class="row"  ng-controller="agencyVehicleManagement">
+
+
+				<div  ng-controller="addVehiculeCtrl">
+
+					<form class="form-horizontal col-10 col-md-10 col-md-offset-1" name="registerForm">
+						<h1> {{isUpdate?'Modifier un véhicule':'Ajouter un nouveau véhicule'}}  </h1>
+						<div class="form-group row">
+							<label for="brand" class="col-sm-2 col-form-label">Nom du véhicule*</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" ng-maxlength=50 ng-model="vehicle.brand" name="brand" value="" required>
+								<span class="text-danger" ng-show="registerForm.brand.$error.maxlength">
+									Le champ ne peux pas contenir plus de 50 caractères
+								</span>
+							</div>
 						</div>
-					</div>			                			
-				</div>
-				
-				
-				
-				
-				
-				
-				<div class="form-group row">
-					<input class="btn btn-primary col-md-10" type="button" ng-disabled="registerForm.$invalid" value="Ajouter le véhicule" ng-click="sendFormVehicules()">
-				</div> 
 
-			</form>
+						<div class="form-group row">
+							<label for="price" class="col-sm-2 col-form-label">Prix à l'heure du véhicule*</label>
+							<div class="col-sm-10">
+								<input type="number" class="form-control" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
+									   step="0.01" ng-model="vehicle.price" name="price" value="" required>
+								<span class="text-danger" ng-show="registerForm.price.$error.step">
+									Il ne peux pas y avoir plus de 2 chiffres après la virgule
+								</span>
+								<span class="text-danger" ng-show="registerForm.price.$error.pattern">
+									Vous devez entrer un nombre décimal
+								</span>
+							</div>
+						</div>
+
+						<div class="form-group row" >
+							<label for="SelectAgency" class="col-sm-2 col-form-label">Agence où enregistrer le véhicule*</label>
+							<div class="col-sm-10">
+								<select name="SelectAgency" id="SelectAgency" class="form-control" required
+										ng-options="agency.name for agency in availableAgency track by agency.id"
+										ng-model="data.selectedAgency"></select>
+							</div>
+						</div>
+
+						<div class="form-group row" >
+							<label for="SelectInsurance" class="col-sm-2 col-form-label">Assurance*</label>
+							<div class="col-sm-10">
+								<select name="SelectInsurance" id="SelectInsurance" class="form-control" required
+										ng-options="insurance.name for insurance in data.availableInsurance track by insurance.name"
+										ng-model="data.selectedInsurance"></select>
+							</div>
+						</div>
+
+						<div class="form-group row" >
+							<label for="SelectTypes" class="col-sm-2 col-form-label">Type de véhicule*</label>
+							<div class="col-sm-10">
+								<select name="SelectTypes" id="SelectTypes" class="form-control" required
+										ng-options="typeV.label for typeV in data.availableTypes track by typeV.id"
+										ng-model="data.selectedTypeVehicule"
+										ng-change="showCharacteristics()"></select>
+							</div>
+						</div>
+
+						<div ng-repeat="(index,characteristic) in data.characteristicsForType">
+							<div class="form-group row">
+								<label for="{{characteristic.labelConcac}}" class="col-sm-2 col-form-label">{{characteristic.labelSee}}</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" ng-pattern="characteristic.pattern" ng-maxlength={{characteristic.max}}
+										   ng-model="data.slectedCharacteristic[characteristic.id]"
+										   name="{{characteristic.labelConcac}}"
+										   ng-required="{{!characteristic.optional}}">
+									<span class="text-danger" ng-show="registerForm.{{characteristic.labelConcac}}.$error.maxlength">
+												Il ne peux pas y avoir plus de {{characteristic.max}} charactères
+											</span>
+									<span class="text-danger" ng-show="registerForm.{{characteristic.labelConcac}}.$error.pattern">
+												Le champs contient le mauvais format de données, format attendu : {{characteristic.typeWait}}
+											</span>
+								</div>
+							</div>
+						</div>
+						<!---->
+						<div class="form-group row">
+							<input ng-if="isUpdate" class="btn btn-danger  col-8 col-md-4 col-md-offset-1" type="button"
+								   value="Annuler" ng-click="goback()">
+							<input class="btn btn-success  col-8 col-md-4 col-md-offset-2" type="button" ng-disabled="registerForm.$invalid"
+								   value="{{isUpdate?'Modifier le véhicule':'Ajouter le véhicule'}}" ng-click="sendFormVehicules()">
+						</div>
+					</form>
+
+					<div class="modal fade" id="modalEndAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Véhicule ajoutée</h4>
+								</div>
+								<div class="modal-body">
+									La nouveau véhicule a bien été créé. Voulez vous ajouter un nouveau véhicule?
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn" data-dismiss="modal"> Oui </button>
+									<button type="button" class="btn" data-dismiss="modal" ng-click="changeLocationWhenEnding()"> Non </button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal fade" id="modalEndUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Véhicule modifié</h4>
+								</div>
+								<div class="modal-body">
+									Le véhicule a été correctement modifié
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn" data-dismiss="modal" ng-click="changeLocationWhenEnding()"> Fermer </button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
 		</div>
 	</div>
-</div>
+</main>
 
