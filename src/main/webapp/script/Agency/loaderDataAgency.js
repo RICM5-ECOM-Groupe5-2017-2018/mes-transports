@@ -126,7 +126,6 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$l
         $rootScope.reloadSubAgencyMenu();
 
 	}
-    console.log($rootScope.isMother);
 });
 
 
@@ -136,7 +135,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	$rootScope.listTypes;
 	$rootScope.listeVehicules;
 	$rootScope.listCharacteristic;
-    $rootScope.filtredVehicules
+    $rootScope.filtredVehicules;
 
 	/**Function which load agency(main and child) vehicle*/
 	$rootScope.loadVehicles=function()

@@ -103,14 +103,19 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
     }
 
+    $rootScope.loadRendAndProfits=function(isChild,id){
+        loadAgenciesProfits(isChild,id,'api/agency/transactions/',true);
+        /*loadAgenciesProfits(isChild,id,'api/agency/rents/',false);*/
+    };
+
     /**Function which load all the transition of an agency depending on a date range*/
-    $rootScope.loadAgenciesProfits=function(isChild,id){
+    function loadAgenciesProfits(isChild,id,endpoint,isTransactions){
         var promises = [];
         var rents = {};
         var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 
         promises.push(new Promise(function(resolve, reject){
-            $http.get('api/agency/transactions/'+id+'/'
+            $http.get(endpoint+id+'/'
                 + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
                 + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
@@ -128,7 +133,7 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
         $.each($rootScope.listChildAgencies, function(key, child){
             promises.push(new Promise(function(resolve, reject){
-                $http.get('api/agency/transactions/'+child.id+'/'
+                $http.get(endpoint+child.id+'/'
                     + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
                     + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
@@ -146,8 +151,15 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
         });
 
         Promise.all(promises).then(function(){
-            formatBenefitByDate(rents);
-            if(!isChild){formatBenefitByAgency(rents);}
+            if(isTransactions){
+                console.log("Transaction");
+                formatBenefitByDate(rents);
+                if(!isChild){formatBenefitByAgency(rents);}
+            }
+            else{
+                console.log("Rents");
+            }
+            console.log(rents);
         });
     }
 

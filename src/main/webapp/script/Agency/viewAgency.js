@@ -6,9 +6,16 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		$location.path('/agency/update/'+$rootScope.MotherAgency.id);
 	};
 
-    //init graph
-    $rootScope.updateGaphBenefitByDate();
-    $rootScope.updateGaphBenefitByAdgency();
+    //init graph*
+
+    if($rootScope.MotherAgency){
+        $rootScope.loadRendAndProfits(false,$rootScope.MotherAgency.id);
+    }else{
+        $rootScope.updateGaphBenefitByDate();
+        $rootScope.updateGaphBenefitByAdgency();
+    }
+
+
 
     //responsive graph
     window.onresize = function()
@@ -38,7 +45,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
     }, function(start, end, label) {
         $rootScope.start = start;
         $rootScope.end = end;
-        $rootScope.loadAgenciesProfits(false,$rootScope.MotherAgency.id);
+        $rootScope.loadRendAndProfits(false,$rootScope.MotherAgency.id);
     });
 
 

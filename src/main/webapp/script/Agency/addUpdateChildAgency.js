@@ -102,6 +102,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     		.then(function successCallback(response) {
     			$scope.agency={};
 	        	$scope.registerForm.$setPristine();
+                console.log(response.data);
 	        	$rootScope.loadOneChildAgency(response.data.id);
 	        	$scope.reponse = response.data;
                 $('#modalEndAdd').modal('show');
@@ -121,6 +122,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     		.then(function successCallback(response) {
     			$scope.agency={};
 	        	$scope.registerForm.$setPristine();
+	        	console.log(response.data);
                 $rootScope.loadOneChildAgency($scope.idUpdatedAgency);
                 $scope.reponse = response.data;
                 $('#modalEndUpdate').modal('show');

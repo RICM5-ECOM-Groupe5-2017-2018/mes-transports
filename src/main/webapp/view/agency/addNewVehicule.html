@@ -62,25 +62,22 @@
 
 						<div ng-repeat="(index,characteristic) in data.characteristicsForType">
 							<div class="form-group row">
-								<label for="{{characteristic.label}}" class="col-sm-2 col-form-label">{{characteristic.labelSee}}</label>
+								<label for="{{characteristic.labelConcac}}" class="col-sm-2 col-form-label">{{characteristic.labelSee}}</label>
 								<div class="col-sm-10">
-									<input type="{{characteristic.type}}" class="form-control" ng-pattern="{{characteristic.pattern}}" ng-maxlength={{characteristic.max}}
-										   ng-model="data.slectedCharacteristic[characteristic.label]"
-										   name="{{characteristic.label}}"
+									<input type="text" class="form-control" ng-pattern="characteristic.pattern" ng-maxlength={{characteristic.max}}
+										   ng-model="data.slectedCharacteristic[characteristic.id]"
+										   name="{{characteristic.labelConcac}}"
 										   ng-required="{{!characteristic.optional}}">
-									<span class="text-danger" ng-show="registerForm.{{characteristic.label}}.$error.maxlength">
+									<span class="text-danger" ng-show="registerForm.{{characteristic.labelConcac}}.$error.maxlength">
 												Il ne peux pas y avoir plus de {{characteristic.max}} charactères
 											</span>
-									<span class="text-danger" ng-show="registerForm.{{characteristic.label}}.$error.pattern">
-												Le champs contient le mauvais format de données, format attendu : {{characteristic.typeWait}}
-											</span>
-									<span class="text-danger" ng-show="registerForm.{{characteristic.label}}.$error.type">
+									<span class="text-danger" ng-show="registerForm.{{characteristic.labelConcac}}.$error.pattern">
 												Le champs contient le mauvais format de données, format attendu : {{characteristic.typeWait}}
 											</span>
 								</div>
 							</div>
 						</div>
-
+						<!---->
 						<div class="form-group row">
 							<input ng-if="isUpdate" class="btn btn-danger  col-8 col-md-4 col-md-offset-1" type="button"
 								   value="Annuler" ng-click="goback()">

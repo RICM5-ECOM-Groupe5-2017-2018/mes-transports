@@ -4,9 +4,15 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     //get selected agency data
 	$scope.currentIdAgency = $routeParams.idA
 
+    if($rootScope.listChildAgencies) {
+        $scope.currentAgency = $rootScope.listChildAgencies[$scope.currentIdAgency];
+    }
+    else{
+        $location.path('agency/');
+    }
 
-    $scope.currentAgency = $rootScope.listChildAgencies[$scope.currentIdAgency];
-
+    //init graph
+    $rootScope.updateGaphBenefitByDate();
 
     //Change location to the update view
     $scope.changeLocationToUpdatePage=function(){
@@ -37,7 +43,7 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     }, function(start, end, label) {
         $rootScope.start = start;
         $rootScope.end = end;
-        $rootScope.loadAgenciesProfits(true,$scope.currentIdAgency  );
+        $rootScope.loadRendAndProfits(true,$scope.currentIdAgency);
     });
 
     /**Function which erased the selected agency*/
@@ -67,7 +73,6 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     }
 
 
-    //init graph
-    $rootScope.updateGaphBenefitByDate();
+
 
 });

@@ -31,7 +31,7 @@
                     <div class="form-group row">
                         <label for="postal" class="col-sm-2 col-form-label">Code Postale*</label>
                         <div class="col-sm-4">
-                            <input type="tel" class="form-control" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-minlength=5 ng-model="data.addressp2" name="postal" value="" required>
+                            <input type="text" class="form-control" ng-pattern="/^[0-9]+[0-9]*$/" ng-maxlength=5 ng-minlength=5 ng-model="data.addressp2" name="postal" value="" required>
                             <span class="text-danger" ng-show="registerForm.postal.$error.maxlength">
                                 Le champ doit contenir 5 chiffres
                             </span>
