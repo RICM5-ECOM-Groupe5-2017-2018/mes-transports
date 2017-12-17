@@ -255,7 +255,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 
 						Promise.all(promises).then(function(values)
 						{
-							endUpdateAdd($scope.currentIdVehicules,response.data,values);
+							endUpdateAdd($scope.currentIdVehicules);
                             $('#modalEndUpdate').modal('show');
 						});
 

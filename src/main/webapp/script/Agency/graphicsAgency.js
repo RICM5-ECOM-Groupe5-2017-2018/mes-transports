@@ -127,7 +127,7 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
                     rents[$rootScope.MotherAgency.id] = response.data
                     resolve("success");
                 },
-                function(response){console.log("Mother failed");reject("failed");}
+                function(response){reject("failed");}
             );
         }));
 
@@ -145,21 +145,18 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
                         resolve("success");
                     },
-                    function(response){console.log("Child "+child.id+" failed");reject("failed");}
+                    function(response){reject("failed");}
                 );
             }));
         });
 
         Promise.all(promises).then(function(){
             if(isTransactions){
-                console.log("Transaction");
                 formatBenefitByDate(rents);
                 if(!isChild){formatBenefitByAgency(rents);}
             }
             else{
-                console.log("Rents");
             }
-            console.log(rents);
         });
     }
 
@@ -198,11 +195,12 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
             if(agency.length!=0){
 
                 $.each(agency, function(key, transac) {
+                    var date;
                     if(delta=='day'){
-                        var date = moment(transac.date).format('YYYY-MM-DD');
+                        date = moment(transac.date).format('YYYY-MM-DD');
                     }
                     else{
-                        var date = moment(transac.date).format('hh:mm:ss');
+                        date = moment(transac.date).format('hh:mm:ss');
                     }
                     $scope.BenefitByDate[date]+=transac.amount;
 
@@ -219,12 +217,13 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
             if(agency.length>0) {
                 $.each(agency, function (idTransac, transac) {
+                    var name;
                     if($rootScope.listChildAgencies[key])
                     {
-                        var name = $rootScope.listChildAgencies[key].name;
+                        name = $rootScope.listChildAgencies[key].name;
                     }
                     else{
-                        var name = $rootScope.MotherAgency.name;
+                        name = $rootScope.MotherAgency.name;
 
                     }
 

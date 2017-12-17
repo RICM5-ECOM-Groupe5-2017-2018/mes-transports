@@ -8,7 +8,6 @@ app.run(function($rootScope,$location,$route,$window) {
 
 	$rootScope.$on("$locationChangeStart", function(event, nextUrl, currentUrl) {
 
-
 		if($rootScope.user)
 		{
 			var route = nextUrl;

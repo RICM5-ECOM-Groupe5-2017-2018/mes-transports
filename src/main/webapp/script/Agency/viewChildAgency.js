@@ -49,7 +49,6 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
     /**Function which erased the selected agency*/
     $scope.eraseAgency = function(){
 
-        console.log("blop");
         var config = {headers: {'Authorization': 'Bearer ' + $rootScope.user.token,}};
         $http.delete('api/agency/delete/'+$scope.currentIdAgency,config).then(
             function(response){

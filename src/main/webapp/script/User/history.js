@@ -8,9 +8,7 @@ historique.controller('HistoryController', function($scope, $http, $location) {
 	$http.get('api/user/transactions/' + $scope.user.id)
 	.then(function successController(response) {
 		$scope.history = response.data;
-		console.log($scope.history);
 	}, function errorController(response) {
-		console.log(response);
 	});
 	
 	$scope.displayQrCode = function(txt) {

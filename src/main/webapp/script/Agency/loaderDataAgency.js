@@ -237,10 +237,9 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 
 			   var vehicle = response.data;
 
-			   var agencyName = ($rootScope.MotherAgency.id == vehicle.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[vehicle.idAgency].name
 			   var newVehicules = {
 									id : vehicle.id,
-									name: agencyName +"-"+vehicle.brand+"-"+$rootScope.listTypes[vehicle.type].label,
+									name: vehicle.brand,
 									details : vehicle,
 								  }
 

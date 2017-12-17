@@ -89,7 +89,6 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 			$scope.updateFilter();
 			
 		}, function errorCallback(response) {
-			console.log(response);
 		});
 		
 	};

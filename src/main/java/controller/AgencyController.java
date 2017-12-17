@@ -4,7 +4,6 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-//import javax.transaction.Transaction;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
@@ -167,7 +166,8 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+idAgency);
+		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency=:idAgency")
+				.setParameter("idAgency", idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
