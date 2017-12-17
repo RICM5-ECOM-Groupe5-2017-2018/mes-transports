@@ -33,6 +33,7 @@ public class Characteristic implements java.io.Serializable {
 	private String unit;
 	private String label;
 	private String form;
+	private String type_data;
 	
 	@JsonIgnore
     private List<AssignCharacteristic> characteristicList = new ArrayList<AssignCharacteristic>();
@@ -117,6 +118,16 @@ public class Characteristic implements java.io.Serializable {
 	public void setForm(String form) {
 		this.form = form;
 	}
-	
+
+	public String getTypeData() {
+        return type_data;
+    }
+
+    public void setTypeData(String type_data) {
+        this.type_data = type_data;
+    }
+
+
+
 	
 }

@@ -2,22 +2,20 @@
 var app = angular.module("app",['routes','account','menu','agency', 'vehicle', 'search', 'cart', 'history']);
 
 
-//var app = angular.module("main",['routes','menu','account','agencyVehiculesView','agency']);
-
-
 app.run(function($rootScope,$location,$route,$window) {
+
+    $route.reload();
 
 	$rootScope.$on("$locationChangeStart", function(event, nextUrl, currentUrl) {
 
+
 		if($rootScope.user)
 		{
-			console.log("connect")
 			var route = nextUrl;
 			if($route.routes[$location.path()]){route = ($route.routes[$location.path()]).originalPath;}
 
 			if(route == '/')
 			{
-				console.log("redirection user et agency");
 				  if($rootScope.user.isAgency)
 				  {
 					  $location.path('/agency');
@@ -46,11 +44,27 @@ app.run(function($rootScope,$location,$route,$window) {
 app.controller('AppController', function($scope, $cookies, CartServices) {
 
 	$scope.user = $cookies.getObject("user");
-	
+
 	$scope.form = {};
+	if(!$scope.success) {
+		$scope.success = undefined;
+		$scope.error = undefined;
+	}
 	
+	$scope.setError = function(msg) {
+		$scope.error = msg;
+	}
+	
+	$scope.setSuccess = function(msg) {
+		$scope.success = msg;
+	}
+
 	$scope.cart = CartServices.cart;
 	$scope.updateCart = CartServices.updateCart;
-	
+
+	$scope.refreshAlerts = function() {
+		$scope.success = undefined;
+		$scope.error = undefined;
+	}
 
 });

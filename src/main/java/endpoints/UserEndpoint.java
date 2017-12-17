@@ -122,7 +122,7 @@ public class UserEndpoint extends Application{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editUserPass(@FormParam("idUser") Integer id
-            ,@FormParam("oldass") String oldPass
+            ,@FormParam("oldPass") String oldPass
             ,@FormParam("newPass") String newPass) {
         try {
             return Response.status(200).entity(controller.updateUserPass(id,oldPass, newPass)).build();
@@ -134,7 +134,7 @@ public class UserEndpoint extends Application{
     }
 
     @DELETE
-    @SecuredAdmin
+    @Secured
     @Path("/disable/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -156,6 +156,20 @@ public class UserEndpoint extends Application{
     public Response reactiveUser(@PathParam("id") Integer userId) {
         try {
             return Response.status(200).entity(controller.enableUser(userId)).build();
+        }
+        catch(Exception e) {
+            return Response.status(400).type("text/plain")
+                    .entity("Aucun utilisateur ne correspond a cette id").build();
+        }
+    }
+    
+    @GET
+    @Path("/transactions/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userTransactions(@PathParam("id") Integer userId) {
+    	try {
+            return Response.status(200).entity(controller.getTransactions(userId)).build();
         }
         catch(Exception e) {
             return Response.status(400).type("text/plain")

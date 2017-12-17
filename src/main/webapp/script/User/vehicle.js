@@ -17,5 +17,4 @@ module.controller('VehicleDetailsController', function($scope, $http, $routePara
 	
 	$scope.addToCart = CartServices.addToCart;
 	
-	
 });

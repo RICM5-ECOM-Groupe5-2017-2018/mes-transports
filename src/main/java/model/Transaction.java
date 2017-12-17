@@ -5,11 +5,13 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "transaction", catalog = "Mes_Transports")
@@ -20,29 +22,42 @@ public class Transaction implements java.io.Serializable {
     private Integer id;
     @Column(name = "amount", nullable = false)
     private Float amount;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
     @Column(name="str_date", nullable=false)
     private Date str_date;
-    @Column(name = "bankName", nullable = false)
+    @Column(name = "bankName")
     private String bankName;
-    @Column(name = "rib", nullable = false)
+    @Column(name = "rib")
     private String rib;
+    
     @OneToMany(targetEntity=Rent.class, mappedBy="transaction", fetch=FetchType.LAZY)
     @JsonIgnore
     private List<Rent> rentList = new ArrayList<Rent>();
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="agency_id")
     @JsonIgnore
     private Agency agency;
+    
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     @JsonIgnore
     private User user;
+    @JoinColumn(name="token", nullable = false)
+    private String token;
     
 
 
-    public Integer getId() {
+    public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -65,7 +80,7 @@ public class Transaction implements java.io.Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
+    
     public Agency getAgency() {
         return agency;
     }
@@ -113,5 +128,12 @@ public class Transaction implements java.io.Serializable {
 
     public void setRentList(List<Rent> rentList) {
         this.rentList = rentList;
+    }
+    
+    public void generateToken() {
+    	SecureRandom random = new SecureRandom();
+    	byte bytes[] = new byte[20];
+    	random.nextBytes(bytes);
+    	token = bytes.toString();
     }
 }
