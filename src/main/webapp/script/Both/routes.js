@@ -15,13 +15,17 @@ routes.config(function($routeProvider) {
     	templateUrl : "view/users/login.html",
     	controller : "AccountController"
     })
-    .when("/signin", {
-    	templateUrl : "view/users/signin.html",
+    .when("/signup", {
+    	templateUrl : "view/users/signup.html",
     	controller : "AccountController"
     })
     .when("/account", {
     	templateUrl : "view/users/update.html",
     	controller : "AccountController"
+    })
+    .when("/agency/account", {
+        templateUrl : "view/users/update.html",
+        controller : "AccountController"
     })
     .when("/cart", {
     	templateUrl : 'view/users/cart.html',

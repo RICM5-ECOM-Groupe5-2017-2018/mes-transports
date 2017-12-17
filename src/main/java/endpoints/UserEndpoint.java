@@ -128,7 +128,7 @@ public class UserEndpoint extends Application{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editUserPass(@FormParam("idUser") Integer id
-            ,@FormParam("oldass") String oldPass
+            ,@FormParam("oldPass") String oldPass
             ,@FormParam("newPass") String newPass) {
         try {
             return Response.status(200).entity(controller.updateUserPass(id,oldPass, newPass)).build();
@@ -140,7 +140,7 @@ public class UserEndpoint extends Application{
     }
 
     @DELETE
-    @SecuredAdmin
+    @Secured
     @Path("/disable/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

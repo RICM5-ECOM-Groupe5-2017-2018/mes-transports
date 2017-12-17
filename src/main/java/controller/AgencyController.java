@@ -4,13 +4,13 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transaction;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
 import model.Rent;
 import model.User;
 import model.Vehicle;
+import model.Transaction;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -70,8 +70,16 @@ public class AgencyController {
 		
 		return all_rents;
 	}
-	
-	public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
+
+	/**
+     * Get the transaction list from all the vehicles for the Agency defined by agencyId from start_date to end_date
+     *
+     * @param agencyId
+     * @param start_date
+     * @param end_date
+     * @return
+     */
+    public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
 		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN '"+start_date+"' AND '" + end_date + "'")
 		.setParameter("id", agencyId)
 		.getResultList();
@@ -163,7 +171,8 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+idAgency);
+		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency=:idAgency")
+				.setParameter("idAgency", idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 

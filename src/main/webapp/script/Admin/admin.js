@@ -5,10 +5,8 @@ admin.controller('AdminController', function($scope,$http,$cookies){
 	$scope.agencies = {};
 	$http.get('api/agency/getAllAgencies')
 	.then(function successCallback(response){
-		$scope.agencies = response.data
-		console.log(response.data)
+		$scope.agencies = response.data;
 	}, function errorCallback(response){
-		console.log(response)
 	});
 
     $scope.sendAdminUser = function(){

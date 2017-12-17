@@ -69,3 +69,86 @@
 
 </fieldset>
 </form>
+
+<form ng-show="user" class="form-horizontal" ng-submit="updatePwd()">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Changer de mot de passe</legend>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="old_password">Ancien mot de passe</label>
+  <div class="col-md-5">
+    <input id="old_password" ng-model="form.update.old_password" name="old_password" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="new_password">Nouveau mot de passe</label>
+  <div class="col-md-5">
+    <input id="new_password" ng-model="form.update.new_password" name="new_password" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="new_password2">Vérification mot de passe</label>
+  <div class="col-md-5">
+    <input id="new_password2" ng-model="form.update.new_password2" name="new_password2" type="password" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="update_button"></label>
+  <div class="col-md-4">
+    <button id="update_pwd_button" name="update_pwd_button" class="btn btn-success btn-block">Sauvegarder les informations</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+<form ng-show="user" class="form-horizontal" ng-submit="updateInfo()">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Zone dangereuse</legend>
+<div class="form-group">
+<div class="col-md-4">
+	<button class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">Supprimer mon compte</button>
+</div>
+</div>
+</fieldset>
+</form>
+
+
+<!-- Modal showing the payment process -->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">Suppression de compte</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					Attention, supprimer votre compte vous empêchera d'accéder à nouveau à toutes vos informations.
+					Celles-ci seront conservées pendant 1 mois pour des raisons légales, puis seront supprimées.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+				<button type="button" class="btn btn-danger" ng-click="deleteAccount()">Confirmer la suppression du compte</button>
+			</div>
+		</div>
+	</div>
+</div>

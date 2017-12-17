@@ -1,5 +1,6 @@
-<h1>Panier de {{user.login}}</h1>
+<h1>Votre panier</h1>
 
+<!-- Table displaying informations concerning the cart -->
 <div class="table-responsive">
   <table class="table table-striped">
     <tr>
@@ -23,24 +24,70 @@
    			</button>
     	</td>
     </tr>
+    <tr>
+    	<td>Total</td>
+    	<td></td>
+    	<td></td>
+    	<td>{{totalCart}}€</td>
+    	<td></td>
+    </tr>
   </table>
 </div>
 
-<button class="btn btn-success btn-block">Valider le panier</button>
+<button ng-show="canPay" class="btn btn-success btn-block" data-toggle="modal"
+	data-target="#myModal">Valider et payer le panier</button>
+	
+<a ng-show="cantPay" href="#!/login" class="btn btn-success btn-block" >Se connecter pour procéder au paiement</a>
 
-<div>
-	<h2>Choisir la méthode de paiement</h2>
-	<div class="row">
-		<button class="btn btn-default btn-lg">Différé</button>
-		<button class="btn btn-default btn-lg" disabled>Paypal</button>
-		<button class="btn btn-default btn-lg" disabled>CB</button>
-	</div>
-</div>
+<!-- Modal showing the payment process -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">Paiement du panier</h4>
+			</div>
+			<div class="modal-body">
+				<div>
+					<h2>Choisir la méthode de paiement</h2>
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-default btn-pay active">
+							Différé
+							<input type="radio" name="btn-pay" id="pay-diff" autocomplete="off" checked>
+						</label>
+						<label class="btn btn-default btn-pay" disabled>
+							Paypal
+							<input type="radio" name="btn-pay" id="pay-paypal" autocomplete="off">
+						</label>
+						<label class="btn btn-default btn-pay" disabled>
+							CB
+							<input type="radio" name="btn-pay" id="pay-cb" autocomplete="off">
+						</label>
+					</div>
+				</div>
 
-<div>
-	<h2>Choisir le billet</h2>
-	<div class="row">
-		<button class="btn btn-default btn-lg">Electronique</button>
-		<button class="btn btn-default btn-lg" disabled>Papier</button>
+				<div>
+					<h2>Choisir le billet</h2>
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-default btn-bill active">
+							Electronique
+							<input type="radio" name="btn-bill" id="bill-elec" autocomplete="off" checked>
+						</label>
+						<label class="btn btn-default btn-bill" disabled>
+							Papier
+							<input type="radio" name="btn-bill" id="bill-paper" autocomplete="off">
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+				<button type="button" class="btn btn-primary" ng-click="payCart()">Confirmer la commande</button>
+			</div>
+		</div>
 	</div>
 </div>

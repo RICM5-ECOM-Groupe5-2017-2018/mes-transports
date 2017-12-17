@@ -141,7 +141,7 @@ public class AgencyEndpoint extends Application {
     }
 
     @DELETE
-    @SecuredAdmin
+    @SecuredAgency
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
