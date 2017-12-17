@@ -221,7 +221,11 @@ public class VehicleController {
 	 */
 	public Vehicle consultVehicle (Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
-		return vehicleRet;
+		if(vehicleRet.isStatus()) {
+			return vehicleRet;
+		}
+		else return null;
+		
 	}
 
 	/**

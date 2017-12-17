@@ -144,7 +144,12 @@ public class AgencyController {
 	 * @return the agency matching
 	 */
 	public Agency getAgency (Integer idAgency) {
-		return (entityManager.find(Agency.class, idAgency));
+		Agency a;
+		if((a = entityManager.find(Agency.class, idAgency)).getStatus()) {
+			return a;	
+		}
+		else return null;
+		
 	}
 
 	/**

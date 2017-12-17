@@ -139,7 +139,13 @@ public class UserController extends Application {
 	 * @return user The user you want to get information about
 	 */
 	public User viewUser(Integer userId) {
-		return entityManager.find(User.class, userId);
+		User u;
+		if(((u=entityManager.find(User.class, userId))).isStatus()){
+			return u;
+		}
+		else {
+			return null;
+		}
 	}
 
 	/**
