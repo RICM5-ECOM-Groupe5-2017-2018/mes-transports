@@ -66,7 +66,7 @@ public class CartController extends Application{
 				.getResultList();
 			if(lr.size()>0) {
 				System.out.println(lr.get(0).getStartDate() + " < " + ci.getStartDate() + ci.getEndDate());
-				return new JsonMessage("Vehicle déjà réservé pour cette date, Cart rejeté");
+				return new JsonMessage("Vehicule déjà réservé pour cette date, Cart rejeté");
 			}
 		}
 		

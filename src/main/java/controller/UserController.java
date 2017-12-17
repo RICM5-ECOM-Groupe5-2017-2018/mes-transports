@@ -3,9 +3,17 @@ package controller;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import javax.ejb.Singleton;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,20 +27,28 @@ import security.PasswordEncryption;
 @Singleton
 public class UserController extends Application {
 
-	@PersistenceContext(unitName="myPU")
+	@PersistenceContext(unitName = "myPU")
 	private EntityManager entityManager;
 
-	@Context private HttpServletRequest request;
+	@Context
+	private HttpServletRequest request;
 
 	/**
 	 * Create the user based on modelAgency
 	 *
-	 * @param modelUser The model of the user you want to create
+	 * @param modelUser
+	 *            The model of the user you want to create
 	 * @return user the concrete user obtained
 	 */
-	public User createUser (User modelUser) {
+	public User createUser(User modelUser) {
 		User newUser = new User(modelUser);
 		newUser.setPassword(PasswordEncryption.generateHash(newUser.getPassword()));
+		this.send(newUser.getMailAddress(), "Votre compte MesTransports a ete cree",
+				"Bonjour,\n\n"
+				+ "Votre compte MesTransports a été créé, vous retrouvez votre login ci-dessous :\n"
+				+ "Login de connexion : " + newUser.getLogin() + "\n\n"
+				+ "Merci de nous faire confiance, à bientôt.\n\n"
+				+ "Cordialement, l'équipe MesTransports");
 		entityManager.persist(newUser);
 		entityManager.flush();
 		return newUser;
@@ -41,15 +57,16 @@ public class UserController extends Application {
 	/**
 	 * Update the user matching the modelUser
 	 *
-	 * @param modelUser The model of the user you want to update
+	 * @param modelUser
+	 *            The model of the user you want to update
 	 * @return user the concrete user obtained
 	 */
-	public User updateUser (User modelUser) {
+	public User updateUser(User modelUser) {
 
 		User user = entityManager.find(User.class, modelUser.getId());
 
 		String password = modelUser.getPassword();
-		if(PasswordEncryption.generateHash(password).equalsIgnoreCase(user.getPassword())) {
+		if (PasswordEncryption.generateHash(password).equalsIgnoreCase(user.getPassword())) {
 			user.setMailAddress(modelUser.getMailAddress());
 			user.setPhoneNum(modelUser.getPhoneNum());
 			user.setUserFirstName(modelUser.getUserFirstName());
@@ -61,17 +78,19 @@ public class UserController extends Application {
 	}
 
 	/**
-	 * Update user identified by id. Verify current password and updates password if ok
+	 * Update user identified by id. Verify current password and updates password if
+	 * ok
+	 * 
 	 * @param id
 	 * @param oldPass
 	 * @param newPass
 	 * @return
 	 */
-	public User updateUserPass (int id, String oldPass, String newPass) {
+	public User updateUserPass(int id, String oldPass, String newPass) {
 		User u = entityManager.find(User.class, id);
 
 		String password = oldPass;
-		if(PasswordEncryption.generateHash(oldPass).equalsIgnoreCase(u.getPassword())) {
+		if (PasswordEncryption.generateHash(oldPass).equalsIgnoreCase(u.getPassword())) {
 			String password2 = newPass;
 			String hashedPassword2 = PasswordEncryption.generateHash(password2);
 			u.setPassword(hashedPassword2);
@@ -84,7 +103,8 @@ public class UserController extends Application {
 	/**
 	 * Disable the user define by userId
 	 *
-	 * @param userId The id of the user you want to disable
+	 * @param userId
+	 *            The id of the user you want to disable
 	 * @return String A confirmation String
 	 */
 	public JsonMessage disableUser(Integer userId) {
@@ -99,7 +119,8 @@ public class UserController extends Application {
 	/**
 	 * Enable the user define by userId
 	 *
-	 * @param userId The id of the user you want to enable
+	 * @param userId
+	 *            The id of the user you want to enable
 	 * @return String A confirmation String
 	 */
 	public JsonMessage enableUser(Integer userId) {
@@ -113,24 +134,24 @@ public class UserController extends Application {
 	/**
 	 * send user informations
 	 *
-	 * @param userId The id of the user you want to see
+	 * @param userId
+	 *            The id of the user you want to see
 	 * @return user The user you want to get information about
 	 */
 	public User viewUser(Integer userId) {
 		return entityManager.find(User.class, userId);
 	}
 
-
 	/**
 	 * Destroy user session
 	 *
-	 * @param httpHeaders the header to retrieve token
+	 * @param httpHeaders
+	 *            the header to retrieve token
 	 * @return Message or error
 	 */
 	public JsonMessage logout(HttpHeaders httpHeaders) {
 		String token = httpHeaders.getHeaderString(HttpHeaders.AUTHORIZATION).substring("Bearer".length()).trim();
-		User user = (User) entityManager.createQuery("FROM User WHERE token = :token")
-				.setParameter("token", token)
+		User user = (User) entityManager.createQuery("FROM User WHERE token = :token").setParameter("token", token)
 				.getSingleResult();
 		user.setToken(null);
 		user.setTokenExpiration(null);
@@ -143,21 +164,21 @@ public class UserController extends Application {
 	/**
 	 * Authenticate a user matching login + password
 	 *
-	 * @param login the login to test
-	 * @param password the password to test
+	 * @param login
+	 *            the login to test
+	 * @param password
+	 *            the password to test
 	 * @return the User identified or error
 	 */
 	public User authenticate(String login, String password) {
 		String hashedPassword = PasswordEncryption.generateHash(password);
 		List<User> ul = (List<User>) entityManager.createQuery("FROM User WHERE login = :user AND password = :pass")
-				.setParameter("user", login)
-				.setParameter("pass", hashedPassword)
-				.getResultList();
-		
-		if(ul.size()==0) {
+				.setParameter("user", login).setParameter("pass", hashedPassword).getResultList();
+
+		if (ul.size() == 0) {
 			return null;
 		}
-		User user=ul.get(0);
+		User user = ul.get(0);
 		request.getSession(true);
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
@@ -179,15 +200,14 @@ public class UserController extends Application {
 		entityManager.flush();
 		return user;
 	}
-	
+
 	/**
 	 * 
 	 * @return All the users on the database
 	 */
 
-	public List<User> getAllUsers(){
-		return entityManager.createQuery("SELECT u From User u")
-		.getResultList();
+	public List<User> getAllUsers() {
+		return entityManager.createQuery("SELECT u From User u").getResultList();
 	}
 	
 	public List<Transaction> getTransactions(Integer userId){
@@ -196,4 +216,52 @@ public class UserController extends Application {
 		.getResultList();
 	}
 	
+
+	// Mailing for users
+
+	private static final String SMTP_HOST1 = "smtp.gmail.com";
+	private static final String LOGIN_SMTP1 = "mestransports.ecom@gmail.com";
+	private static final String IMAP_ACCOUNT1 = "mestransports.ecom@gmail.com";
+	private static final String PASSWORD_SMTP1 = "Ecom2017";
+
+	public JsonMessage send(String address, String subject, String content) {
+		Properties properties = new Properties();
+		properties.setProperty("mail.transport.protocol", "smtp");
+		properties.setProperty("mail.smtp.starttls.enable", "true");
+		properties.setProperty("mail.smtp.port", "587");
+		properties.setProperty("mail.smtp.host", SMTP_HOST1);
+		properties.setProperty("mail.smtp.user", LOGIN_SMTP1);
+		properties.setProperty("mail.from", IMAP_ACCOUNT1);
+		Session session = Session.getInstance(properties);
+
+		// 2 -> Création du message
+		MimeMessage message = new MimeMessage(session);
+		try {
+			message.setText(content);
+			message.setSubject(subject);
+			message.addRecipients(Message.RecipientType.TO, address);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+
+		// 3 -> Envoi du message
+		Transport transport = null;
+		try {
+			transport = session.getTransport("smtp");
+			transport.connect(LOGIN_SMTP1, PASSWORD_SMTP1);
+			transport.sendMessage(message, new Address[] { new InternetAddress(address) });
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (transport != null) {
+					transport.close();
+				}
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		}
+		return new JsonMessage("Mail sent successfully");
+	}
+
 }
