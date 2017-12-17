@@ -64,9 +64,15 @@ public class UserEndpoint extends Application{
     @Produces(MediaType.APPLICATION_JSON)
     public Response view(@PathParam("id") Integer id) {
         try {
-            return Response.status(200).entity(controller.viewUser(id)).build();
+        	User u =controller.viewUser(id);
+        	if(u==null) return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        	else return Response.status(200).entity(u).build();
+        		
+        	
         } catch (Exception ex) {
-            return Response.status(401).build();
+            return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
         }
     }
 

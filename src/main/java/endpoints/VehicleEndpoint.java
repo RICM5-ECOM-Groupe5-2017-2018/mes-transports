@@ -140,7 +140,10 @@ public class VehicleEndpoint extends Application{
     @Produces(MediaType.APPLICATION_JSON)
     public Response consultVehicle (@PathParam("id") Integer id) {
         try {
-            return Response.status(200).entity(controller.consultVehicle(id)).build();
+        	Vehicle v = controller.consultVehicle(id);
+        	if(v==null) return Response.status(400).type("text/plain")
+                    .entity("Aucune entité correspondant à cet Id").build();
+        	else  return Response.status(200).entity(v).build();
         } catch (Exception ex) {
             return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();

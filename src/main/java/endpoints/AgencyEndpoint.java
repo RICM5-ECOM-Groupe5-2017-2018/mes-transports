@@ -85,7 +85,10 @@ public class AgencyEndpoint extends Application {
     @Produces(MediaType.APPLICATION_JSON)
     public Response consultAgency (@PathParam("id") Integer id) {
         try {
-            return Response.status(200).entity(controller.getAgency(id)).build();
+        	Agency a = controller.getAgency(id);
+        	if(a==null) return Response.status(400).type("text/plain")
+        				.entity("Aucune entité correspondant à cet Id").build();
+        	else return Response.status(200).entity(a).build();
         } catch (Exception ex) {
             return Response.status(400).type("text/plain")
                     .entity("Aucune entité correspondant à cet Id").build();
