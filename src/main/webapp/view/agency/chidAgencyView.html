@@ -1,15 +1,50 @@
-<div style="margin:0;" ng-controller="agencyMainCtrl">
+<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3" ng-controller="agencyMainCtrl">
+	<div ng-controller="graphicsController">
 
-	<div class="row" ng-include="'view/menu/SideMenuAgency.html'"></div>
-	
-	<div ng-controller="childAgencyView" style="margin-left: 25%;" >
-			<h1>CHILD AGENCY</h1>
-			{{currentIdAgency}}
-			
-			
-			
-			<input class="btn btn-primary col-md-10"  type="button" ng-click="changeLocationToUpdatePage()" name="Update" value="Modifier les données relative à l'agence" >
-			
-				
+		<div class="row" ng-controller="childAgencyView">
+
+				<div class="row">
+					<h1 class="col-10 col-md-9 col-xs-8">{{currentAgency.name}}</h1>
+					<div class="row col-2 col-xs-4 col-md-3">
+						<input class="btn btn-success  btn-sm"
+							   type="button" ng-click="changeLocationToUpdatePage()" name="Update"
+							   value="Modifier Agence">
+						<input class="btn btn-danger btn-sm"
+							   type="button"
+							   data-toggle="modal" data-target="#modalErase" name="New"
+							   value="Supprimer">
+					</div>
+				</div>
+
+				<hr class="my-4 col-12">
+
+				<div class="row">
+					<div class="col-4 col-md-4 col-sm-4 col-lg-4 col-md-offset-4 col-lg-offset-4 inner-addon left-addon">
+						<i class="glyphicon glyphicon-calendar"></i>
+						<input type="text" name="daterange" class="form-control input-md" />
+					</div>
+				</div>
+
+				<div class="col-10 col-md-10 col-md-offset-1 row jumbotron">
+					<div id="benefitGlobal"></div>
+				</div>
+
+			<div class="modal fade" id="modalErase" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Supprimer l'agence</h4>
+						</div>
+						<div class="modal-body">
+							Voulez-vous supprimer cette agence?
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn" data-dismiss="modal" ng-click="eraseAgency()"> Oui </button>
+							<button type="button" class="btn" data-dismiss="modal" > Non </button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
+</main>

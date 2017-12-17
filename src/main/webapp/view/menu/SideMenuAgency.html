@@ -1,52 +1,42 @@
-<div class="row" ng-controller="NavController">
-    <!-- Menu -->   
-    <nav class="navbar navbar-default side-menu" role="navigation">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	        <div class="brand-wrapper">
-	            <!-- Hamburger -->
-	            <button type="button" id="nav-side" class="navbar-toggle" >
-	                <span class="sr-only">Toggle navigation</span>
-	                <span class="icon-bar"></span>
-	                <span class="icon-bar"></span>
-	                <span class="icon-bar"></span>
-	            </button>
-	         </div>
-	    </div>
-	
-	    <!-- Main Menu -->
-	    <div class="side-menu-container" id="sideMenu">
-	        <ul style="margin:0;" class="nav navbar-nav" id="menu-side">
-	            <li id="accueil" ng-class="{active: ($route.current.activetab == 'main') && (data.id==currentAgencyUpdate)}"><a href="#!/"> Accueil</a></li>
-	            <li id="parc" ng-class="{active: $route.current.activetab == 'seeVehicules'}"> <a href="#!/agency/view/vehicule"> Parc de Véhicules</a></li>
-	            
-				<div>
-					<li id="agency">
-					    <a data-toggle="collapse" ng-click="collapseL1()"> Agences <span class="caret"></span></a>
-					    <div id="listAgence" class="panel-collapse collapse">
-					        <div class="panel-body">
-					            <ul class="nav navbar-nav">
-					                <li id="addAgency" ng-class="{active: $route.current.activetab == 'addchildAgency'}"><a href="#!/agency/add/childAgency">Ajouter une sous agence</a></li>
-					                
-					                <div ng-repeat="(city, agencies) in agencyByCity">
-					                	<a data-toggle="collapse"  ng-click="collapseL2(city)"> {{city}} <span class="caret"></span></a>
-					                	<div id="{{city}}" class="panel-collapse collapse">
-					                		<div class="panel-body">
-					                			<ul class="nav navbar-nav">
-								        			<!-- Liste des agences pour la ville -->        	
-								                	<div ng-repeat="(index,data) in agencies">
-								                			<li id="{{city}}-{{data.name}}" ng-class="{active: ($route.current.activetab == 'childAgency')&&((data.id==currentAgencyView)||(data.id==currentAgencyUpdate))}"><a href="#!/agency/view/chagency/{{data.id}}">{{data.name}}</a></li>
-								               		</div>
-					                </div>
-					            </ul>
-					        </div>
-					    </div>
+<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded navbar sidebar " ng-controller="agencyMainCtrl">
+
+	<div class="navbar-header navbar-default">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#side-menu" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+	</div>
+	<div class="collapse navbar-collapse" id="side-menu">
+		<ul class="nav nav-pills nav-stacked">
+			<li id="accueil" class="nav-item" ng-class="{active: ($route.current.activetab == 'main') && (data.id==currentAgencyUpdate)}">
+				<a href="#!/"> Accueil</a>
+			</li>
+			<li id="parc" class="nav-item" ng-class="{active: $route.current.activetab == 'seeVehicules'}">
+				<a href="#!/agency/view/vehicule"> Parc de Véhicules</a>
+			</li>
+
+			<li class="nav-item" id="agency" ng-if="isMother">
+				<a class="nav-link"  data-toggle="collapse" data-target="#ListeCity"> Agences <span class="caret"></span></a>
+				<ul class="nav nav-pills nav-stacked"
+					ng-class="{collapse: ($route.current.activetab != 'addchildAgency')||($route.current.activetab != 'childAgency')}"
+					id="ListeCity">
+					<li id="addAgency" class="nav-item" ng-class="{active: $route.current.activetab == 'addchildAgency'}">
+						<a href="#!/agency/add/childAgency">Ajouter une sous agence</a>
 					</li>
-				</div>
-	            
-	        </ul>
-	    </div><!-- /.navbar-collapse -->
-	</nav>
-</div>
-    
-    
+
+					<li class="nav-item" ng-repeat="(city, agencies) in agencyByCity">
+						<a data-toggle="collapse"  data-target="#{{city}}"> {{city}} <span class="caret"></span></a>
+							<ul id="{{city}}"  class="nav nav-pills nav-stacked collapse">
+									<li ng-repeat="(index,data) in agencies" id="{{city}}-{{data.name}}" class="nav-item"
+										ng-class="{active: ($route.current.activetab == 'childAgency')&&((data.id==currentAgencyView)||(data.id==currentAgencyUpdate))}">
+										<a href="#!/agency/view/chagency/{{data.id}}">{{data.name}}</a>
+									</li>
+							</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>
