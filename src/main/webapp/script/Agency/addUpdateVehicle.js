@@ -105,7 +105,8 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 			   else{$scope.data.slectedCharacteristic=[];}
 
 			   //copy
-			   $scope.data.beforTreatementCharacteristicsForType = $.extend(true, {}, response.data.sort(function (a, b) {return a.rank - b.rank;}));
+			   $scope.data.beforTreatementCharacteristicsForType = $.extend(true, {}, response.data.sort(function (a, b) {return -(a.rank - b.rank);}));
+
 
 			   //Form pattern
 			   $.each(response.data, function(key , characteristic){
@@ -143,7 +144,8 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 				   characteristic.max ="255";
 			   });
 
-			   $scope.data.characteristicsForType = response.data.sort(function (a, b) {return a.rank - b.rank;});
+			   $scope.data.characteristicsForType = response.data.sort(function (a, b) {return -(a.rank - b.rank);});
+
 		    },
 		    function(response){}
 	    );

@@ -41,16 +41,16 @@ strCommand +="#===========================================characteristic========
 strCommand +="#====================================================================================================#\n\n"
 
 charact = {
-	'1':['','Couleur',1,10,'null','str'],
-	'2':['','Marque',0,2,'null','str'],
-	'3':['','Date construction',1,3,'null','str'],
-	'4':['km','Nombre de kilomètres',0,4,'null','int'],
-	'5':['kg','Poids',1,7,'null','float'],
-	'6':['','Type Carburant',0,5,'null','str'],
-	'7':['','Date du dernier controle technique',0,6,'null','str'],
-	'8':['','Nombre de places',0,8,'null','int'],
-	'9':['','Nombre de portes',0,9,'null','int'],
-	'10':['','Immatriculation',0,1,'null','str'],
+	'1':['','Couleur',1,1,'null','str'],
+	'2':['','Marque',0,9,'null','str'],
+	'3':['','Date construction',1,8,'null','str'],
+	'4':['km','Nombre de kilomètres',0,7,'null','int'],
+	'5':['kg','Poids',1,4,'null','float'],
+	'6':['','Type Carburant',0,6,'null','str'],
+	'7':['','Date du dernier controle technique',0,5,'null','str'],
+	'8':['','Nombre de places',0,3,'null','int'],
+	'9':['','Nombre de portes',0,2,'null','int'],
+	'10':['','Immatriculation',0,10,'null','str'],
 }
 
 for key in charact :
