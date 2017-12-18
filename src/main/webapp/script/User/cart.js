@@ -80,6 +80,8 @@ cart.controller('CartController', function($scope, $rootScope, $http, $location,
 		$http.get('api/vehicle/view/' + item.idVehicle)
 		.then(function successCallback(response) {
 			item.vehicle = response.data;
+			item.startDate = new Date(item.startDate);
+			item.endDate = new Date(item.endDate);		
 		}, function errorCallback(response) {
 		});
 	});

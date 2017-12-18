@@ -41,7 +41,6 @@ admin.controller('AdminController', function($scope,$http,$cookies){
 			function(data, status, headers, config){
 				$scope.vehicule={};
 	        	$scope.registerForm.$setPristine();
-	        	alert("Utilisateur modifié");
 		    },
 		    function(data, status, headers, config)
 		    {

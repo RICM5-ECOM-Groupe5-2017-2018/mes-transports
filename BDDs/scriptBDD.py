@@ -41,17 +41,19 @@ strCommand +="#===========================================characteristic========
 strCommand +="#====================================================================================================#\n\n"
 
 charact = {
-	'1':['','Couleur',1,1,'null','str'],
-	'2':['','Marque',0,9,'null','str'],
-	'3':['','Date construction',1,8,'null','str'],
-	'4':['km','Nombre de kilomètres',0,7,'null','int'],
-	'5':['kg','Poids',1,4,'null','float'],
-	'6':['','Type Carburant',0,6,'null','str'],
-	'7':['','Date du dernier controle technique',0,5,'null','str'],
-	'8':['','Nombre de places',0,3,'null','int'],
-	'9':['','Nombre de portes',0,2,'null','int'],
+	'1':['','Couleur',1,1,'string','str'], 
+	'2':['','Marque',0,9,'string','str'], 
+	'3':['','Date construction',1,8,'int','str'], 
+	'4':['km','Nombre de kilomètres',0,7,'range','int'], 
+	'5':['kg','Poids',1,4,'range','float'], 
+	'6':['','Type Carburant',0,6,'string','str'], 
+	'7':['','Date du dernier controle technique',0,5,'string','str'], 
+	'8':['','Nombre de places',0,3,'int','int'], 
+	'9':['','Nombre de portes',0,2,'int','int'], 
 	'10':['','Immatriculation',0,10,'null','str'],
 }
+
+
 
 for key in charact :
 	strCommand += ("INSERT INTO characteristic (id, unit, label, optional, rank, form, typeData) VALUES ("+str(key)+",'"+charact[key][0]+"','"+charact[key][1]+"',"

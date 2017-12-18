@@ -33,9 +33,11 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     	{
     		$scope.agency.bankLink =$scope.data.selectedBank.value;
     		$scope.agency.bankName = $scope.data.selectedBank.name;
-
-    		$scope.agency.address = $scope.data.addressp1+" "+$scope.data.addressp2+" "+$scope.agency.city.toUpperCase();
-    		$scope.agency.city = $scope.agency.city.toUpperCase()
+			var city = $scope.agency.city.toUpperCase();
+            city = city.replace(/ /g, '-');
+			console.log(city);
+    		$scope.agency.address = $scope.data.addressp1+" "+$scope.data.addressp2+" "+city;
+    		$scope.agency.city = city;
     		$scope.agency.type = $scope.data.availableTypes.id;
 
     		sendUpdate();
@@ -55,7 +57,7 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
         $http.get('api/agency/view/'+$scope.idUpdatedAgency,config).then(
             function(response){
 
-                $scope.agency = response.data
+                $scope.agency = response.data;
 
                 //Fill address input
                 var adressWithoutCity = ($scope.agency.address.slice(0,$scope.agency.address.lastIndexOf($scope.agency.city))).trim();
@@ -76,13 +78,16 @@ agency.controller("childRegistration",function($scope,$http,$cookies,$route, $ro
     {
     	if($rootScope.user && $rootScope.user.isAgency)
     	{
+            var city = $scope.agency.city.toUpperCase();
+            city = city.replace(/ /g, '-');
+            console.log(city);
     		var dataToSend = {
     				"id":null,
     				"type":$scope.data.availableTypes.id,
-    				"address":$scope.data.addressp1+" "+$scope.data.addressp2+" "+$scope.agency.city.toUpperCase(),
+    				"address":$scope.data.addressp1+" "+$scope.data.addressp2+" "+city,
     				"idMotherAgency":$rootScope.user.idAgency,
     				"phoneNum":$scope.agency.phoneNum,
-    				"city":$scope.agency.city.toUpperCase(),
+    				"city":city,
     				"name":$scope.agency.name,
     				"bankLink":$scope.data.selectedBank.value,
     				"bankName":$scope.data.selectedBank.name,

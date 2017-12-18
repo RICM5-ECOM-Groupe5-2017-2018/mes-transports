@@ -58,3 +58,11 @@ a {
     color: #777;
     text-decoration: none;
 }
+
+.slider-selection {
+	background: #B8DD6D;
+}
+
+.slider-handle {
+	background: #8EBD56;
+}

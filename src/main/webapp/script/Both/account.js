@@ -122,8 +122,12 @@ account.controller('AccountController',
                 if($scope.form.signup.password != $scope.form.signup.password2) {
                     $scope.form.error.password = "Les deux mots de passe ne correspondent pas";
                 }
+                
+                if($scope.form.password.length <= 3) {
+                	$scope.form.error.password_len = "Le mot de passe est trop court (min. 4 caractères";
+                }
 
-                if($scope.form.error.password || $scope.form.error.mail) {
+                if($scope.form.error.password || $scope.form.error.password_len || $scope.form.error.mail) {
                     $scope.setError("Le formulaire n'est pas rempli correctement");
                 } else {
                 	// prepares the user object used for the http request
