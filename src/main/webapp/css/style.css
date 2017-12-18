@@ -48,3 +48,13 @@
   text-align: left;
   vertical-align: middle;
 }
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #fff;
+    background-color: #8ebd56;
+}
+
+a {
+    color: #777;
+    text-decoration: none;
+}

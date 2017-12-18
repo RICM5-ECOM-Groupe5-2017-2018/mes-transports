@@ -1,6 +1,6 @@
 var cart = angular.module('cart', ['account']);
 
-cart.factory('CartServices', function($cookies, $http) { 
+cart.factory('CartServices', function($rootScope, $cookies, $http) { 
 	
 	var utils = {};
 	utils.form = {};
@@ -30,14 +30,15 @@ cart.factory('CartServices', function($cookies, $http) {
 				))
 			) {
 				add = false;
-				utils.form.error = "La date est déjà prise.";
+				$rootScope.setError("La date est déjà prise.");
+				$('#myModal').modal('hide');
 				return add;
 			}
 		});
 		if(add) {				
 			newRent = {};
 			newRent.idVehicle = item.id;
-			if(user) {			
+			if(user) {
 				newRent.idUser = user.id;
 			} else {
 				newRent.idUser = -1;
@@ -49,7 +50,7 @@ cart.factory('CartServices', function($cookies, $http) {
 			newRent.locationOut = "";
 			utils.cart.push(newRent);
 			$cookies.putObject("cart", utils.cart);
-			utils.form.success = "Véhicule ajouté au panier !"
+			$rootScope.setSuccess("Véhicule ajouté au panier !");
 			$('#myModal').modal('hide');
 		}
 	}
