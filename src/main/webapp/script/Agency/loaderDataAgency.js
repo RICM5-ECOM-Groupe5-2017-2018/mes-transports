@@ -152,7 +152,6 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 				function(response){
 					$rootScope.listeVehicules=[];
 					response.data.forEach(function(child,index) {
-						var agencyName = ($rootScope.MotherAgency.id == child.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[child.idAgency].name
 						$rootScope.listeVehicules.push({
 							id : child.id,
 							name: child.brand,
@@ -241,7 +240,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 									id : vehicle.id,
 									name: vehicle.brand,
 									details : vehicle,
-								  }
+								  };
 
 			   var index= $rootScope.listeVehicules.findIndex(function(element) {
 				   return element.id == newVehicules.id;

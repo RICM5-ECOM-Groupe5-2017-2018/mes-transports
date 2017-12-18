@@ -16,7 +16,7 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
     /**Function that calculate the number of day between two date*/
     function dateDiff(date1, date2){
-        var diff = {}
+        var diff = {};
         var tmp = date2 - date1;
 
         tmp = Math.floor(tmp/1000);
@@ -131,22 +131,25 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
             );
         }));
 
+
         $.each($rootScope.listChildAgencies, function(key, child){
             promises.push(new Promise(function(resolve, reject){
-                $http.get(endpoint+child.id+'/'
-                    + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
-                    + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
+                if(child){
+                    $http.get(endpoint+child.id+'/'
+                        + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
+                        + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
-                    function(response){
-                        $.each(response.data, function(key, child){
-                            child.date = moment(child.date).format('YYYY-MM-DD HH:mm:ss');
-                        });
-                        rents[child.id]=response.data;
+                        function(response){
+                            $.each(response.data, function(key, child){
+                                child.date = moment(child.date).format('YYYY-MM-DD HH:mm:ss');
+                            });
+                            rents[child.id]=response.data;
 
-                        resolve("success");
-                    },
-                    function(response){reject("failed");}
-                );
+                            resolve("success");
+                        },
+                        function(response){reject("failed");}
+                    );
+                }
             }));
         });
 
