@@ -146,13 +146,13 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 			 method: 'GET',
 			 url: 'api/agency/vehicle/'+$rootScope.user.idAgency,
 			 headers: {'Authorization': 'Bearer ' + $rootScope.user.token},
-			}
+			};
 			$http(req).then(
 
 				function(response){
+					console.log(response.data);
 					$rootScope.listeVehicules=[];
 					response.data.forEach(function(child,index) {
-						var agencyName = ($rootScope.MotherAgency.id == child.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[child.idAgency].name
 						$rootScope.listeVehicules.push({
 							id : child.id,
 							name: child.brand,
@@ -241,7 +241,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 									id : vehicle.id,
 									name: vehicle.brand,
 									details : vehicle,
-								  }
+								  };
 
 			   var index= $rootScope.listeVehicules.findIndex(function(element) {
 				   return element.id == newVehicules.id;
@@ -271,5 +271,8 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	else if($rootScope.listCharacteristic==undefined){
 		$rootScope.loadCarateristics();
 	}
-
+	console.log("Load Data");
+    console.log($rootScope.listeVehicules);
+    console.log($rootScope.filtredVehicules);
+    $rootScope.filtredVehicules = $rootScope.listeVehicules;
 });

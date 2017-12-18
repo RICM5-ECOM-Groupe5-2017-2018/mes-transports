@@ -6,10 +6,13 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
 
 	/**Data use for the filtred list*/
-	$scope.filteredCharacteristic = {
-        filterSelectedAgency : {"id" :0, "name": "Toutes",},
-        filtredSelectedType : {id : 0, label : "Tous"},
-	};
+	if(!$rootScope.filteredCharacteristic){
+        $rootScope.filteredCharacteristic = {
+            filterSelectedAgency : {"id" :0, "name": "Toutes",},
+            filtredSelectedType : {id : 0, label : "Tous"},
+        };
+	}
+
 
 	/**Get data from the selected vehicle*/
     if($scope.currentIdVehicules){
@@ -50,8 +53,8 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 				 	$scope.allRents = response.data;
 
 					$.each($scope.allRents, function(key, rent){
-						rent.endDate = moment(rent.endDate).format("YYYY-MM-DD HH:mm");
-						rent.startDate = moment(rent.startDate).format("YYYY-MM-DD HH:mm");
+						rent.endDate = moment(rent.endDate).format("DD-MM-YYYY HH:mm");
+						rent.startDate = moment(rent.startDate).format("DD-MM-YYYY HH:mm");
 					});
 					$scope.filtredRent = $.extend(true, {}, $scope.allRents);
 		    },

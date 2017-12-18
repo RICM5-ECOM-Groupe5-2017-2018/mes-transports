@@ -23,6 +23,17 @@
 	  <input type="text" name="daterange" class="form-control input-md" />
 	  </div>
 	</div>
+	
+	<!-- Select the price -->
+	<div class="form-group">
+		<label class="col-md-4 control-label" for="search_price">Prix</label>
+		<div class="col-md-7">
+			<b>0€ </b><input class="range" name="search_price" id="search_price"
+				ng-model="form.search.vehiclePrice" 
+	     		data-slider-id='search_price' type="text" data-slider-min="0" data-slider-max="700"
+	     		data-slider-step="10" data-slider-value="[0,700]"/><b> 700€</b>
+		</div>
+	</div>
 
 	<!-- Select the type of vehicle to look for -->
 	<div class="form-group">
@@ -41,15 +52,41 @@
 
 	<!-- Select characteristics -->
 	<div class="form-group">
-	  <label class="col-md-4 control-label" for="chk_chara">Caractéristiques</label>
+	<fieldset>
+	  <legend>
+	  	<label class="col-md-4 control-label" for="chk_chara">Caractéristiques</label>
+	  </legend>
 	  <div class="col-md-7">
-	  <div class="checkbox" ng-repeat="chara in vehicleCharas">
-	    <label for="chk_chara-{{chara.id}}">
-	      <input type="checkbox" name="chk_chara" id="chk_chara-{{chara.id}}" value="{{chara.id}}">
-	      {{chara.label}}
-	    </label>
+	  	<div ng-repeat="chara in vehicleCharas" ng-hide="chara.form == null || chara.form == 'null'">
+		  	<div ng-if="chara.form == 'int'" class="integer">
+			   	<label for="int_chara-{{chara.id}}">
+			     	{{chara.label}}<br>
+			     	<input type="number" name="int_chara" id="int_chara-{{chara.id}}" value="0" disabled>
+			   	</label>
+			</div>
+			<div ng-if="chara.form == 'float'" class="integer">
+			   	<label for="float_chara-{{chara.id}}">
+			     	{{chara.label}}<br>
+			     	<input type="number" name="float_chara" id="float_chara-{{chara.id}}" value="0.0" step="0.1" disabled>
+			   	</label>
+			</div>
+			<div ng-if="chara.form == 'string'" class="integer">
+			   	<label for="txt_chara-{{chara.id}}">
+			     	{{chara.label}}<br>
+			     	<input type="text" name="txt_chara" id="txt_chara-{{chara.id}}" value="" disabled>
+			   	</label>
+			</div>
+			<div ng-if="chara.form == 'range'" class="integer">
+			   	<label for="range_chara-{{chara.id}}">
+			     	{{chara.label}}<br>
+			     	<input class="slide_chara" name="range_chara-{{chara.id}}" id="range_chara-{{chara.id}}" 
+			     		data-slider-id='range_chara-{{chara.id}}' type="text" data-slider-min="1" data-slider-max="100"
+			     		data-slider-step="1" data-slider-value="50" disabled/>
+			   	</label>
+			</div>
 		</div>
 	  </div>
+	  </fieldset>
 	</div>
 
 	</fieldset>
@@ -63,7 +100,7 @@
 <div class="row">
  <div class="col-sm-6 col-md-4" ng-repeat="vehicle in searchFiltered">
    <div class="thumbnail">
-     <img src="" alt="" width=200 height=200>
+     <img src="ressources/vehicle-basic.png" alt="Image véhicule de base" height=100 width=200>
      <div class="caption">
        <h3>{{vehicle.brand}}</h3>
        <label class="label label-small label-default">{{getVehicleType(vehicle.type).label}}</label>

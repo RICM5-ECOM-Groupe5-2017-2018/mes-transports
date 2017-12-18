@@ -6,9 +6,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -131,9 +129,6 @@ public class Transaction implements java.io.Serializable {
     }
     
     public void generateToken() {
-    	SecureRandom random = new SecureRandom();
-    	byte bytes[] = new byte[20];
-    	random.nextBytes(bytes);
-    	token = bytes.toString();
+    	token = UUID.randomUUID().toString();
     }
 }

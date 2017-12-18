@@ -7,7 +7,7 @@ historique.controller('HistoryController', function($scope, $http, $location) {
 	
 	$http.get('api/user/transactions/' + $scope.user.id)
 	.then(function successController(response) {
-		$scope.history = response.data;
+		$scope.history = response.data.reverse();
 	}, function errorController(response) {
 	});
 	

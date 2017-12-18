@@ -6,9 +6,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 
-import JsonEncoders.JsonMessage;
-import model.AssignCharacteristic;
-import model.AssignCharacteristicId;
+import jsonencoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Disponibilitee;
@@ -50,7 +48,8 @@ public class VehicleController {
 	public Vehicle editVehicle (Vehicle vehicle) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, vehicle.getId());
 		if(vehicle.getType() != vehicleRet.getType()) {
-			entityManager.createNativeQuery("DELETE FROM assign_characteristic WHERE idVehicle="+vehicle.getId()+" ")
+			entityManager.createNativeQuery("DELETE FROM assign_characteristic WHERE idVehicle=:vehicleId")
+			.setParameter("vehicleId", vehicle.getId())
 			.executeUpdate();
 		}
 		vehicleRet.setBrand(vehicle.getBrand());
@@ -142,7 +141,10 @@ public class VehicleController {
 	 * @return a JsonMessage
 	 */
 	public JsonMessage addCharacteristic(Integer idVehicule, Integer idCharac, String valueCharac) {
-		Query q= entityManager.createNativeQuery("insert into assign_characteristic values("+idVehicule+","+idCharac+",'"+valueCharac+"')");
+		Query q= entityManager.createNativeQuery("insert into assign_characteristic values(:idVehicule,:idCharac,':valueCharac')")
+		.setParameter("idVehicule", idVehicule)
+		.setParameter("idCharac", idCharac)
+		.setParameter("valueCharac", valueCharac);
 		q.executeUpdate();
 		return new JsonMessage("Characteristic added successfully");
 	}
@@ -156,7 +158,10 @@ public class VehicleController {
 	 * @return a JsonMessage
 	 */
 	public JsonMessage editCharacteristic(Integer idVehicule, Integer idCharac, String valueCharac) {
-		Query q= entityManager.createNativeQuery("update assign_characteristic SET valueCharacteristic='"+valueCharac+"' WHERE idVehicle="+idVehicule+" AND idCharacteristic="+idCharac);
+		Query q= entityManager.createNativeQuery("update assign_characteristic SET valueCharacteristic=':valueCharac' WHERE idVehicle=:idVehicule AND idCharacteristic=:idCharac")
+		.setParameter("valueCharac", valueCharac)
+		.setParameter("idVehicule", idVehicule)
+		.setParameter("idCharac", idCharac);
 		q.executeUpdate();
 		return new JsonMessage("Characteristic updated successfully");
 	}
@@ -250,18 +255,29 @@ public class VehicleController {
 	 * @return
 	 */
 	public List<Vehicle> searchVehicle (String startDate, String endDate) {
-		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	'"+startDate+"' AND '"+endDate+"' OR r.endDate BETWEEN '"+startDate+"' AND '"+endDate+"'");
+		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	':startDate' AND ':endDate' OR r.endDate BETWEEN ':startDate' AND ':endDate'")
+			.setParameter("startDate", startDate)
+			.setParameter("endDate", endDate);
+		Query qBis = entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate < ':startDate' AND r.endDate > ':endDate'")
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate);
+
 		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.status=true");
 
-	    List<Rent> lr = q.getResultList(); 
+	    List<Rent> lr = q.getResultList();
+	    List<Rent> lrBis = qBis.getResultList();
+	    lr.addAll(lrBis);
 	    List<Vehicle> excluded = new LinkedList<Vehicle>();
+
 	    for(int i=0;i<lr.size();i++) {
 	    	excluded.add(entityManager.find(Vehicle.class, lr.get(i).getIdVehicle()));
 	    }
 	    
 		List<Vehicle> all_vehicles = q2.getResultList();
 		for(int i=0;i<all_vehicles.size();i++) {
+			System.out.println("vehicule 1 : " + all_vehicles.get(i).getBrand() );
 			for(int j=0;j<excluded.size();j++) {
+				System.out.println("vehicule 2 : " + excluded.get(j).getBrand());
 				if(all_vehicles.get(i).getId() == excluded.get(j).getId()) {
 					excluded.remove(j);
 					all_vehicles.remove(i);
