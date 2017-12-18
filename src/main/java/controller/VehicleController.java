@@ -6,9 +6,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 
-import JsonEncoders.JsonMessage;
-import model.AssignCharacteristic;
-import model.AssignCharacteristicId;
+import jsonencoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Disponibilitee;
@@ -251,7 +249,7 @@ public class VehicleController {
 	 */
 	public List<Vehicle> searchVehicle (String startDate, String endDate) {
 		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	'"+startDate+"' AND '"+endDate+"' OR r.endDate BETWEEN '"+startDate+"' AND '"+endDate+"'");
-		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v");
+		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.status=true");
 
 	    List<Rent> lr = q.getResultList(); 
 	    List<Vehicle> excluded = new LinkedList<Vehicle>();

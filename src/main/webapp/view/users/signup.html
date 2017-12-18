@@ -46,7 +46,7 @@
   <label class="col-md-4 control-label" for="signup_mail2">Confirmer mail</label>
   <div class="col-md-5">
   <input id="signup_mail2" ng-model="form.signup.mailAddress2" name="signup_mail2" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
-
+	<span class="text-danger" ng-show="form.error.mail">{{form.error.mail}}</span>
   </div>
 </div>
 
@@ -73,7 +73,7 @@
   <label class="col-md-4 control-label" for="signup_password2">Confirmer mot de passe</label>
   <div class="col-md-5">
     <input id="signup_password2" ng-model="form.signup.password2" name="signup_password2" type="password" placeholder="******" class="form-control input-md" required="">
-
+	<span class="text-danger" ng-show="form.error.password">{{form.error.password}}</span>
   </div>
 </div>
 
