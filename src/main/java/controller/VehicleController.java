@@ -14,6 +14,8 @@ import model.Rent;
 import model.Vehicle;
 import model.VehicleType;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -254,14 +256,22 @@ public class VehicleController {
 	 * @param endDate date of end
 	 * @return
 	 */
-	public List<Vehicle> searchVehicle (String startDate, String endDate) {
-		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	':startDate' AND ':endDate' OR r.endDate BETWEEN ':startDate' AND ':endDate'")
-			.setParameter("startDate", startDate)
-			.setParameter("endDate", endDate);
-		Query qBis = entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate < ':startDate' AND r.endDate > ':endDate'")
-				.setParameter("startDate", startDate)
-				.setParameter("endDate", endDate);
-
+	public List<Vehicle> searchVehicle (String startDates, String endDates) {
+		DateFormat formatter = new SimpleDateFormat("yy/mm/dd hh:mm");
+		Date startDate = null;
+		Date endDate = null;
+		try{
+			startDate = formatter.parse(startDates);
+			endDate = formatter.parse(endDates);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN :start AND :end OR r.endDate BETWEEN :start AND :end")
+				.setParameter("start", startDate)
+				.setParameter("end", endDate);
+		Query qBis = entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate < :start AND r.endDate > :end")
+				.setParameter("start", startDate)
+				.setParameter("end", endDate);
 		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.status=true");
 
 	    List<Rent> lr = q.getResultList();
