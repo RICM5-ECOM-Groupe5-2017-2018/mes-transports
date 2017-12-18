@@ -6,10 +6,13 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 	$scope.isVehiculeSelected = $scope.currentIdVehicules?true:false;
 
 	/**Data use for the filtred list*/
-	$scope.filteredCharacteristic = {
-        filterSelectedAgency : {"id" :0, "name": "Toutes",},
-        filtredSelectedType : {id : 0, label : "Tous"},
-	};
+	if(!$rootScope.filteredCharacteristic){
+        $rootScope.filteredCharacteristic = {
+            filterSelectedAgency : {"id" :0, "name": "Toutes",},
+            filtredSelectedType : {id : 0, label : "Tous"},
+        };
+	}
+
 
 	/**Get data from the selected vehicle*/
     if($scope.currentIdVehicules){
