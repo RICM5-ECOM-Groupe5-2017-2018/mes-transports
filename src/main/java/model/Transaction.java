@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -134,6 +135,6 @@ public class Transaction implements java.io.Serializable {
     	SecureRandom random = new SecureRandom();
     	byte bytes[] = new byte[20];
     	random.nextBytes(bytes);
-    	token = bytes.toString();
+    	token = Arrays.toString(bytes);
     }
 }

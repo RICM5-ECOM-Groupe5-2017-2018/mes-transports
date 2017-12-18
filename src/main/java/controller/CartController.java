@@ -1,29 +1,20 @@
 package controller;
 
-import javax.decorator.Delegate;
-import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Singleton;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import JsonEncoders.JsonMessage;
-import io.swagger.annotations.Api;
+import jsonencoders.JsonMessage;
 import model.Agency;
 import model.CartItem;
-import model.Characteristic;
 import model.User;
 import model.Transaction;
-import model.CharacteristicType;
 import model.Rent;
 import model.Vehicle;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;

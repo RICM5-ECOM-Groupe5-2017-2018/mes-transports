@@ -19,7 +19,7 @@ import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.*;
 
-import JsonEncoders.JsonMessage;
+import jsonencoders.JsonMessage;
 import model.Transaction;
 import model.User;
 import security.PasswordEncryption;
