@@ -146,10 +146,11 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 			 method: 'GET',
 			 url: 'api/agency/vehicle/'+$rootScope.user.idAgency,
 			 headers: {'Authorization': 'Bearer ' + $rootScope.user.token},
-			}
+			};
 			$http(req).then(
 
 				function(response){
+					console.log(response.data);
 					$rootScope.listeVehicules=[];
 					response.data.forEach(function(child,index) {
 						$rootScope.listeVehicules.push({
@@ -270,5 +271,8 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	else if($rootScope.listCharacteristic==undefined){
 		$rootScope.loadCarateristics();
 	}
-
+	console.log("Load Data");
+    console.log($rootScope.listeVehicules);
+    console.log($rootScope.filtredVehicules);
+    $rootScope.filtredVehicules = $rootScope.listeVehicules;
 });
