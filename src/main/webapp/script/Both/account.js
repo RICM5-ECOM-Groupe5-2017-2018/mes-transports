@@ -1,18 +1,5 @@
 var account = angular.module('account', ['ngCookies','menu']);
 
-account.run( function($rootScope, $location) {
-
-    // register listener to watch route changes
-    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-
-    	if ( $rootScope.user ) {
-        if ( next.templateUrl == "view/users/login.html" || next.templateUrl == "view/users/signup.html") {
-        	$location.path( "/search" );
-        }
-      }         
-    });
- });
-
 /**
  * Account controller :
  * - signup / login / logout
@@ -209,8 +196,8 @@ account.controller('AccountController',
             }
 
             /**
-             * User account deletion
-             */
+			 * User account deletion
+			 */
             $scope.deleteAccount = function() {
                 $http.delete('api/user/disable/' + $scope.user.id, {}, {
                     headers: {'Authorization': 'Bearer ' + $cookies.get("token")}

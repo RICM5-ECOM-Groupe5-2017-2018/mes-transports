@@ -7,6 +7,9 @@ app.run(function($rootScope,$location,$route,$window) {
     $route.reload();
 
 	$rootScope.$on("$locationChangeStart", function(event, nextUrl, currentUrl) {
+		
+		$rootScope.setError(undefined);
+		$rootScope.setSuccess(undefined);
 
 		if($rootScope.user)
 		{
@@ -44,17 +47,17 @@ app.controller('AppController', function($scope, $rootScope, $cookies, CartServi
 
 	$rootScope.user = $cookies.getObject("user");
 
-	$scope.form = {};
+	$scope.form = [];
 	if(!$scope.success) {
-		$scope.success = undefined;
-		$scope.error = undefined;
+		$rootScope.success = undefined;
+		$rootScope.error = undefined;
 	}
 	
-	$scope.setError = function(msg) {
+	$rootScope.setError = function(msg) {
 		$scope.error = msg;
 	}
 	
-	$scope.setSuccess = function(msg) {
+	$rootScope.setSuccess = function(msg) {
 		$scope.success = msg;
 	}
 
