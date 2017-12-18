@@ -35,7 +35,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
         timePickerIncrement: 30,
         "showWeekNumbers": true,
         locale: {
-            format: 'DD/MM/YYYY H:mm'
+            format: 'DD/MM/YYYY HH:mm'
         }
     }, function(start, end, label) {
         $rootScope.start = start;

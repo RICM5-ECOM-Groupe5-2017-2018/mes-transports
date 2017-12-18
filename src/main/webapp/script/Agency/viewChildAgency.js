@@ -38,7 +38,7 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
         timePickerIncrement: 30,
         "showWeekNumbers": true,
         locale: {
-            format: 'DD/MM/YYYY H:mm'
+            format: 'DD/MM/YYYY HH:mm'
         }
     }, function(start, end, label) {
         $rootScope.start = start;
@@ -55,11 +55,13 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
 
                 if($rootScope.listeVehicules){
                     $rootScope.listeVehicules = $rootScope.listeVehicules.filter(function(vehicle) {
-                        return vehicle.idAgency != $scope.currentIdAgency;
+                        return vehicle.details.idAgency != $scope.currentIdAgency;
                     });
                 }
-                $rootScope.filtredVehicules = $rootScope.listeVehicules
-
+                console.log("Erase");
+                $rootScope.filtredVehicules = $rootScope.listeVehicules;
+                console.log($rootScope.listeVehicules);
+                console.log($rootScope.filtredVehicules);
 
 
                 var newListAgency={};
