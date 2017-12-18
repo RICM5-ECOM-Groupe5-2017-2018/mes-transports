@@ -36,7 +36,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signup_mail">Adresse e-mail</label>
   <div class="col-md-5">
-  <input id="signup_mail" ng-model="form.signup.mailAddress" name="signup_mail" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+  <input id="signup_mail" ng-model="form.signup.mailAddress" name="signup_mail" type="email" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
 
   </div>
 </div>
@@ -45,7 +45,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="signup_mail2">Confirmer mail</label>
   <div class="col-md-5">
-  <input id="signup_mail2" ng-model="form.signup.mailAddress2" name="signup_mail2" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+  <input id="signup_mail2" ng-model="form.signup.mailAddress2" name="signup_mail2" type="email" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
 	<span class="text-danger" ng-show="form.error.mail">{{form.error.mail}}</span>
   </div>
 </div>
@@ -64,7 +64,7 @@
   <label class="col-md-4 control-label" for="signup_password">Mot de passe</label>
   <div class="col-md-5">
     <input id="signup_password" ng-model="form.signup.password" name="signup_password" type="password" placeholder="******" class="form-control input-md" required="">
-
+	<span class="text-danger" ng-show="form.error.password_len">{{form.error.password_len}}</span>
   </div>
 </div>
 
