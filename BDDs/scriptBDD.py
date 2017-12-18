@@ -44,7 +44,7 @@ charact = {
 	'1':['','Couleur',1,10,'null','str'],
 	'2':['','Marque',0,2,'null','str'],
 	'3':['','Date construction',1,3,'null','str'],
-	'4':['km','Nombre de kilomètres',0,4,'null','float'],
+	'4':['km','Nombre de kilomètres',0,4,'null','int'],
 	'5':['kg','Poids',1,7,'null','float'],
 	'6':['','Type Carburant',0,5,'null','str'],
 	'7':['','Date du dernier controle technique',0,6,'null','str'],
@@ -138,7 +138,7 @@ strCommand +="#=================================================================
 vehicle = {
 		'1' : { 
 				'v':['3','La DeLorean DMC-12',99.99,'MAIF', '3' ,'1'],
-				'char' : {'1' : 'Gris','2' : 'DeLorean motor company','3' : '1985','4' : 'indeterminable','5' : '1230',
+				'char' : {'1' : 'Gris','2' : 'DeLorean motor company','3' : '1985','4' : '100000000000000000','5' : '1230',
 							'6' : 'Essence','7' : '10/2017','8' : '2','9' : '3','10' : 'OUTATIME',}
 			},
 		'2' : {
@@ -278,8 +278,8 @@ for vehicleID in rents:
 		agency = vehicle[vehicleID]['v'][4]
 		city = agence[agency][6]
 		userData = dicoUserBank[str(rent[2])]
-		strCommand +=("INSERT INTO transaction (id, amount, bankName, description, rib, agency_id, user_id, str_date, user) VALUES ("
-		+str(i)+","+rent[3]+",'"+userData[0]+"','...','"+userData[2]+"',"+agency+","+rent[2]+",'"+rent[0]+"',0);\n")
+		strCommand +=("INSERT INTO transaction (id, amount, bankName, description, rib, agency_id, user_id, str_date) VALUES ("
+		+str(i)+","+rent[3]+",'"+userData[0]+"','...','"+userData[2]+"',"+agency+","+rent[2]+",'"+rent[0]+"');\n")
 		i=i+1
 				
 #====================================================================================================#

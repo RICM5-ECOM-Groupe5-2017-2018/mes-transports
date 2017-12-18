@@ -40,7 +40,7 @@ agency.controller("addVehiculeCtrl",function($scope,$http,$cookies,$rootScope,$r
 		else{
 			$scope.vehicle.id = null;
 		}
-		$scope.vehicle.status = null;
+		$scope.vehicle.status = 1;
 
 		$scope.vehicle.insurance = $scope.data.selectedInsurance.name;
 		$scope.vehicle.idAgency = $scope.data.selectedAgency.id;
