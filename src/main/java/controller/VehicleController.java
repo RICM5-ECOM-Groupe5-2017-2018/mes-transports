@@ -255,12 +255,8 @@ public class VehicleController {
 	 * @return
 	 */
 	public List<Vehicle> searchVehicle (String startDate, String endDate) {
-		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	':startDate' AND ':endDate' OR r.endDate BETWEEN ':startDate' AND ':endDate'")
-			.setParameter("startDate", startDate)
-			.setParameter("endDate", endDate);
-		Query qBis = entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate < ':startDate' AND r.endDate > ':endDate'")
-				.setParameter("startDate", startDate)
-				.setParameter("endDate", endDate);
+		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN '"+startDate+"' AND '"+endDate+"' OR r.endDate BETWEEN '"+startDate+"' AND '"+endDate+"'");
+		Query qBis = entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate < '"+startDate+"' AND r.endDate > '"+endDate+"'");
 
 		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.status=true");
 
