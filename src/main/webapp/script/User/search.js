@@ -26,6 +26,10 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 		})
 	}
 	
+	$scope.form.search.price_min = 0;
+	$scope.form.search.price_max = 700;
+	$(".slide_chara").slider();
+	
 	/* REST API call getting all the types of vehicles */
 	$http.get('api/vehicle/type')
 	.then(function successCallback(response) {
@@ -62,12 +66,12 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	
 	$scope.updateFilter = function() {
 		$scope.searchFiltered = [];
-		
 		$scope.searchRes.forEach( function(vehicle) {
 			
 			if(
 					($scope.form.search.vehicleType == "" || vehicle.type == $scope.form.search.vehicleType)
 					&& ($scope.form.search.keyword == "" || vehicle.brand.toLowerCase().indexOf($scope.form.search.keyword.toLowerCase()) !== -1)
+					&& ($scope.form.search.price_min <= vehicle.price && $scope.form.search.price_max >= vehicle.price)
 			) {
 				$scope.searchFiltered.push(vehicle);
 			}
@@ -107,6 +111,13 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 		$scope.updateFilter();
 		
 	}
+	
+	var slider_price = new Slider("#search_price");
+	slider_price.on("slide", function(slideEvt) {
+		$scope.form.search.price_min = slider_price.getValue()[0];
+		$scope.form.search.price_max = slider_price.getValue()[1];
+		$scope.updateSearch();
+	});
 	
 	$scope.updateSearch(); // Call to display the vehicles when the page is loaded
 
