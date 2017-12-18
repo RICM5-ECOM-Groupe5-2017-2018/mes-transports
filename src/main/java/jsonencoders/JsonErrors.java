@@ -1,4 +1,4 @@
-package JsonEncoders;
+package jsonencoders;
 
 import java.io.Serializable;
 

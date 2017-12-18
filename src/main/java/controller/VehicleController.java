@@ -6,9 +6,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 
-import JsonEncoders.JsonMessage;
-import model.AssignCharacteristic;
-import model.AssignCharacteristicId;
+import jsonencoders.JsonMessage;
 import model.Characteristic;
 import model.CharacteristicType;
 import model.Disponibilitee;
