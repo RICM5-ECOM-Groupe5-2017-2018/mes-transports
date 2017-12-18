@@ -7,20 +7,28 @@
 
 <h1>Page de véhicule : {{vehicle.brand}}</h1>
 
-<div>Assurance : {{vehicle.insurance}}</div>
-<div>
-	Price : {{vehicle.price}}
-
-	<div ng-repeat="chara in vehicle.characteristicList">
-		{{chara.idCharacteristic.label}} :
-		{{chara.valueCharacteristic}}{{chara.idCharacteristic.unit}}</div>
+<div class="row">
+	<div class="col-md-4">
+		<img src="ressources/vehicle-basic.png" alt="Image véhicule de base" width=250>
+	</div>
+	<div class="col-md-8">
+	
+		<!-- Button trigger modal -->
+		<button class="btn btn-success" data-toggle="modal"
+			data-target="#myModal">
+			<i class="glyphicon glyphicon-shopping-cart"></i> Ajouter au panier
+		</button>
+	
+		<div>Assurance : {{vehicle.insurance}}</div>
+		<div>
+			Price : {{vehicle.price}}
+		
+			<div ng-repeat="chara in vehicle.characteristicList">
+				{{chara.idCharacteristic.label}} :
+				{{chara.valueCharacteristic}}{{chara.idCharacteristic.unit}}</div>
+		</div>
+	</div>
 </div>
-
-<!-- Button trigger modal -->
-<button class="btn btn-success" data-toggle="modal"
-	data-target="#myModal">
-	<i class="glyphicon glyphicon-shopping-cart"></i> Ajouter au panier
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
