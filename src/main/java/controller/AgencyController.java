@@ -58,8 +58,10 @@ public class AgencyController {
 		
 		for(int i=0;i<allRents.size();i++) {
 			
-			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN '"+startDate+ "' AND '"+endDate+"'")
+			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN ':startDate' AND ':endDate'")
 			.setParameter("idT", allRents.get(i).getTransaction().getId())
+			.setParameter("startDate", startDate)
+			.setParameter("endDate", endDate)
 			.getResultList().size()<=0 &&
 					(allRents.isEmpty() == false)) {
 				allRents.remove(i);
@@ -79,8 +81,10 @@ public class AgencyController {
      * @return
      */
     public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
-		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN '"+start_date+"' AND '" + end_date + "'")
+		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN ':startDate' AND ':endDate'")
 		.setParameter("id", agencyId)
+		.setParameter("startDate", start_date)
+		.setParameter("endDate", end_date)
 		.getResultList();
 	}
 	
@@ -158,7 +162,7 @@ public class AgencyController {
 	 * @return the list of agency's vehicles
 	 */
 	public List<Vehicle> getAgencyVehicles (Integer idAgency) {
-		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE id_mother_agency=:idAgency OR id=:idAgency)")
+		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE status=1 AND (id_mother_agency=:idAgency OR id=:idAgency))")
 				.setParameter("idAgency", idAgency);
 		List<Vehicle> lv = ((List<Vehicle>)q.getResultList());
 		for(int i=0;i<lv.size();i++) {
@@ -177,7 +181,8 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true AND a.idMotherAgency="+idAgency);
+		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true AND a.idMotherAgency=:idAgency")
+		.setParameter("idAgency", idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
