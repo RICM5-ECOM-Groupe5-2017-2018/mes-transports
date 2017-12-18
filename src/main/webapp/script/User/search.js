@@ -44,16 +44,16 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	
 	/* Definition of the date-range picker */
 	$('input[name="daterange"]').daterangepicker({
+		timePicker: true,
+		timePicker24Hour: true,
+		timePickerIncrement: 30,
+		showWeekNumbers: true,
 		locale: {
-			format: 'DD/MM/YYYY hh:mm'
+			format: 'DD/MM/YYYY HH:mm'
 		},
+		endDate: $scope.form.search.end,
 		startDate: $scope.form.search.start,
-	    endDate: $scope.form.search.end,
-	    timePicker: true,
-        timePickerIncrement: 30,
-        showWeekNumbers: true,
-        timePicker24Hour: true,
-        minDate: moment(now).format('DD/MM/YYYY hh:mm')
+        minDate: moment(now).format('DD/MM/YYYY HH:mm')
 	}, function(start, end, label) {
 	    $scope.form.search.start = start;
 		$scope.form.search.end = end;
@@ -81,11 +81,10 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	$scope.updateSearch = function() {
 		
 		$http.get('api/vehicle/search/' 
-				+ moment($scope.form.search.start).format('YYYY-MM-DD hh:mm') + '/' 
-				+ moment($scope.form.search.end).format('YYYY-MM-DD hh:mm'))
+				+ moment($scope.form.search.start).format('YYYY-MM-DD HH:mm') + '/' 
+				+ moment($scope.form.search.end).format('YYYY-MM-DD HH:mm'))
 		.then(function successCallback(response) {
 			$scope.searchRes = response.data;
-			
 			$scope.updateFilter();
 			
 		}, function errorCallback(response) {
