@@ -158,8 +158,6 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
                 formatBenefitByDate(rents);
                 if(!isChild){formatBenefitByAgency(rents);}
             }
-            else{
-            }
         });
     }
 
