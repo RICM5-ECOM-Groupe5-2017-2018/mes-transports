@@ -6,8 +6,7 @@ agency.controller("agencyMainPageCtrl",function($scope,$http,$cookies,$rootScope
 		$location.path('/agency/update/'+$rootScope.MotherAgency.id);
 	};
 
-    //init graph*
-    console.log("Load");
+    //init graph
     $rootScope.updateGaphBenefitByDate();
     $rootScope.updateGaphBenefitByAdgency();
 

@@ -58,10 +58,7 @@ agency.controller("childAgencyView",function($scope,$http,$cookies,$rootScope,$r
                         return vehicle.details.idAgency != $scope.currentIdAgency;
                     });
                 }
-                console.log("Erase");
                 $rootScope.filtredVehicules = $rootScope.listeVehicules;
-                console.log($rootScope.listeVehicules);
-                console.log($rootScope.filtredVehicules);
 
 
                 var newListAgency={};
