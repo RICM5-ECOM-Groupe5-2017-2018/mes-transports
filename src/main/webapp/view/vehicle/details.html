@@ -23,7 +23,7 @@
 		<div>
 			Price : {{vehicle.price}}
 		
-			<div ng-repeat="chara in vehicle.characteristicList">
+			<div ng-repeat="chara in vehicle.characteristicList | orderBy:'rank':true">
 				{{chara.idCharacteristic.label}} :
 				{{chara.valueCharacteristic}}{{chara.idCharacteristic.unit}}
 			</div>

@@ -41,7 +41,7 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	/* REST API call getting the list of all the vehicle characteristics */
 	$http.get('api/vehicle/list') 
 	.then(function successCallback(response) {
-		$scope.vehicleCharas = response.data.sort(function(a, b){ return a.rank <= b.rank; });
+		$scope.vehicleCharas = response.data.sort(function(a, b){ return a.rank >= b.rank; });
 	}, function errorCallback(response) {
 		// TODO
 	});
@@ -116,7 +116,7 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	slider_price.on("slide", function(slideEvt) {
 		$scope.form.search.price_min = slider_price.getValue()[0];
 		$scope.form.search.price_max = slider_price.getValue()[1];
-		$scope.updateSearch();
+		$scope.updateFilter();
 	});
 	
 	$scope.updateSearch(); // Call to display the vehicles when the page is loaded
