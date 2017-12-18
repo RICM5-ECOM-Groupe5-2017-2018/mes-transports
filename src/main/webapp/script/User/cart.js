@@ -80,7 +80,6 @@ cart.controller('CartController', function($scope, $rootScope, $http, $location,
 		.then(function successCallback(response) {
 			item.vehicle = response.data;
 		}, function errorCallback(response) {
-			console.log(response);
 		});
 	});
 	
@@ -128,7 +127,6 @@ cart.controller('CartController', function($scope, $rootScope, $http, $location,
 				$scope.canPay = false;
 				$scope.setSuccess("Panier validé !");
 			}, function errorCallback(response) {
-				console.log(response);
 			});			
 		}
 		

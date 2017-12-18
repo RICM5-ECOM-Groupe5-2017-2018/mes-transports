@@ -4,7 +4,6 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-//import javax.transaction.Transaction;
 
 import JsonEncoders.JsonMessage;
 import model.Agency;
@@ -145,7 +144,12 @@ public class AgencyController {
 	 * @return the agency matching
 	 */
 	public Agency getAgency (Integer idAgency) {
-		return (entityManager.find(Agency.class, idAgency));
+		Agency a;
+		if((a = entityManager.find(Agency.class, idAgency)).getStatus()) {
+			return a;	
+		}
+		else return null;
+		
 	}
 
 	/**
@@ -157,7 +161,14 @@ public class AgencyController {
 	public List<Vehicle> getAgencyVehicles (Integer idAgency) {
 		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE id_mother_agency=:idAgency OR id=:idAgency)")
 				.setParameter("idAgency", idAgency);
-		return ((List<Vehicle>)q.getResultList());
+		List<Vehicle> lv = ((List<Vehicle>)q.getResultList());
+		for(int i=0;i<lv.size();i++) {
+			if(!lv.get(i).isStatus()) {
+				lv.remove(i);
+				i--;
+			}
+		}
+		return lv;
 	}
 
 	/**
@@ -167,7 +178,7 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("FROM Agency WHERE id_mother_agency="+idAgency);
+		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true a.id_mother_agency="+idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 

@@ -4,13 +4,10 @@ account.run( function($rootScope, $location) {
 
     // register listener to watch route changes
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-      
-    	console.log($rootScope.user);
+
     	if ( $rootScope.user ) {
         if ( next.templateUrl == "view/users/login.html" || next.templateUrl == "view/users/signup.html") {
         	$location.path( "/search" );
-        } else {
-          
         }
       }         
     });
@@ -62,21 +59,22 @@ account.controller('AccountController',
                     response.data.isAgency = response.data.idAgency!=null;
                     $cookies.putObject("user", response.data);
                     $cookies.put("token", response.data.token);
+
+                    $scope.user = $cookies.getObject("user");
                     $rootScope.user = $scope.user;
 
                     // update cart status by setting user as owner of the cart items
                     if($scope.cart) {
                         $scope.updateCart($scope.user);
                     }
-
                     // redirect user to the main page
                     $scope.loadTopMenu();
                     $scope.loadSideMenu();
                     $location.path('/');
 
+
                 }, function errorCallback(response) {
-                    //console.log(response);
-                    //console.log($scope.error);
+
                     $scope.setError("Connexion impossible : informations invalides.");
                 });
             }
@@ -125,7 +123,6 @@ account.controller('AccountController',
 
                 // verifies if user is not already logged in
                 if($cookies.getObject("user")) {
-                    console.log("connected");
                     return "Already connected";
                 }
 
@@ -154,12 +151,9 @@ account.controller('AccountController',
                 // call to the API, creates the user in the database
                 $http.post('api/user/create/', data)
                     .then(function successCallback(response) {
-                        //console.log("user created");
                         $scope.setSuccess("Utilisateur enregistré correctement. Connectez-vous.");
                     }, function errorCallback(data, status, headers) {
                         $scope.setError("Impossible de créer l'utilisateur. (erreur)");
-                        //console.log("user can't be created");
-                        //console.log(data);
                     });
 
             }
@@ -179,11 +173,9 @@ account.controller('AccountController',
                 })
                     .then(function successCallback(response) {
                         $scope.user = response.data;
-                        //console.log(response.data);
                         $scope.setSuccess("Les informations ont bien été modifiées.");
                         $cookies.putObject("user", $scope.user);
                     }, function errorCallback(response) {
-                        //console.log(response);
                         $scope.setError("Erreur durant la mise à jour des informations");
                     });
 
@@ -211,9 +203,7 @@ account.controller('AccountController',
                         }
                     })
                         .then(function successCallback(response) {
-                            console.log(response);
                         }, function errorCallback(response) {
-                            console.log(response);
                         });
 
                 }
@@ -231,7 +221,6 @@ account.controller('AccountController',
                         $scope.logout();
                         $scope.setSuccess("Compte supprimé avec succès.");
                     }, function errorCallback(response) {
-                        console.log(response);
                         $scope.setError("Erreur dans la suppression du compte.");
                     });
             }

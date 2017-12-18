@@ -11,10 +11,10 @@
 	<div class="collapse navbar-collapse" id="side-menu">
 		<ul class="nav nav-pills nav-stacked">
 			<li id="accueil" class="nav-item" ng-class="{active: ($route.current.activetab == 'main') && (data.id==currentAgencyUpdate)}">
-				<a href="#!/"> Accueil</a>
+				<a href="#!/agency/"> Accueil</a>
 			</li>
 			<li id="parc" class="nav-item" ng-class="{active: $route.current.activetab == 'seeVehicules'}">
-				<a href="#!/agency/view/vehicule"> Parc de Véhicules</a>
+				<a href="#!/agency/view/vehicule"> Parc de Véhicules </a>
 			</li>
 
 			<li class="nav-item" id="agency" ng-if="isMother">

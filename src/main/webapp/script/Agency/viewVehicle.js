@@ -13,10 +13,15 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 
 	/**Get data from the selected vehicle*/
     if($scope.currentIdVehicules){
-		$scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
-			   return element.id == $scope.currentIdVehicules;
-		 });
-		 loadVehicleRent();
+
+    	if($rootScope.listeVehicules)
+		{
+            $scope.selectedVehicule = $rootScope.listeVehicules.find(function(element) {
+                return element.id == $scope.currentIdVehicules;
+            });
+            loadVehicleRent();
+		}
+		else{$location.path('agency/view/vehicule/');}
 	}
 
 	/**Change location to add vehicle view*/
@@ -49,7 +54,6 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 						rent.startDate = moment(rent.startDate).format("YYYY-MM-DD HH:mm");
 					});
 					$scope.filtredRent = $.extend(true, {}, $scope.allRents);
-					console.log($scope.filtredRent);
 		    },
 		    function(response){}
 	    );
@@ -84,7 +88,6 @@ agency.controller("viewVehicules",function($scope,$http,$cookies,$rootScope,$rou
 
         $http.delete('api/vehicle/delete/'+$scope.selectedVehicule.id).then(
             function(response){
-                console.log("blop");
                 $rootScope.listeVehicules = $rootScope.listeVehicules.filter(function(vehicle) {
                     return vehicle.id != $scope.selectedVehicule.id;
                 });

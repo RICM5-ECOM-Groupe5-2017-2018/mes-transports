@@ -103,14 +103,19 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
     }
 
+    $rootScope.loadRendAndProfits=function(isChild,id){
+        loadAgenciesProfits(isChild,id,'api/agency/transactions/',true);
+        /*loadAgenciesProfits(isChild,id,'api/agency/rents/',false);*/
+    };
+
     /**Function which load all the transition of an agency depending on a date range*/
-    $rootScope.loadAgenciesProfits=function(isChild,id){
+    function loadAgenciesProfits(isChild,id,endpoint,isTransactions){
         var promises = [];
         var rents = {};
         var config = {headers: {'Authorization': 'Bearer ' + $rootScope.token,}};
 
         promises.push(new Promise(function(resolve, reject){
-            $http.get('api/agency/transactions/'+id+'/'
+            $http.get(endpoint+id+'/'
                 + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
                 + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
@@ -122,13 +127,13 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
                     rents[$rootScope.MotherAgency.id] = response.data
                     resolve("success");
                 },
-                function(response){console.log("Mother failed");reject("failed");}
+                function(response){reject("failed");}
             );
         }));
 
         $.each($rootScope.listChildAgencies, function(key, child){
             promises.push(new Promise(function(resolve, reject){
-                $http.get('api/agency/transactions/'+child.id+'/'
+                $http.get(endpoint+child.id+'/'
                     + moment($scope.start).format('YYYY-MM-DD HH:mm:ss') + '/'
                     + moment($scope.end).format('YYYY-MM-DD HH:mm:ss'),config).then(
 
@@ -140,14 +145,18 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
                         resolve("success");
                     },
-                    function(response){console.log("Child "+child.id+" failed");reject("failed");}
+                    function(response){reject("failed");}
                 );
             }));
         });
 
         Promise.all(promises).then(function(){
-            formatBenefitByDate(rents);
-            if(!isChild){formatBenefitByAgency(rents);}
+            if(isTransactions){
+                formatBenefitByDate(rents);
+                if(!isChild){formatBenefitByAgency(rents);}
+            }
+            else{
+            }
         });
     }
 
@@ -186,11 +195,12 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
             if(agency.length!=0){
 
                 $.each(agency, function(key, transac) {
+                    var date;
                     if(delta=='day'){
-                        var date = moment(transac.date).format('YYYY-MM-DD');
+                        date = moment(transac.date).format('YYYY-MM-DD');
                     }
                     else{
-                        var date = moment(transac.date).format('hh:mm:ss');
+                        date = moment(transac.date).format('hh:mm:ss');
                     }
                     $scope.BenefitByDate[date]+=transac.amount;
 
@@ -207,12 +217,13 @@ agency.controller("graphicsController",function($scope,$http,$cookies,$rootScope
 
             if(agency.length>0) {
                 $.each(agency, function (idTransac, transac) {
+                    var name;
                     if($rootScope.listChildAgencies[key])
                     {
-                        var name = $rootScope.listChildAgencies[key].name;
+                        name = $rootScope.listChildAgencies[key].name;
                     }
                     else{
-                        var name = $rootScope.MotherAgency.name;
+                        name = $rootScope.MotherAgency.name;
 
                     }
 

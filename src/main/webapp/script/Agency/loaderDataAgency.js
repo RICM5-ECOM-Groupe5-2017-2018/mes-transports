@@ -126,7 +126,6 @@ agency.controller("agencyMainCtrl",function($http,$cookies,$rootScope, $scope,$l
         $rootScope.reloadSubAgencyMenu();
 
 	}
-    console.log($rootScope.isMother);
 });
 
 
@@ -136,7 +135,7 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 	$rootScope.listTypes;
 	$rootScope.listeVehicules;
 	$rootScope.listCharacteristic;
-    $rootScope.filtredVehicules
+    $rootScope.filtredVehicules;
 
 	/**Function which load agency(main and child) vehicle*/
 	$rootScope.loadVehicles=function()
@@ -238,10 +237,9 @@ agency.controller("agencyVehicleManagement",function($scope,$http,$cookies,$root
 
 			   var vehicle = response.data;
 
-			   var agencyName = ($rootScope.MotherAgency.id == vehicle.idAgency)?$rootScope.MotherAgency.name:$rootScope.listChildAgencies[vehicle.idAgency].name
 			   var newVehicules = {
 									id : vehicle.id,
-									name: agencyName +"-"+vehicle.brand+"-"+$rootScope.listTypes[vehicle.type].label,
+									name: vehicle.brand,
 									details : vehicle,
 								  }
 
