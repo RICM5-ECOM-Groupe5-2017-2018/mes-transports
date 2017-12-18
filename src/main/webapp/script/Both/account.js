@@ -6,8 +6,7 @@ var account = angular.module('account', ['ngCookies','menu']);
  * - update user infos
  */
 account.controller('AccountController',
-    ['$scope', '$http', '$cookies','$location','$rootScope',
-        function AccountController($scope, $http, $cookies,$location,$rootScope) {
+        function AccountController($scope, $http, $cookies,$location,$rootScope, $timeout) {
 
             /* load a logged in user infos from it's related cookie */
             $rootScope.user = $cookies.getObject("user");
@@ -123,7 +122,7 @@ account.controller('AccountController',
                     $scope.form.error.password = "Les deux mots de passe ne correspondent pas";
                 }
                 
-                if($scope.form.password.length <= 3) {
+                if($scope.form.signup.password.length <= 3) {
                 	$scope.form.error.password_len = "Le mot de passe est trop court (min. 4 caractères";
                 }
 
@@ -139,7 +138,10 @@ account.controller('AccountController',
                 	// call to the API, creates the user in the database
                 	$http.post('api/user/create/', data)
                 	.then(function successCallback(response) {
-                		$scope.setSuccess("Utilisateur enregistré correctement. Connectez-vous.");
+                		$scope.setSuccess("Utilisateur enregistré correctement. Connectez-vous. Redirection en cours.");
+                		$timeout(function () {
+                	        $location.path('/login');
+                	    }, 3000);
                 	}, function errorCallback(data, status, headers) {
                 		$scope.setError("Impossible de créer l'utilisateur. Le login est peut-être déjà utilisé ou le serveur a rencontré une erreur.");
                 	});                	
@@ -214,4 +216,4 @@ account.controller('AccountController',
                     });
             }
 
-        }]);
+        });
