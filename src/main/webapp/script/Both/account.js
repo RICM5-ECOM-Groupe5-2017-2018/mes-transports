@@ -119,7 +119,7 @@ account.controller('AccountController',
             $scope.signup = function UserSignup() {
 
                 $scope.refreshAlerts();
-                $scope.form.error = {};
+                $scope.form.error = [];
 
                 // verifies if user is not already logged in
                 if($cookies.getObject("user")) {
@@ -128,33 +128,31 @@ account.controller('AccountController',
 
                 // check mail confirmation
                 if($scope.form.signup.mailAddress != $scope.form.signup.mailAddress2) {
-                    $scope.form.error.mail = "Mails should be the same";
-                    $scope.setError("Les deux mails ne correspondent pas");
+                    $scope.form.error.mail = "Les deux mails ne correspondent pas";
                 }
 
                 // check password confirmation
                 if($scope.form.signup.password != $scope.form.signup.password2) {
-                    $scope.form.error.password = "Passwords should be the same";
-                    $scope.setError("Les deux mots de passe ne correspondent pas");
+                    $scope.form.error.password = "Les deux mots de passe ne correspondent pas";
                 }
 
-                if($scope.form.error.mail || $scope.form.error.password) {
-                    return null;
+                if($scope.form.error.password || $scope.form.error.mail) {
+                    $scope.setError("Le formulaire n'est pas rempli correctement");
+                } else {
+                	// prepares the user object used for the http request
+                	var data = $scope.form.signup;
+                	data.role = "user";
+                	data.mailAddress2 = undefined;
+                	data.password2 = undefined;
+                	
+                	// call to the API, creates the user in the database
+                	$http.post('api/user/create/', data)
+                	.then(function successCallback(response) {
+                		$scope.setSuccess("Utilisateur enregistré correctement. Connectez-vous.");
+                	}, function errorCallback(data, status, headers) {
+                		$scope.setError("Impossible de créer l'utilisateur. Le login est peut-être déjà utilisé ou le serveur a rencontré une erreur.");
+                	});                	
                 }
-
-                // prepares the user object used for the http request
-                var data = $scope.form.signup;
-                data.role = "user";
-                data.mailAddress2 = undefined;
-                data.password2 = undefined;
-
-                // call to the API, creates the user in the database
-                $http.post('api/user/create/', data)
-                    .then(function successCallback(response) {
-                        $scope.setSuccess("Utilisateur enregistré correctement. Connectez-vous.");
-                    }, function errorCallback(data, status, headers) {
-                        $scope.setError("Impossible de créer l'utilisateur. (erreur)");
-                    });
 
             }
 
