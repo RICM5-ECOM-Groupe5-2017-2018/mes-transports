@@ -1,0 +1,89 @@
+<!-- signup form -->
+<form ng-show="!user" class="form-horizontal" ng-submit="signup()">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Inscription</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_firstname">Prénom</label>
+  <div class="col-md-5">
+  <input id="signup_firstname" ng-model="form.signup.userFirstName" name="signup_firstname" type="text" placeholder="John" class="form-control input-md" required="">
+
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_lastname">Nom</label>
+  <div class="col-md-5">
+  <input id="signup_lastname" ng-model="form.signup.userName" name="signup_lastname" type="text" placeholder="Doe" class="form-control input-md" required="">
+
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_login">Login</label>
+  <div class="col-md-5">
+  <input id="signup_login" ng-model="form.signup.login" name="signup_login" type="text" placeholder="johndoe" class="form-control input-md" required="">
+  <span class="help-block">Choisissez le login pour vous identifier à la connexion</span>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_mail">Adresse e-mail</label>
+  <div class="col-md-5">
+  <input id="signup_mail" ng-model="form.signup.mailAddress" name="signup_mail" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_mail2">Confirmer mail</label>
+  <div class="col-md-5">
+  <input id="signup_mail2" ng-model="form.signup.mailAddress2" name="signup_mail2" type="text" placeholder="johndoe@gmail.com" class="form-control input-md" required="">
+	<span class="text-danger" ng-show="form.error.mail">{{form.error.mail}}</span>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_phone">Numéro de téléphone</label>
+  <div class="col-md-5">
+  <input id="signup_phone" ng-model="form.signup.phoneNum" name="signup_phone" type="text" placeholder="" class="form-control input-md">
+
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_password">Mot de passe</label>
+  <div class="col-md-5">
+    <input id="signup_password" ng-model="form.signup.password" name="signup_password" type="password" placeholder="******" class="form-control input-md" required="">
+
+  </div>
+</div>
+
+<!-- Password input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_password2">Confirmer mot de passe</label>
+  <div class="col-md-5">
+    <input id="signup_password2" ng-model="form.signup.password2" name="signup_password2" type="password" placeholder="******" class="form-control input-md" required="">
+	<span class="text-danger" ng-show="form.error.password">{{form.error.password}}</span>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="signup_button"></label>
+  <div class="col-md-5">
+    <button id="signup_button" name="signup_button" class="btn btn-success btn-block">Confirmer l'inscription</button>
+  </div>
+</div>
+
+</fieldset>
+</form>

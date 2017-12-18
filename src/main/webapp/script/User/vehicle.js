@@ -12,10 +12,8 @@ module.controller('VehicleDetailsController', function($scope, $http, $routePara
 	).then(function successCallback(response){
 		$scope.vehicle = response.data;
 	}, function errorCallback(response) {
-		console.log(response);
 	});
 	
 	$scope.addToCart = CartServices.addToCart;
-	
 	
 });

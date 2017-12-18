@@ -197,7 +197,13 @@ public class VehicleController {
 				.getResultList();
 		return characteristicList;
 	}
-	
+
+	/**
+     * Returns all vehicle type from the data base
+     *
+     * @param idType the type chosen
+     * @return List of characteristics or error
+     */
 	public List<VehicleType> getTypeVehicle(){
 		List<VehicleType> typeList = entityManager
 				.createQuery("FROM  VehicleType")
@@ -215,7 +221,11 @@ public class VehicleController {
 	 */
 	public Vehicle consultVehicle (Integer id) {
 		Vehicle vehicleRet = entityManager.find(Vehicle.class, id);
-		return vehicleRet;
+		if(vehicleRet.isStatus()) {
+			return vehicleRet;
+		}
+		else return null;
+		
 	}
 
 	/**
@@ -241,7 +251,7 @@ public class VehicleController {
 	 */
 	public List<Vehicle> searchVehicle (String startDate, String endDate) {
 		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	'"+startDate+"' AND '"+endDate+"' OR r.endDate BETWEEN '"+startDate+"' AND '"+endDate+"'");
-		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v");
+		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.status=true");
 
 	    List<Rent> lr = q.getResultList(); 
 	    List<Vehicle> excluded = new LinkedList<Vehicle>();

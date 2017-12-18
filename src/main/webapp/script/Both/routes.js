@@ -15,13 +15,17 @@ routes.config(function($routeProvider) {
     	templateUrl : "view/users/login.html",
     	controller : "AccountController"
     })
-    .when("/signin", {
-    	templateUrl : "view/users/signin.html",
+    .when("/signup", {
+    	templateUrl : "view/users/signup.html",
     	controller : "AccountController"
     })
     .when("/account", {
     	templateUrl : "view/users/update.html",
     	controller : "AccountController"
+    })
+    .when("/agency/account", {
+        templateUrl : "view/users/update.html",
+        controller : "AccountController"
     })
     .when("/cart", {
     	templateUrl : 'view/users/cart.html',
@@ -67,6 +71,10 @@ routes.config(function($routeProvider) {
     .when('/agency/update/vehicule/:idVupdate', {
     	templateUrl : 'view/agency/addNewVehicule.html',
         activetab : 'seeVehicules'
+    })
+    .when('/admin/update/user/',{
+    	templateUrl : 'view/admin/ModifyUserInformation.html',
+    	controller : 'AdminController'
     })
     .otherwise({
     	redirectTo : '/'

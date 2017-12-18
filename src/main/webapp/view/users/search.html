@@ -3,41 +3,43 @@
 <nav>
 	<form class="form-horizontal">
 	<fieldset>
-	
+
 	<!-- Form Name -->
 	<legend>Recherche</legend>
-	
-	<!-- Text input-->
+
+	<!-- Text input search : looking for matching vehicle brands -->
 	<div class="form-group">
-	  <label class="col-md-4 control-label" for="search_input">Mot-clef</label>  
+	  <label class="col-md-4 control-label" for="search_input">Mot-clef</label>
 	  <div class="col-md-7">
-	  <input id="search_input" ng-model="form.search.keyword" ng-change="updateFilter()" name="search_input" type="text" placeholder="Rechercher" class="form-control input-md"> 
+	  <input id="search_input" ng-model="form.search.keyword" ng-change="updateFilter()" name="search_input" type="text" placeholder="Rechercher" class="form-control input-md">
 	  </div>
 	</div>
-	
+
+	<!-- Select a date range -->
 	<div class="form-group">
-	  <label class="col-md-4 control-label" for="search_input">Dates</label>  
+	  <label class="col-md-4 control-label" for="search_input">Dates</label>
 	  <div class="col-md-7 inner-addon left-addon">
 	  <i class="glyphicon glyphicon-calendar"></i>
 	  <input type="text" name="daterange" class="form-control input-md" />
 	  </div>
 	</div>
-	
-	<!-- Select Basic -->
+
+	<!-- Select the type of vehicle to look for -->
 	<div class="form-group">
 	  <label class="col-md-4 control-label" for="select_type_vh">Véhicule</label>
 	  <div class="col-md-7">
-	    <select 
+	    <select
 	    	id="select_type_vh"
 	    	ng-change="updateType()"
-	    	ng-model="form.search.vehicleType" 
-	    	name="select_type_vh" 
-	    	ng-options="type.id as type.label for type in vehicleTypes" 
+	    	ng-model="form.search.vehicleType"
+	    	name="select_type_vh"
+	    	ng-options="type.id as type.label for type in vehicleTypes"
 	    	class="form-control">
 	    </select>
 	  </div>
 	</div>
-	
+
+	<!-- Select characteristics -->
 	<div class="form-group">
 	  <label class="col-md-4 control-label" for="chk_chara">Caractéristiques</label>
 	  <div class="col-md-7">
@@ -49,25 +51,27 @@
 		</div>
 	  </div>
 	</div>
-	
+
 	</fieldset>
 	</form>
 
 </nav>
 </div>
 
+<!-- Search results -->
 <div class="col-sm-8">
 <div class="row">
  <div class="col-sm-6 col-md-4" ng-repeat="vehicle in searchFiltered">
    <div class="thumbnail">
      <img src="" alt="" width=200 height=200>
      <div class="caption">
-       <h3>{{vehicle.brand}}<small> {{getVehicleType(vehicle.type).label}}</small></h3>
-       <p>{{vehicle.price}}</p>
+       <h3>{{vehicle.brand}}</h3>
+       <label class="label label-small label-default">{{getVehicleType(vehicle.type).label}}</label>
+       <p>{{vehicle.price}} €/jour</p>
 	</div>
        <p>
        	<a href="#!/vehicle/view/{{vehicle.id}}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-eye-open"></span> Détails</a>
-       	<a href="#" class="btn btn-success" role="button"><span class="glyphicon glyphicon-shopping-cart"></span> Ajouter au panier</a></p>
+       	<!-- <a href="#" class="btn btn-success" role="button"><span class="glyphicon glyphicon-shopping-cart"></span> Ajouter au panier</a></p> -->
      </div>
    </div>
  </div>

@@ -44,13 +44,12 @@ public class AssignCharacteristicId implements java.io.Serializable {
 	@Override
 	public boolean equals(Object o) {
         
-		if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+		if (this == o){ return true;}
+        if (o == null || getClass() != o.getClass()){ return false;}
 
         AssignCharacteristicId objet = (AssignCharacteristicId) o;
 
-        return Objects.equals(vehicle_pk, objet.vehicle_pk) &&
-                Objects.equals(characteristic_pk, objet.characteristic_pk);
+        return Objects.equals(vehicle_pk, objet.vehicle_pk) && Objects.equals(characteristic_pk, objet.characteristic_pk);
 
     }
 
