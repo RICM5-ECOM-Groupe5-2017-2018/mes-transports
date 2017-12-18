@@ -44,16 +44,16 @@ search.controller('SearchController', ['$scope', '$http', function SearchControl
 	
 	/* Definition of the date-range picker */
 	$('input[name="daterange"]').daterangepicker({
+		endDate: $scope.form.search.end,
+		startDate: $scope.form.search.start,
 		timePicker: true,
 		timePicker24Hour: true,
 		timePickerIncrement: 30,
 		showWeekNumbers: true,
 		locale: {
-			format: 'DD/MM/YYYY HH:mm'
+			format: 'DD/MM/YYYY'
 		},
-		endDate: $scope.form.search.end,
-		startDate: $scope.form.search.start,
-        minDate: moment(now).format('DD/MM/YYYY HH:mm')
+        minDate: moment(now).format('DD/MM/YYYY')
 	}, function(start, end, label) {
 	    $scope.form.search.start = start;
 		$scope.form.search.end = end;
