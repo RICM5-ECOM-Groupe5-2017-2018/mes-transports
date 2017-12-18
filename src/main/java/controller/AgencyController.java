@@ -5,14 +5,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import JsonEncoders.JsonMessage;
+import jsonencoders.JsonMessage;
 import model.Agency;
 import model.Rent;
-import model.User;
 import model.Vehicle;
 import model.Transaction;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,32 +41,33 @@ public class AgencyController {
 	 * @param end_date
 	 * @return
 	 */
-	public List<Rent> getRents(Integer agencyId,String start_date, String end_date){
+	public List<Rent> getRents(Integer agencyId,String startDate, String endDate){
 		List<Vehicle> lv = entityManager.createQuery("Select v FROM Vehicle v WHERE v.idAgency=:id")
 		.setParameter("id", agencyId)
 		.getResultList();
 		
-		List<Rent> all_rents = new LinkedList<Rent>();		
+		List<Rent> allRents = new LinkedList<>();
 		for(int i=0;i<lv.size();i++) {
 			List<Rent> lr=entityManager.createQuery("SELECT r FROM Rent r WHERE r.idVehicle=:id")
 			.setParameter("id", lv.get(i).getId())
 			.getResultList();
 			for(int j=0;j<lr.size();j++) {
-				all_rents.add(lr.get(j));
+				allRents.add(lr.get(j));
 			}
 		}
 		
-		for(int i=0;i<all_rents.size();i++) {
+		for(int i=0;i<allRents.size();i++) {
 			
-			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN '"+start_date+ "' AND '"+end_date+"'")
-			.setParameter("idT", all_rents.get(i).getTransaction().getId())
-			.getResultList().size()<=0) {
-				all_rents.remove(i);
+			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN '"+startDate+ "' AND '"+endDate+"'")
+			.setParameter("idT", allRents.get(i).getTransaction().getId())
+			.getResultList().size()<=0 &&
+					(allRents.isEmpty() == false)) {
+				allRents.remove(i);
 				i--;
 			}
 		}
 		
-		return all_rents;
+		return allRents;
 	}
 
 	/**
@@ -178,7 +177,7 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true a.id_mother_agency="+idAgency);
+		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true AND a.id_mother_agency="+idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
