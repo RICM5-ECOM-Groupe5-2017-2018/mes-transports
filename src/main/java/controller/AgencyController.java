@@ -159,7 +159,7 @@ public class AgencyController {
 	 * @return the list of agency's vehicles
 	 */
 	public List<Vehicle> getAgencyVehicles (Integer idAgency) {
-		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE id_mother_agency=:idAgency OR id=:idAgency)")
+		Query q = entityManager.createQuery("FROM Vehicle WHERE idAgency in (SELECT id FROM Agency WHERE status=1 AND (id_mother_agency=:idAgency OR id=:idAgency))")
 				.setParameter("idAgency", idAgency);
 		List<Vehicle> lv = ((List<Vehicle>)q.getResultList());
 		for(int i=0;i<lv.size();i++) {
@@ -178,7 +178,7 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true a.id_mother_agency="+idAgency);
+		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true AND a.idMotherAgency="+idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
