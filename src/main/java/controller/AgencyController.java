@@ -177,7 +177,7 @@ public class AgencyController {
 	 * @return List of the children agencies
 	 */
 	public List<Agency> getChildAgencies (Integer idAgency) {
-		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true AND a.id_mother_agency="+idAgency);
+		Query q = entityManager.createQuery("SELECT a FROM Agency a WHERE a.status=true AND a.idMotherAgency="+idAgency);
 		return ((List<Agency>)q.getResultList());
 	}
 
