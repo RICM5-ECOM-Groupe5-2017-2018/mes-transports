@@ -249,17 +249,23 @@ public class VehicleController {
 	 */
 	public List<Vehicle> searchVehicle (String startDate, String endDate) {
 		Query q=entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate BETWEEN	'"+startDate+"' AND '"+endDate+"' OR r.endDate BETWEEN '"+startDate+"' AND '"+endDate+"'");
+		Query qBis = entityManager.createQuery("SELECT r FROM Rent r WHERE r.startDate <	'"+startDate+"' AND r.endDate > '"+endDate+"'");
 		Query q2=entityManager.createQuery("SELECT v FROM Vehicle v WHERE v.status=true");
 
-	    List<Rent> lr = q.getResultList(); 
+	    List<Rent> lr = q.getResultList();
+	    List<Rent> lrBis = qBis.getResultList();
+	    lr.addAll(lrBis);
 	    List<Vehicle> excluded = new LinkedList<Vehicle>();
+
 	    for(int i=0;i<lr.size();i++) {
 	    	excluded.add(entityManager.find(Vehicle.class, lr.get(i).getIdVehicle()));
 	    }
 	    
 		List<Vehicle> all_vehicles = q2.getResultList();
 		for(int i=0;i<all_vehicles.size();i++) {
+			System.out.println("vehicule 1 : " + all_vehicles.get(i).getBrand() );
 			for(int j=0;j<excluded.size();j++) {
+				System.out.println("vehicule 2 : " + excluded.get(j).getBrand());
 				if(all_vehicles.get(i).getId() == excluded.get(j).getId()) {
 					excluded.remove(j);
 					all_vehicles.remove(i);
