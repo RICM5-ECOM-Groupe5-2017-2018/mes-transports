@@ -11,6 +11,9 @@ import model.Rent;
 import model.Vehicle;
 import model.Transaction;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +44,16 @@ public class AgencyController {
 	 * @param end_date
 	 * @return
 	 */
-	public List<Rent> getRents(Integer agencyId,String startDate, String endDate){
+	public List<Rent> getRents(Integer agencyId,String startDates, String endDates){
+		DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		Date startDate = null;
+		Date endDate = null;
+		try{
+			startDate = formatter.parse(startDates);
+			endDate = formatter.parse(endDates);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
 		List<Vehicle> lv = entityManager.createQuery("Select v FROM Vehicle v WHERE v.idAgency=:id")
 		.setParameter("id", agencyId)
 		.getResultList();
@@ -58,7 +70,7 @@ public class AgencyController {
 		
 		for(int i=0;i<allRents.size();i++) {
 			
-			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN ':startDate' AND ':endDate'")
+			if(entityManager.createQuery("SELECT t FROM Transaction t WHERE t.id=:idT AND t.str_date BETWEEN :startDate AND :endDate")
 			.setParameter("idT", allRents.get(i).getTransaction().getId())
 			.setParameter("startDate", startDate)
 			.setParameter("endDate", endDate)
@@ -80,11 +92,20 @@ public class AgencyController {
      * @param end_date
      * @return
      */
-    public List<Transaction> getTransactions(Integer agencyId, String start_date, String end_date){
-		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN ':startDate' AND ':endDate'")
+    public List<Transaction> getTransactions(Integer agencyId, String startDates, String endDates){
+		DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		Date startDate = null;
+		Date endDate = null;
+		try{
+			startDate = formatter.parse(startDates);
+			endDate = formatter.parse(endDates);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return entityManager.createQuery("Select t FROM Transaction t WHERE t.agency.id=:id AND t.str_date BETWEEN :startDate AND :endDate")
 		.setParameter("id", agencyId)
-		.setParameter("startDate", start_date)
-		.setParameter("endDate", end_date)
+		.setParameter("startDate", startDate)
+		.setParameter("endDate", endDate)
 		.getResultList();
 	}
 	
