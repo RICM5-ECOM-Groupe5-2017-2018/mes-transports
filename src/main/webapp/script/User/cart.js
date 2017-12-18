@@ -2,7 +2,7 @@ var cart = angular.module('cart', ['account']);
 
 cart.factory('CartServices', function($rootScope, $cookies, $http) { 
 	
-	var utils = {};
+	var utils = [];
 	utils.form = {};
 	utils.form.error = undefined;
 	utils.form.success = undefined;
@@ -35,7 +35,7 @@ cart.factory('CartServices', function($rootScope, $cookies, $http) {
 				return add;
 			}
 		});
-		if(add) {				
+		if(add) {
 			newRent = {};
 			newRent.idVehicle = item.id;
 			if(user) {
