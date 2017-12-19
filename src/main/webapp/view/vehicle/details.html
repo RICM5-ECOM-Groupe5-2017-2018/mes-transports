@@ -36,8 +36,6 @@
 	aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="alert alert-success" ng-show="form.success" role="alert">{{form.success}}</div>
-			<div class="alert alert-danger" ng-show="form.error" role="alert">{{form.error}}</div>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
@@ -46,7 +44,7 @@
 				<h4 class="modal-title" id="myModalLabel">Ajouter au panier</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-group" ng-controller="SearchController">
+				<div class="form-group">
 					<label class="col-lg-4 control-label" for="search_input">Confirmer
 						les dates</label>
 					<div class="col-lg-7 inner-addon left-addon">
